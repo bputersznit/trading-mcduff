@@ -260,7 +260,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 				Print(string.Format("{0} === LIVE TRADING STARTED ===", Time[0]));
 				Print(string.Format("{0} Signal file: {1}", Time[0], SignalFile));
-				Print(string.Format("{0} Connection: {1}", Time[0], Connection.Status));
+				Print(string.Format("{0} Connection: {1}", Time[0], Account != null && Account.Connection != null ? Account.Connection.Status.ToString() : "Unknown"));
 			}
 			else if (State == State.Terminated)
 			{
@@ -590,7 +590,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 			lastConnectionCheck = DateTime.Now;
 
-			bool isConnected = (Connection != null && Connection.Status == ConnectionStatus.Connected);
+			bool isConnected = (Account != null && Account.Connection != null && Account.Connection.Status == ConnectionStatus.Connected);
 
 			// Detect disconnect
 			if (wasConnected && !isConnected && EnableEmergencyFlatten)
@@ -631,8 +631,12 @@ namespace NinjaTrader.NinjaScript.Strategies
 			if (execution.Order == null)
 				return;
 
-			// Track entry fills
-			if (execution.Order.IsEntry && execution.Order.OrderState == OrderState.Filled)
+			// Track entry fills (check if order name contains signal type)
+			bool isEntryOrder = execution.Order.Name.Contains("ABSORPTION") ||
+			                    execution.Order.Name.Contains("ICEBERG") ||
+			                    execution.Order.Name.Contains("BREAKOUT");
+
+			if (isEntryOrder && execution.Order.OrderState == OrderState.Filled)
 			{
 				entryPrice = execution.Price;
 				positionQuantity = execution.Quantity * (execution.Order.IsLong ? 1 : -1);
@@ -645,8 +649,13 @@ namespace NinjaTrader.NinjaScript.Strategies
 					execution.Quantity));
 			}
 
-			// Track exit fills and calculate P&L
-			if (execution.Order.IsExit && execution.Order.OrderState == OrderState.Filled)
+			// Track exit fills and calculate P&L (check if order name contains Exit, Target, Stop, or Time)
+			bool isExitOrder = execution.Order.Name.Contains("Exit") ||
+			                   execution.Order.Name.Contains("Target") ||
+			                   execution.Order.Name.Contains("Stop") ||
+			                   execution.Order.Name.Contains("Time");
+
+			if (isExitOrder && execution.Order.OrderState == OrderState.Filled)
 			{
 				// Calculate P&L for this execution
 				double ticksPnL = (execution.Price - entryPrice) * positionQuantity / TickSize;

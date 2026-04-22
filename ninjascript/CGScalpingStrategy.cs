@@ -511,7 +511,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 			lastConnectionCheck = DateTime.Now;
 
-			bool isConnected = (Connection.Status == ConnectionStatus.Connected);
+			bool isConnected = (Account != null && Account.Connection != null && Account.Connection.Status == ConnectionStatus.Connected);
 
 			// Detect disconnect
 			if (wasConnected && !isConnected && EnableEmergencyFlatten)
@@ -550,7 +550,13 @@ namespace NinjaTrader.NinjaScript.Strategies
 			// Only track realized P&L from exits
 			if (execution.Order != null && execution.Order.OrderState == OrderState.Filled)
 			{
-				if (execution.Order.IsExit)
+				// Check if this is an exit order
+				bool isExitOrder = execution.Order.Name.Contains("Exit") ||
+				                   execution.Order.Name.Contains("Target") ||
+				                   execution.Order.Name.Contains("Stop") ||
+				                   execution.Order.Name.Contains("Time");
+
+				if (isExitOrder)
 				{
 					// Calculate P&L for this exit
 					double pnl = execution.Order.AverageFillPrice * execution.Quantity * (execution.Order.IsLong ? -1 : 1);

@@ -1,0 +1,171 @@
+CG_MNQ_MarketReplayLab Restart Summary
+=====================================
+
+Project Root
+------------
+~/trading4/CG_MNQ_MarketReplayLab
+
+Goal
+----
+Build a Python-based market replay and execution simulator for MNQ futures using:
+- ClickHouse for raw MBO storage
+- Polars for extraction/normalization
+- SortedContainers for order book state
+- SimPy for replay timing
+- hftbacktest for execution modeling later
+- Dash/PyQt for UI later
+
+Current Architecture
+--------------------
+Key packages/directories:
+- cg_sim/
+- cg_book/
+- cg_exec/
+- cg_strategy/
+- scripts/
+- replay_cache/
+
+Important Files
+---------------
+- scripts/CG_extract_one_session.py
+- scripts/CG_replay_one_session.py
+- scripts/CG_validate_book_state.py
+- scripts/CG_validate_book_state_relaxed.py
+- scripts/CG_validate_book_state_relaxed_side_test.py
+- scripts/CG_validate_book_state_eventbatched.py
+- cg_book/order_book_relaxed.py
+- cg_sim/replay.py
+
+Most Important Discovery
+------------------------
+The major reconstruction problems were NOT primarily caused by side inversion.
+
+What fixed the book substantially:
+1. Use only front-month MNQZ5
+2. Use exact instrument_id 42001149
+3. Filter out absurd prices using min/max price band
+4. Preserve raw Databento action semantics:
+   - A -> add
+   - M -> modify
+   - C -> cancel
+   - R -> clear
+   - T -> trade_aggressor
+   - F -> fill_resting
+   - N -> none
+5. Treat T and F differently:
+   - trade_aggressor should NOT mutate the resting book
+   - fill_resting SHOULD decrement resting liquidity
+6. Process rows in event batches grouped by ts_event_ns
+7. Validate the book only after the event batch completes
+8. Use flags bitmask correctly:
+   - 128 = F_LAST
+   - F_LAST means the row is the final record in the event for that instrument
+
+Important Databento Notes
+-------------------------
+flags is a bitmask:
+- 128 = F_LAST
+- 64 = F_TOB
+- 32 = F_SNAPSHOT
+- 16 = F_MBP
+- 8 = F_BAD_TS_RECV
+- 4 = F_MAYBE_BAD_BOOK
+- 2 = F_PUBLISHER_SPECIFIC
+
+action semantics:
+- A = add resting liquidity
+- M = modify existing resting order
+- C = cancel/remove resting liquidity
+- R = clear book
+- T = aggressor-side trade info
+- F = resting-side fill
+- N = no-op informational event
+
+Current Best Extraction Command
+-------------------------------
+python scripts/CG_extract_one_session.py \
+  --start "2025-10-22 00:00:00" \
+  --end "2025-10-22 20:00:00" \
+  --symbol MNQZ5 \
+  --instrument-id 42001149 \
+  --min-price 24000 \
+  --max-price 26000 \
+  --out replay_cache/2025-10-22_MNQZ5_i42001149_pxfiltered_semantic.parquet
+
+Current Best Validation Command
+-------------------------------
+python scripts/CG_validate_book_state_eventbatched.py \
+  --parquet replay_cache/2025-10-22_MNQZ5_i42001149_pxfiltered_semantic.parquet \
+  --max-events 500000 \
+  --mode full
+
+Latest Good Result
+------------------
+Event-batched validation produced:
+
+- rows_loaded: 500,000
+- batches_seen: 424,837
+- crossed_after_batch: 30,824
+- fill_events: 26,389
+- aggressor_trade_events: 15,163
+- missing_level_refs: 55,409
+- best_bid: 25239.5
+- best_ask: 25240.0
+- spread: 0.5
+
+This is the first realistic healthy result:
+- final book no longer catastrophically crossed
+- final spread positive and sane
+- top-of-book snapshot plausible
+
+Current Remaining Problem
+-------------------------
+The remaining reconstruction issue is likely modify semantics.
+
+The current relaxed book does not keep per-order state.
+
+Likely next improvement:
+- maintain order_id -> (side, price, size)
+- on modify:
+  - remove old order state from old price level
+  - apply new order state at new price level
+- on cancel:
+  - decrement known order
+- on fill_resting:
+  - decrement known order
+- on trade_aggressor:
+  - record only, do not decrement book
+
+Recommended Next Files
+----------------------
+Create:
+- cg_book/order_book_eventbatched_strict.py
+- scripts/CG_validate_book_state_eventbatched_strict.py
+
+Strict Book Design
+------------------
+The strict event-batched book should:
+- keep order_id map
+- maintain exact per-order resting state
+- apply add/modify/cancel/fill correctly
+- validate only after complete ts_event_ns batches
+- likely reduce:
+  - missing_level_refs
+  - crossed_after_batch
+  - capped_decrements
+
+Useful Instrument Reference
+---------------------------
+Front-month MNQZ5:
+- symbol = MNQZ5
+- instrument_id = 42001149
+
+Avoid:
+- spreads/calendar instruments
+- deferred contracts
+- weird instrument_ids with tiny row counts
+- prices outside sane MNQ range
+
+Key Takeaway
+------------
+The simulator is now on the right path. The remaining gap is not side handling or trade semantics anymore. The next major improvement is strict order-aware modify handling using order_id state.

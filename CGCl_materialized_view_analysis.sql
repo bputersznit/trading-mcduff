@@ -1,0 +1,16 @@
+-- Materialized views analysis
+-- Consider replacing with regular views if:
+--   1. The source data doesn't change frequently
+--   2. Query performance is acceptable without pre-aggregation
+--   3. The target table is large
+
+-- bookmap_1m_mv
+-- Engine: MaterializedView
+-- CREATE DDL:
+--   CREATE MATERIALIZED VIEW default.bookmap_1m_mv TO default.bookmap_1m (`time_bucket` DateTime, `symbol` String, `price` Decimal(10, 2), `bid_depth` Nullable(Float64), `ask_depth` Nullable(Float64), `depth_total` Nullable(Float64), `depth_imbalance` Nullable(Float64), `exec_buy_vol` Nullable(UInt64), `exec_sell_vol` Nullable(UInt64), `exec_total_vol` Nullable(UInt64), `exec_delta` Nullable(Int64), `large_depth_flag` Nullable(UInt8), `large_trade_flag` Nullable(UInt8), `absorption_score` Nullable(Float64), `iceberg_score` Nullable(Float64), `stop_run_score` Nullable(Float64), `imbalance_strength` Nullable(Float64)) AS SELECT toStartOfMinute(time_bucket) AS time_bucket, symbol AS symbol, price AS price, avgOrNull(bid_depth) AS bid_depth, avgOrNull(ask_depth) AS ask_depth, avgOrNull(depth_total) AS depth_total, avgOrNull(depth_imbalance) AS depth_imbalance, sumOrNull(exec_buy_vol) AS exec_buy_vol, sumOrNull(exec_sell_vol) AS exec_sell_vol, sumOrNull(exec_total_vol) AS exec_total_vol, sumOrNull(exec_delta) AS exec_delta, maxOrNull(large_depth_flag) AS large_depth_flag, maxOrNull(large_trade_flag) AS large_trade_flag, avgOrNull(absorption_score) AS absorption_score, avgOrNull(iceberg_score) AS iceberg_score, avgOrNull(stop_run_score) AS stop_run_score, avgOrNull(imbalance_strength) AS imbalance_strength FROM default.bookmap_1s GROUP BY toStartOfMinute(bookmap_1s.time_bucket), bookmap_1s.symbol, bookmap_1s.price
+
+-- bookmap_5m_mv
+-- Engine: MaterializedView
+-- CREATE DDL:
+--   CREATE MATERIALIZED VIEW default.bookmap_5m_mv TO default.bookmap_5m (`time_bucket` DateTime, `symbol` String, `price` Decimal(10, 2), `bid_depth` Nullable(Float64), `ask_depth` Nullable(Float64), `depth_total` Nullable(Float64), `depth_imbalance` Nullable(Float64), `exec_buy_vol` Nullable(UInt64), `exec_sell_vol` Nullable(UInt64), `exec_total_vol` Nullable(UInt64), `exec_delta` Nullable(Int64), `large_depth_flag` Nullable(UInt8), `large_trade_flag` Nullable(UInt8), `absorption_score` Nullable(Float64), `iceberg_score` Nullable(Float64), `stop_run_score` Nullable(Float64), `imbalance_strength` Nullable(Float64)) AS SELECT toStartOfInterval(time_bucket, toIntervalMinute(5)) AS time_bucket, symbol AS symbol, price AS price, avgOrNull(bid_depth) AS bid_depth, avgOrNull(ask_depth) AS ask_depth, avgOrNull(depth_total) AS depth_total, avgOrNull(depth_imbalance) AS depth_imbalance, sumOrNull(exec_buy_vol) AS exec_buy_vol, sumOrNull(exec_sell_vol) AS exec_sell_vol, sumOrNull(exec_total_vol) AS exec_total_vol, sumOrNull(exec_delta) AS exec_delta, maxOrNull(large_depth_flag) AS large_depth_flag, maxOrNull(large_trade_flag) AS large_trade_flag, avgOrNull(absorption_score) AS absorption_score, avgOrNull(iceberg_score) AS iceberg_score, avgOrNull(stop_run_score) AS stop_run_score, avgOrNull(imbalance_strength) AS imbalance_strength FROM default.bookmap_1m GROUP BY toStartOfInterval(bookmap_1m.time_bucket, toIntervalMinute(5)), bookmap_1m.symbol, bookmap_1m.price
+

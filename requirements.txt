@@ -1,0 +1,7 @@
+polars>=1.0.0
+sortedcontainers>=2.4.0
+simpy>=4.1.1
+clickhouse-connect>=0.7.0
+pyarrow>=16.0.0
+pydantic>=2.7.0
+dash>=2.18.0

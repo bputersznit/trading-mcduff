@@ -1078,13 +1078,17 @@ namespace NinjaTrader.NinjaScript.Strategies
 			double stop = 0;
 			int maxHold = 0;
 					if (signal.Type == "ABSORPTION")
+					{
 						target = AbsorptionTarget;
 						stop = AbsorptionStop;
 						maxHold = AbsorptionMaxHold;
+					}
 					else if (signal.Type == "BREAKOUT")
+					{
 						target = BreakoutTarget;
 						stop = BreakoutStop;
 						maxHold = BreakoutMaxHold;
+					}
 			}
 
 			SetProfitTarget(CalculationMode.Ticks, (int)(target / TickSize));

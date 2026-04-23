@@ -1472,7 +1472,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 
 		public override string DisplayName
 		{
-			return "CG Scalping NT8 Native v4.2 - Hybrid";
+			get { return "CG Scalping NT8 Native v4.2 - Hybrid"; }
 		}
 	}
 }

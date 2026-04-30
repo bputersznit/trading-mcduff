@@ -208,11 +208,26 @@ public class CG_T2_EventImbalance_Baseline_v1_0 : Strategy
             return;
 
         if (CurrentBar < Math.Max(EventLookbackBars, 10))
+        {
+            if (PrintDiagnostics && CurrentBar == 1)
+                Print($"Waiting for primary bars: {CurrentBar}/{Math.Max(EventLookbackBars, 10)} needed");
             return;
+        }
 
         // Also ensure tick data has enough bars
         if (BarsArray[1].Count < Math.Max(EventLookbackBars, 10))
+        {
+            if (PrintDiagnostics && CurrentBar % 60 == 0) // Print every 60 bars
+                Print($"Waiting for tick data: {BarsArray[1].Count}/{Math.Max(EventLookbackBars, 10)} ticks needed");
             return;
+        }
+
+        // Log when strategy starts active evaluation (only once)
+        if (PrintDiagnostics && CurrentBar == Math.Max(EventLookbackBars, 10))
+        {
+            Print($"✅ Strategy active! Primary bars: {CurrentBar}, Tick bars: {BarsArray[1].Count}");
+            Print($"Now evaluating signals...");
+        }
 
         DateTime now = Time[0];
         string regime = GetSessionRegime(now);

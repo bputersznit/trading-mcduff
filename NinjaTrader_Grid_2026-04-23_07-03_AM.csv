@@ -1,0 +1,4 @@
+NinjaScript File,Error,Code,Line,Column,
+CGScalpingStrategyNT8Native_v4_2_Hybrid.cs,At least one accessor is required.,,1473,2,
+CGScalpingStrategyNT8Native_v4_2_Hybrid.cs,'}' expected.,,1473,3,
+CGScalpingStrategyNT8Native_v4_2_Hybrid.cs,Extern alias declarations using clauses assembly/module attributes top-level statements or namespace/type declarations expected.,,1476,2,

@@ -1,0 +1,298 @@
+🧠 MNQ Intraday Strategy — Project Summary (Restart Doc)
+🎯 Objective
+Develop a profitable, execution-realistic MNQ intraday strategy that:
+
+
+Uses order-flow / microstructure signals
+
+
+Is validated in ClickHouse backtests
+
+
+Can be deployed in NinjaTrader 8
+
+
+Respects strict risk constraints:
+
+
+Max daily loss: $200
+
+
+1 MNQ contract only
+
+
+RTH trading only (09:30–16:00 ET)
+
+
+
+
+
+📊 Data & Infrastructure
+Data Sources
+
+
+L3 / MBO data → mnq_mbo
+
+
+Derived tables (CG_ prefix):
+
+
+CG_mnq_mbo_events
+
+
+CG_mnq_trades_100ms
+
+
+CG_mnq_trades_flow_100ms
+
+
+CG_mnq_features_100ms_clean
+
+
+
+
+Engine
+
+
+ClickHouse (MergeTree)
+
+
+100ms aggregation resolution
+
+
+
+⚙️ Core Strategy Logic
+Signal Layer
+Based on:
+
+
+Order-flow imbalance
+
+
+Delta / velocity
+
+
+Microstructure-derived features
+
+
+Signals:
+LONG / SHORT / NONE
+
+⚡ Execution Models Tested
+Model A — Limit Only
+
+
+Queue-based fill simulation (q10, 5s)
+
+
+Pros:
+
+
+High PF (~2.1)
+
+
+High expectancy (~$55)
+
+
+
+
+Cons:
+
+
+Misses ~60% of trades
+
+
+
+
+
+Model B — Market Only
+
+
+Always enters
+
+
+Dynamic slippage model (3–8 ticks)
+
+
+Pros:
+
+
+Higher total PnL
+
+
+
+
+Cons:
+
+
+Worse PF (~1.8)
+
+
+Larger drawdowns
+
+
+
+
+
+Model C — Hybrid (v1)
+Limit → if not filled → Market (1s)
+Result:
+
+
+Best PnL (~$105k)
+
+
+But fragile on certain days
+
+
+Example failure:
+
+
+2025-10-15: -$611 day
+
+
+
+
+
+🔥 Critical Failure Discovery
+Root Cause
+Bad days caused by:
+Limit fails → forced market entry → immediate stop
+Observed:
+
+
+LIMIT trades: profitable
+
+
+MARKET trades: large losses
+
+
+Conclusion:
+Execution failure, not signal failure
+
+🛠️ Hybrid v2 (Current Best Model)
+Key Improvement — Conditional Market Fallback
+Limit firstIf not filled:    IF flow <= threshold → MARKET    ELSE → SKIP trade
+Flow proxy:
+total_event_size
+Threshold:
+<= 150–200
+
+📈 Final Validated Model (v2 + constraints)
+Metrics (FULL SAMPLE)
+Trades:        ~1813Total PnL:     ~$95,000Expectancy:    ~$52Win rate:      ~55%Profit factor: ~2.03Worst intraday: -$190.7
+
+🛡️ Risk Controls
+Enforced in model:
+Stop new entries if daily PnL <= -60Hard stop / disable at -200Single position onlyRTH only
+
+📉 Key Validation
+Worst Day (2025-10-15)
+Before fix:  -611After fix:   -126   ✅
+
+🚫 Trailing Stop Attempt (Invalid)
+Result:
+Win rate: ~98%PnL: 3–4x increaseMax trade: >$800
+Diagnosis:
+Broken backtest (path leakage)Trailing exits not enforced at first hit
+Decision:
+DISCARD trailing modelUse fixed stops for now
+
+🧾 Final Strategy Definition
+Entry
+Signal triggersPlace LIMITWait ~1 second
+Execution Decision
+IF filled → tradeELSE IF flow <= threshold → MARKETELSE → SKIP
+Exit
+Stop:   -20 ticks (~-$100)Target: +40 ticks (~$200)No trailing
+
+🧠 Key Insights
+1. Edge is robust
+Signal works even with slippage
+2. Execution matters more than signal
+Bad execution = lossesSelective execution = profitability
+3. Market orders are NOT bad
+Unconditional market orders are bad
+4. Hybrid is optimal
+Limit + conditional market fallback
+
+⚠️ Remaining Risks
+
+
+Latency differences (live vs CH)
+
+
+Slippage model approximation
+
+
+Queue model realism
+
+
+No L2 depth replay validation yet
+
+
+
+🚀 Next Steps (Recommended)
+1. NT8 Implementation
+
+
+Limit → conditional market fallback
+
+
+Daily loss lockout
+
+
+Single position enforcement
+
+
+2. Further Improvements
+
+
+Dynamic flow threshold (adaptive)
+
+
+Momentum confirmation before market
+
+
+L2-based gating
+
+
+Regime detection (chop vs trend)
+
+
+3. Validation
+
+
+Market replay with L2
+
+
+Slippage stress testing (+1–2 ticks)
+
+
+
+🧩 Current Best Table
+Use this as ground truth:
+CG_mnq_hybrid_model_v2_executed
+Or risk-constrained:
+CG_mnq_hybrid_model_rth_single_position
+
+🏁 Bottom Line
+You now have:
+A profitableexecution-awarerisk-constrainedintraday MNQ strategy
+That:
+
+
+survives bad days
+
+
+respects capital limits
+
+
+maintains strong expectancy
+
+
+
+If you paste this into a new chat, we can immediately pick up at:
+👉 NT8 implementation
+👉 further edge refinement
+👉 live deployment prep

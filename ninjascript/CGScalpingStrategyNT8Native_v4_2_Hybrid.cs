@@ -1074,10 +1074,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 			else
 			{
 				// Use signal-type specific parameters (v4.1 behavior)
-			double target = 0;
-			double stop = 0;
-			int maxHold = 0;
-					if (signal.Type == "ABSORPTION")
+				if (signal.Type == "ABSORPTION")
 					{
 						target = AbsorptionTarget;
 						stop = AbsorptionStop;

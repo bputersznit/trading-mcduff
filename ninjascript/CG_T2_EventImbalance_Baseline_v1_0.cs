@@ -159,32 +159,32 @@ public class CG_T2_EventImbalance_Baseline_v1_0 : Strategy
         }
         else if (State == State.Configure)
         {
+            // Add tick data series for high-resolution event tracking
+            // This runs regardless of what primary series the user selected
+            // BarsArray[0] = primary (user-selected)
+            // BarsArray[1] = tick data (for event calculations)
+            AddDataSeries(BarsPeriodType.Tick, 1);
+
+            if (PrintDiagnostics)
+                Print("Added 1-tick data series for event calculations (BarsArray[1])");
         }
         else if (State == State.DataLoaded)
         {
-            // Auto-configure EventLookbackBars to maintain ~10 second lookback
-            // (matching original CH 100ms × 100 bars = 10 seconds)
-            if (BarsPeriod.BarsPeriodType == BarsPeriodType.Tick)
+            // Auto-configure EventLookbackBars for tick data
+            // We always use tick data (BarsArray[1]) regardless of primary series
+            // Target: ~10 seconds of lookback (matching original CH 100ms × 100 = 10 seconds)
+            // For MNQ, ~200 ticks ≈ 10 seconds during active trading
+            if (EventLookbackBars == 100)
             {
-                // Tick bars: use manual setting or default to 100
-                // (user should adjust based on tick volume)
-                if (EventLookbackBars == 100)
-                    EventLookbackBars = 200; // Reasonable default for MNQ tick frequency
+                EventLookbackBars = 200; // Default for MNQ tick frequency
             }
-            else if (BarsPeriod.BarsPeriodType == BarsPeriodType.Second)
-            {
-                // For second bars: calculate bars needed for 10 seconds
-                EventLookbackBars = Math.Max(10, 10 / BarsPeriod.Value);
-            }
-            else if (BarsPeriod.BarsPeriodType == BarsPeriodType.Minute)
-            {
-                // For minute bars: ~10 bars gives reasonable lookback
-                EventLookbackBars = 10;
-            }
-            // else keep user-specified value
 
             if (PrintDiagnostics)
-                Print($"Auto-configured EventLookbackBars = {EventLookbackBars} for {BarsPeriod.BarsPeriodType} {BarsPeriod.Value}");
+            {
+                Print($"Primary data series: {BarsPeriod.BarsPeriodType} {BarsPeriod.Value}");
+                Print($"Event calculations use: 1-tick data (BarsArray[1])");
+                Print($"EventLookbackBars = {EventLookbackBars} ticks");
+            }
 
             if (EnableTelemetry)
                 OpenTelemetry();
@@ -202,7 +202,16 @@ public class CG_T2_EventImbalance_Baseline_v1_0 : Strategy
 
     protected override void OnBarUpdate()
     {
+        // Only execute on primary data series (user-selected)
+        // BarsArray[1] (tick data) is used for event calculations only
+        if (BarsInProgress != 0)
+            return;
+
         if (CurrentBar < Math.Max(EventLookbackBars, 10))
+            return;
+
+        // Also ensure tick data has enough bars
+        if (BarsArray[1].Count < Math.Max(EventLookbackBars, 10))
             return;
 
         DateTime now = Time[0];
@@ -310,19 +319,23 @@ public class CG_T2_EventImbalance_Baseline_v1_0 : Strategy
         // In CH: event_delta = bid_events - ask_events
         //        event_imbalance = event_delta / total_events
         //
-        // In NT8: We approximate using tick/bar counts classified by close direction
-        //         Each bar where close > prior close = bid-side event
-        //         Each bar where close < prior close = ask-side event
+        // In NT8: We use tick data (BarsArray[1]) for high-resolution event tracking
+        //         Each tick where close > prior close = bid-side event
+        //         Each tick where close < prior close = ask-side event
 
         double bidEvents = 0.0;
         double askEvents = 0.0;
 
-        int n = Math.Min(EventLookbackBars, CurrentBar);
+        // Use tick data series (BarsArray[1]) for event calculations
+        int tickBars = BarsArray[1].Count;
+        int n = Math.Min(EventLookbackBars, tickBars - 1);
+
         for (int i = 0; i < n; i++)
         {
-            if (Close[i] > Close[i + 1])
+            // Access tick data using Closes[1][i]
+            if (Closes[1][i] > Closes[1][i + 1])
                 bidEvents += 1.0;
-            else if (Close[i] < Close[i + 1])
+            else if (Closes[1][i] < Closes[1][i + 1])
                 askEvents += 1.0;
             else
             {

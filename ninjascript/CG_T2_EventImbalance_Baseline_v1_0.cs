@@ -162,6 +162,30 @@ public class CG_T2_EventImbalance_Baseline_v1_0 : Strategy
         }
         else if (State == State.DataLoaded)
         {
+            // Auto-configure EventLookbackBars to maintain ~10 second lookback
+            // (matching original CH 100ms × 100 bars = 10 seconds)
+            if (BarsPeriod.BarsPeriodType == BarsPeriodType.Tick)
+            {
+                // Tick bars: use manual setting or default to 100
+                // (user should adjust based on tick volume)
+                if (EventLookbackBars == 100)
+                    EventLookbackBars = 200; // Reasonable default for MNQ tick frequency
+            }
+            else if (BarsPeriod.BarsPeriodType == BarsPeriodType.Second)
+            {
+                // For second bars: calculate bars needed for 10 seconds
+                EventLookbackBars = Math.Max(10, 10 / BarsPeriod.Value);
+            }
+            else if (BarsPeriod.BarsPeriodType == BarsPeriodType.Minute)
+            {
+                // For minute bars: ~10 bars gives reasonable lookback
+                EventLookbackBars = 10;
+            }
+            // else keep user-specified value
+
+            if (PrintDiagnostics)
+                Print($"Auto-configured EventLookbackBars = {EventLookbackBars} for {BarsPeriod.BarsPeriodType} {BarsPeriod.Value}");
+
             if (EnableTelemetry)
                 OpenTelemetry();
         }

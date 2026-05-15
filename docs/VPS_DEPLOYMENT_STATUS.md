@@ -14,11 +14,17 @@
 
 **Path:** `C:\Users\Administrator\Documents\NinjaTrader 8\bin\Custom\Strategies\`
 
+**Policy:** Only latest version deployed. Old versions deleted.
+
 | File | Size | Status | Description |
 |------|------|--------|-------------|
-| CG_OrderFlow_Aggression_v2_0.cs | 24,364 bytes | ✅ DEPLOYED | **USE THIS** - Complete rewrite with execution aggression |
-| CG_OrderFlow_Imbalance_v1_0_CORRECTED.cs | 17,315 bytes | ✅ DEPLOYED | v1.0 with P&L fix only |
-| CG_OrderFlow_Imbalance_v1_0_FIXED.cs | 15,892 bytes | ✅ DEPLOYED | Older version with timeout fix |
+| CG_OrderFlow_Aggression_v2_1_OCO_ORFIX.cs | 44,910 bytes | ✅ DEPLOYED | **CURRENT** - Production-grade execution aggression |
+
+**Deleted (kept in git history only):**
+- ~~CG_OrderFlow_Aggression_v2_0.cs~~ (had bugs)
+- ~~CG_OrderFlow_Imbalance_v1_0_CORRECTED.cs~~ (obsolete)
+- ~~CG_OrderFlow_Imbalance_v1_0_FIXED.cs~~ (obsolete)
+- ~~CG_OrderFlow_Imbalance_v1_0.cs~~ (broken)
 
 ---
 

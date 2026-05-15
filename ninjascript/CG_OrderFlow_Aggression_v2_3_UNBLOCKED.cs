@@ -38,7 +38,7 @@ using NinjaTrader.NinjaScript;
 
 namespace NinjaTrader.NinjaScript.Strategies
 {
-    public class CG_OrderFlow_Aggression_v2_2_PERSISTENCE_AUCTION : Strategy
+    public class CG_OrderFlow_Aggression_v2_3_UNBLOCKED : Strategy
     {
         #region Enums
         private enum DirectionSignal { None = 0, Long = 1, Short = -1 }
@@ -126,8 +126,8 @@ namespace NinjaTrader.NinjaScript.Strategies
         {
             if (State == State.SetDefaults)
             {
-                Description = "CG OrderFlow Aggression v2.2 Persistence + Auction State";
-                Name = "CG_OrderFlow_Aggression_v2_2_PERSISTENCE_AUCTION";
+                Description = "CG OrderFlow Aggression v2.3 UNBLOCKED - relaxed gates for trade discovery";
+                Name = "CG_OrderFlow_Aggression_v2_3_UNBLOCKED";
 
                 Calculate = Calculate.OnEachTick;
                 EntriesPerDirection = 1;
@@ -146,36 +146,37 @@ namespace NinjaTrader.NinjaScript.Strategies
                 BarsRequiredToTrade = 20;
 
                 // Signal / persistence
-                MinAggressionDelta100ms = 70;
-                MinAggressionImbalance100ms = 0.65;
-                MinAggressionDelta1s = 120;
-                MinAggressionImbalance1s = 0.20;
-                MinAggressionDelta5s = 200;
-                MinAggressionImbalance5s = 0.10;
-                ConsecutiveBucketsRequired = 3;
+                // v2.3 UNBLOCKED: relaxed defaults because v2.2 proved over-gated and produced zero trades.
+                MinAggressionDelta100ms = 40;
+                MinAggressionImbalance100ms = 0.55;
+                MinAggressionDelta1s = 50;
+                MinAggressionImbalance1s = 0.05;
+                MinAggressionDelta5s = 100;
+                MinAggressionImbalance5s = 0.05;
+                ConsecutiveBucketsRequired = 1;
                 PersistenceWindowBuckets = 10;
-                MinPersistenceScore = 2.40;
+                MinPersistenceScore = 1.00;
                 Require1sConfirmation = true;
-                Require5sNonOpposition = true;
+                Require5sNonOpposition = false;
 
                 // Auction / structure
                 EnableOpeningRangeFilter = true;
-                EnableVWAPFilter = true;
-                EnableStructureFilter = true;
-                EnableAuctionStateMachine = true;
+                EnableVWAPFilter = false;
+                EnableStructureFilter = false;
+                EnableAuctionStateMachine = false;
                 SwingLookbackMinutes = 6;
-                MinDistanceFromVWAPTicks = 4;
+                MinDistanceFromVWAPTicks = 0;
                 AllowReversalTrades = false;
 
                 // Sweep / acceptance / absorption
-                EnablePostSweepDelay = true;
+                EnablePostSweepDelay = false;
                 SweepDeltaThreshold = 180;
                 SweepImbalanceThreshold = 0.80;
                 PostSweepDelayMs = 1000;
-                EnablePriceAcceptance = true;
+                EnablePriceAcceptance = false;
                 AcceptanceTicks = 4;
-                AcceptanceBucketsRequired = 2;
-                EnableAbsorptionFilter = true;
+                AcceptanceBucketsRequired = 1;
+                EnableAbsorptionFilter = false;
                 AbsorptionPriceMoveMaxTicks = 2;
                 AbsorptionAggressionDelta = 200;
 
@@ -191,8 +192,8 @@ namespace NinjaTrader.NinjaScript.Strategies
                 EnableCooldown = true;
                 CooldownSeconds = 90;
                 PostStopCooldownSeconds = 180;
-                MinimumSecondsBetweenEntries = 60;
-                MaxTradesPerDay = 20;
+                MinimumSecondsBetweenEntries = 20;
+                MaxTradesPerDay = 40;
 
                 // Daily limits: ON by default now, because prior run overtraded into large negative drift.
                 EnableDailyLimits = true;
@@ -208,7 +209,7 @@ namespace NinjaTrader.NinjaScript.Strategies
                 RTHEndMinute = 0;
 
                 PrintDiagnostics = true;
-                DiagnosticEveryBuckets = 250;
+                DiagnosticEveryBuckets = 100;
             }
             else if (State == State.Configure)
             {

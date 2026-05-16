@@ -55,6 +55,7 @@
 2026-03-02/l2_chunk_0163.parquet
 2026-04-02/l2_chunk_0407.parquet
 2026-03-18/l2_chunk_0095.parquet
+2026-04-08/l2_chunk_0346.parquet
 2026-03-17/l2_chunk_0150.parquet
 2026-03-31/l2_chunk_0987.parquet
 2026-03-17/l2_chunk_0477.parquet
@@ -195,6 +196,7 @@
 2026-03-24/l2_chunk_0168.parquet
 2026-03-06/l2_chunk_0234.parquet
 2026-03-09/l2_chunk_0200.parquet
+2026-04-09/l2_chunk_0072.parquet
 2026-03-26/l2_chunk_0049.parquet
 2026-03-18/l2_chunk_0821.parquet
 2026-03-20/l2_chunk_0731.parquet
@@ -222,6 +224,7 @@
 2026-04-01/l2_chunk_0527.parquet
 2026-03-12/l2_chunk_0053.parquet
 2026-03-27/l2_chunk_0676.parquet
+2026-04-08/l2_chunk_0263.parquet
 2026-03-16/l2_chunk_0085.parquet
 2026-03-24/l2_chunk_0171.parquet
 2026-03-18/l2_chunk_0385.parquet
@@ -283,11 +286,13 @@
 2026-03-27/l2_chunk_0232.parquet
 2026-03-19/l2_chunk_0946.parquet
 2026-03-18/l2_chunk_0003.parquet
+2026-04-08/l2_chunk_0358.parquet
 2026-03-11/l2_chunk_0002.parquet
 2026-03-24/l2_chunk_0169.parquet
 2026-03-20/l2_chunk_0362.parquet
 2026-03-17/l2_chunk_0195.parquet
 2026-04-08/l2_chunk_0010.parquet
+2026-04-08/l2_chunk_0285.parquet
 2026-03-06/l2_chunk_0190.parquet
 2026-03-02/l2_chunk_0071.parquet
 2026-03-11/l2_chunk_0134.parquet
@@ -547,6 +552,7 @@
 2026-04-01/l2_chunk_0497.parquet
 2026-03-18/l2_chunk_0511.parquet
 2026-03-30/l2_chunk_0574.parquet
+2026-04-08/l2_chunk_0297.parquet
 2026-03-18/l2_chunk_0327.parquet
 2026-03-27/l2_chunk_0369.parquet
 2026-04-06/l2_chunk_0548.parquet
@@ -608,6 +614,7 @@
 2026-03-31/l2_chunk_0627.parquet
 2026-05-06/l2_chunk_0002.parquet
 2026-03-26/l2_chunk_0706.parquet
+2026-04-08/l2_chunk_0325.parquet
 2026-03-16/l2_chunk_0627.parquet
 2026-03-31/l2_chunk_0762.parquet
 2026-03-19/l2_chunk_0929.parquet
@@ -807,6 +814,7 @@
 2026-03-19/l2_chunk_0743.parquet
 2026-03-30/l2_chunk_0239.parquet
 2026-03-10/l2_chunk_0172.parquet
+2026-04-08/l2_chunk_0342.parquet
 2026-03-18/l2_chunk_0285.parquet
 2026-03-04/l2_chunk_0115.parquet
 2026-04-02/l2_chunk_0569.parquet
@@ -862,6 +870,7 @@
 2026-03-25/l2_chunk_0746.parquet
 2026-03-06/l2_chunk_0115.parquet
 2026-03-26/l2_chunk_0126.parquet
+2026-04-08/l2_chunk_0245.parquet
 2026-03-25/l2_chunk_0061.parquet
 2026-03-26/l2_chunk_0776.parquet
 2026-03-27/l2_chunk_0162.parquet
@@ -956,6 +965,7 @@
 2026-03-20/l2_chunk_0558.parquet
 2026-03-20/l2_chunk_0650.parquet
 2026-03-04/l2_chunk_0084.parquet
+2026-04-08/l2_chunk_0222.parquet
 2026-03-19/l2_chunk_0859.parquet
 2026-03-18/l2_chunk_0294.parquet
 2026-03-16/l2_chunk_0341.parquet
@@ -1018,6 +1028,7 @@
 2026-04-07/l2_chunk_0708.parquet
 2026-03-25/l2_chunk_0588.parquet
 2026-03-25/l2_chunk_0694.parquet
+2026-04-08/l2_chunk_0221.parquet
 2026-03-18/l2_chunk_0062.parquet
 2026-03-25/l2_chunk_0760.parquet
 2026-03-31/l2_chunk_0591.parquet
@@ -1281,6 +1292,7 @@
 2026-03-12/l2_chunk_0057.parquet
 2026-04-01/l2_chunk_0092.parquet
 2026-03-31/l2_chunk_0324.parquet
+2026-04-08/l2_chunk_0214.parquet
 2026-03-03/l2_chunk_0064.parquet
 2026-03-31/l2_chunk_0049.parquet
 2026-03-30/l2_chunk_0849.parquet
@@ -1294,6 +1306,7 @@
 2026-04-07/l2_chunk_0061.parquet
 2026-03-18/l2_chunk_0314.parquet
 2026-03-26/l2_chunk_0758.parquet
+2026-04-09/l2_chunk_0067.parquet
 2026-03-31/l2_chunk_0494.parquet
 2026-03-05/l2_chunk_0187.parquet
 2026-04-01/l2_chunk_0214.parquet
@@ -1340,6 +1353,7 @@
 2026-03-31/l2_chunk_0303.parquet
 2026-05-05/l2_chunk_0049.parquet
 2026-03-19/l2_chunk_0342.parquet
+2026-04-09/l2_chunk_0054.parquet
 2026-03-31/l2_chunk_1005.parquet
 2026-03-16/l2_chunk_0230.parquet
 2026-03-19/l2_chunk_0489.parquet
@@ -1561,6 +1575,8 @@
 2026-05-06/l2_chunk_0157.parquet
 2026-03-12/l2_chunk_0125.parquet
 2026-03-20/l2_chunk_0508.parquet
+2026-04-08/l2_chunk_0292.parquet
+2026-04-08/l2_chunk_0283.parquet
 2026-03-19/l2_chunk_0979.parquet
 2026-03-19/l2_chunk_0999.parquet
 2026-03-05/l2_chunk_0060.parquet
@@ -1660,6 +1676,7 @@
 2026-03-19/l2_chunk_0771.parquet
 2026-03-06/l2_chunk_0077.parquet
 2026-03-19/l2_chunk_0418.parquet
+2026-04-08/l2_chunk_0240.parquet
 2026-03-20/l2_chunk_0399.parquet
 2026-03-18/l2_chunk_0673.parquet
 2026-03-19/l2_chunk_0679.parquet
@@ -1671,8 +1688,10 @@
 2026-03-19/l2_chunk_0873.parquet
 2026-04-07/l2_chunk_0550.parquet
 2026-03-03/l2_chunk_0025.parquet
+2026-04-08/l2_chunk_0267.parquet
 2026-03-16/l2_chunk_0197.parquet
 2026-03-17/l2_chunk_0517.parquet
+2026-04-08/l2_chunk_0213.parquet
 2026-03-26/l2_chunk_0182.parquet
 2026-04-01/l2_chunk_0741.parquet
 2026-04-06/l2_chunk_0120.parquet
@@ -1767,6 +1786,7 @@
 2026-03-09/l2_chunk_0051.parquet
 2026-04-07/l2_chunk_0321.parquet
 2026-04-08/l2_chunk_0001.parquet
+2026-04-09/l2_chunk_0056.parquet
 2026-03-06/l2_chunk_0148.parquet
 2026-03-09/l2_chunk_0108.parquet
 2026-03-24/l2_chunk_0223.parquet
@@ -1785,6 +1805,7 @@
 2026-03-20/l2_chunk_0718.parquet
 2026-03-18/l2_chunk_0537.parquet
 2026-03-19/l2_chunk_0863.parquet
+2026-04-08/l2_chunk_0366.parquet
 2026-03-16/l2_chunk_0462.parquet
 2026-04-02/l2_chunk_0299.parquet
 2026-04-07/l2_chunk_0539.parquet
@@ -2147,6 +2168,7 @@
 2026-04-02/l2_chunk_0284.parquet
 2026-04-02/l2_chunk_0542.parquet
 2026-03-19/l2_chunk_0318.parquet
+2026-04-08/l2_chunk_0326.parquet
 2026-04-06/l2_chunk_0406.parquet
 2026-04-02/l2_chunk_0198.parquet
 2026-03-19/l2_chunk_0396.parquet
@@ -2336,6 +2358,7 @@
 2026-03-25/l2_chunk_0478.parquet
 2026-03-03/l2_chunk_0163.parquet
 2026-03-19/l2_chunk_0899.parquet
+2026-04-08/l2_chunk_0304.parquet
 2026-03-10/l2_chunk_0028.parquet
 2026-03-16/l2_chunk_0003.parquet
 2026-03-12/l2_chunk_0106.parquet
@@ -2343,6 +2366,7 @@
 2026-03-02/l2_chunk_0074.parquet
 2026-03-25/l2_chunk_0701.parquet
 2026-03-18/l2_chunk_0084.parquet
+2026-04-08/l2_chunk_0359.parquet
 2026-03-06/l2_chunk_0202.parquet
 2026-03-26/l2_chunk_0617.parquet
 2026-03-20/l2_chunk_0725.parquet
@@ -2364,6 +2388,7 @@
 2026-03-26/l2_chunk_0046.parquet
 2026-03-25/l2_chunk_0271.parquet
 2026-03-31/l2_chunk_0767.parquet
+2026-04-08/l2_chunk_0229.parquet
 2026-03-18/l2_chunk_0459.parquet
 2026-03-27/l2_chunk_0250.parquet
 2026-03-16/l2_chunk_0635.parquet
@@ -2390,6 +2415,7 @@
 2026-03-11/l2_chunk_0014.parquet
 2026-03-24/l2_chunk_0249.parquet
 2026-04-06/l2_chunk_0121.parquet
+2026-04-09/l2_chunk_0055.parquet
 2026-03-31/l2_chunk_0933.parquet
 2026-03-18/l2_chunk_0097.parquet
 2026-03-02/l2_chunk_0083.parquet
@@ -2503,6 +2529,7 @@
 2026-03-16/l2_chunk_0682.parquet
 2026-03-27/l2_chunk_0433.parquet
 2026-03-31/l2_chunk_0264.parquet
+2026-04-08/l2_chunk_0227.parquet
 2026-04-06/l2_chunk_0365.parquet
 2026-03-19/l2_chunk_0047.parquet
 2026-03-16/l2_chunk_0045.parquet
@@ -2574,6 +2601,7 @@
 2026-03-19/l2_chunk_0062.parquet
 2026-03-26/l2_chunk_0446.parquet
 2026-04-07/l2_chunk_0021.parquet
+2026-04-08/l2_chunk_0335.parquet
 2026-03-31/l2_chunk_0879.parquet
 2026-03-06/l2_chunk_0026.parquet
 2026-03-31/l2_chunk_0998.parquet
@@ -2635,9 +2663,11 @@
 2026-04-08/l2_chunk_0003.parquet
 2026-03-31/l2_chunk_0334.parquet
 2026-03-18/l2_chunk_0741.parquet
+2026-04-08/l2_chunk_0303.parquet
 2026-03-04/l2_chunk_0043.parquet
 2026-03-05/l2_chunk_0116.parquet
 2026-03-11/l2_chunk_0243.parquet
+2026-04-08/l2_chunk_0264.parquet
 2026-03-31/l2_chunk_0038.parquet
 2026-03-16/l2_chunk_0441.parquet
 2026-03-18/l2_chunk_0069.parquet
@@ -2708,6 +2738,7 @@
 2026-03-25/l2_chunk_0493.parquet
 2026-04-07/l2_chunk_0501.parquet
 2026-03-27/l2_chunk_0586.parquet
+2026-04-09/l2_chunk_0065.parquet
 2026-03-17/l2_chunk_0330.parquet
 2026-03-18/l2_chunk_0199.parquet
 2026-04-08/l2_chunk_0120.parquet
@@ -2784,6 +2815,7 @@
 2026-03-25/l2_chunk_0197.parquet
 2026-03-25/l2_chunk_0020.parquet
 2026-04-07/l2_chunk_0706.parquet
+2026-04-08/l2_chunk_0208.parquet
 2026-03-09/l2_chunk_0114.parquet
 2026-03-20/l2_chunk_0199.parquet
 2026-03-31/l2_chunk_0523.parquet
@@ -2847,6 +2879,7 @@
 2026-03-25/l2_chunk_0145.parquet
 2026-04-06/l2_chunk_0630.parquet
 2026-04-07/l2_chunk_0532.parquet
+2026-04-08/l2_chunk_0282.parquet
 2026-03-17/l2_chunk_0082.parquet
 2026-03-16/l2_chunk_0477.parquet
 2026-03-17/l2_chunk_0277.parquet
@@ -2880,6 +2913,7 @@
 2026-03-27/l2_chunk_0169.parquet
 2026-03-13/l2_chunk_0044.parquet
 2026-03-20/l2_chunk_0023.parquet
+2026-04-08/l2_chunk_0361.parquet
 2026-03-30/l2_chunk_0361.parquet
 2026-03-18/l2_chunk_0837.parquet
 2026-03-25/l2_chunk_0355.parquet
@@ -2916,6 +2950,7 @@
 2026-03-17/l2_chunk_0456.parquet
 2026-03-31/l2_chunk_0794.parquet
 2026-03-09/l2_chunk_0021.parquet
+2026-04-08/l2_chunk_0233.parquet
 2026-03-16/l2_chunk_0194.parquet
 2026-03-31/l2_chunk_0813.parquet
 2026-03-20/l2_chunk_0273.parquet
@@ -2949,6 +2984,7 @@
 2026-03-19/l2_chunk_0584.parquet
 2026-03-18/l2_chunk_0724.parquet
 2026-03-25/l2_chunk_0720.parquet
+2026-04-08/l2_chunk_0235.parquet
 2026-04-02/l2_chunk_0296.parquet
 2026-03-06/l2_chunk_0223.parquet
 2026-03-16/l2_chunk_0375.parquet
@@ -2990,6 +3026,7 @@
 2026-04-06/l2_chunk_0552.parquet
 2026-04-02/l2_chunk_0187.parquet
 2026-03-30/l2_chunk_0295.parquet
+2026-04-09/l2_chunk_0077.parquet
 2026-03-30/l2_chunk_0284.parquet
 2026-03-18/l2_chunk_0182.parquet
 2026-03-26/l2_chunk_0157.parquet
@@ -3065,6 +3102,7 @@
 2026-03-31/l2_chunk_0062.parquet
 2026-04-06/l2_chunk_0023.parquet
 2026-03-18/l2_chunk_0179.parquet
+2026-04-08/l2_chunk_0271.parquet
 2026-03-27/l2_chunk_0284.parquet
 2026-03-30/l2_chunk_0861.parquet
 2026-03-16/l2_chunk_0296.parquet
@@ -3166,6 +3204,7 @@
 2026-03-19/l2_chunk_0292.parquet
 2026-04-07/l2_chunk_0076.parquet
 2026-03-31/l2_chunk_0250.parquet
+2026-04-08/l2_chunk_0212.parquet
 2026-03-18/l2_chunk_0674.parquet
 2026-03-30/l2_chunk_0829.parquet
 2026-03-02/l2_chunk_0082.parquet
@@ -3275,6 +3314,7 @@
 2026-03-19/l2_chunk_0410.parquet
 2026-03-24/l2_chunk_0188.parquet
 2026-03-26/l2_chunk_0400.parquet
+2026-04-08/l2_chunk_0350.parquet
 2026-05-06/l2_chunk_0021.parquet
 2026-04-01/l2_chunk_0221.parquet
 2026-04-07/l2_chunk_0794.parquet
@@ -3298,6 +3338,7 @@
 2026-03-13/l2_chunk_0029.parquet
 2026-03-18/l2_chunk_0865.parquet
 2026-03-26/l2_chunk_0586.parquet
+2026-04-08/l2_chunk_0256.parquet
 2026-03-17/l2_chunk_0500.parquet
 2026-03-03/l2_chunk_0030.parquet
 2026-03-27/l2_chunk_0283.parquet
@@ -3314,6 +3355,7 @@
 2026-03-25/l2_chunk_0329.parquet
 2026-04-07/l2_chunk_0881.parquet
 2026-04-08/l2_chunk_0135.parquet
+2026-04-08/l2_chunk_0338.parquet
 2026-03-12/l2_chunk_0158.parquet
 2026-03-17/l2_chunk_0683.parquet
 2026-04-01/l2_chunk_0150.parquet
@@ -3407,6 +3449,7 @@
 2026-04-07/l2_chunk_0301.parquet
 2026-04-07/l2_chunk_0492.parquet
 2026-03-18/l2_chunk_0491.parquet
+2026-04-08/l2_chunk_0308.parquet
 2026-03-06/l2_chunk_0153.parquet
 2026-04-07/l2_chunk_0522.parquet
 2026-03-24/l2_chunk_0110.parquet
@@ -3464,6 +3507,7 @@
 2026-03-31/l2_chunk_0776.parquet
 2026-03-31/l2_chunk_0963.parquet
 2026-04-02/l2_chunk_0286.parquet
+2026-04-08/l2_chunk_0226.parquet
 2026-03-27/l2_chunk_0290.parquet
 2026-03-04/l2_chunk_0055.parquet
 2026-03-20/l2_chunk_0462.parquet
@@ -3530,6 +3574,7 @@
 2026-03-30/l2_chunk_0802.parquet
 2026-03-20/l2_chunk_0262.parquet
 2026-04-06/l2_chunk_0010.parquet
+2026-04-08/l2_chunk_0253.parquet
 2026-04-06/l2_chunk_0355.parquet
 2026-03-30/l2_chunk_0069.parquet
 2026-03-18/l2_chunk_0373.parquet
@@ -3541,6 +3586,7 @@
 2026-03-05/l2_chunk_0189.parquet
 2026-04-01/l2_chunk_0684.parquet
 2026-03-20/l2_chunk_0372.parquet
+2026-04-08/l2_chunk_0230.parquet
 2026-04-01/l2_chunk_0555.parquet
 2026-04-06/l2_chunk_0147.parquet
 2026-03-19/l2_chunk_0059.parquet
@@ -3566,13 +3612,16 @@
 2026-03-24/l2_chunk_0030.parquet
 2026-03-19/l2_chunk_0176.parquet
 2026-04-06/l2_chunk_0229.parquet
+2026-04-08/l2_chunk_0255.parquet
 2026-03-20/l2_chunk_0604.parquet
 2026-03-25/l2_chunk_0238.parquet
 2026-03-16/l2_chunk_0689.parquet
 2026-03-19/l2_chunk_0806.parquet
 2026-04-02/l2_chunk_0406.parquet
 2026-03-18/l2_chunk_0043.parquet
+2026-04-08/l2_chunk_0228.parquet
 2026-03-31/l2_chunk_0418.parquet
+2026-04-08/l2_chunk_0306.parquet
 2026-04-07/l2_chunk_0732.parquet
 2026-03-03/l2_chunk_0004.parquet
 2026-03-16/l2_chunk_0522.parquet
@@ -3634,6 +3683,7 @@
 2026-03-19/l2_chunk_0302.parquet
 2026-03-18/l2_chunk_0343.parquet
 2026-03-24/l2_chunk_0231.parquet
+2026-04-08/l2_chunk_0337.parquet
 2026-03-27/l2_chunk_0776.parquet
 2026-03-19/l2_chunk_0677.parquet
 2026-03-25/l2_chunk_0396.parquet
@@ -3664,6 +3714,7 @@
 2026-03-30/l2_chunk_0804.parquet
 2026-05-05/l2_chunk_0167.parquet
 2026-03-19/l2_chunk_0191.parquet
+2026-04-08/l2_chunk_0246.parquet
 2026-03-30/l2_chunk_0365.parquet
 2026-03-25/l2_chunk_0447.parquet
 2026-03-11/l2_chunk_0223.parquet
@@ -3709,6 +3760,7 @@
 2026-03-27/l2_chunk_0577.parquet
 2026-03-30/l2_chunk_0022.parquet
 2026-03-30/l2_chunk_0271.parquet
+2026-04-08/l2_chunk_0333.parquet
 2026-04-01/l2_chunk_0098.parquet
 2026-04-06/l2_chunk_0105.parquet
 2026-03-18/l2_chunk_0408.parquet
@@ -3863,6 +3915,7 @@
 2026-04-02/l2_chunk_0382.parquet
 2026-03-19/l2_chunk_0572.parquet
 2026-03-31/l2_chunk_0132.parquet
+2026-04-09/l2_chunk_0071.parquet
 2026-03-25/l2_chunk_0521.parquet
 2026-03-31/l2_chunk_0493.parquet
 2026-03-19/l2_chunk_0493.parquet
@@ -3917,6 +3970,7 @@
 2026-04-01/l2_chunk_0007.parquet
 2026-03-31/l2_chunk_0148.parquet
 2026-04-07/l2_chunk_0504.parquet
+2026-04-08/l2_chunk_0219.parquet
 2026-03-19/l2_chunk_0638.parquet
 2026-03-25/l2_chunk_0691.parquet
 2026-03-25/l2_chunk_0554.parquet
@@ -4055,9 +4109,11 @@
 2026-03-26/l2_chunk_0513.parquet
 2026-04-07/l2_chunk_0657.parquet
 2026-05-05/l2_chunk_0175.parquet
+2026-04-09/l2_chunk_0064.parquet
 2026-03-26/l2_chunk_0648.parquet
 2026-03-24/l2_chunk_0135.parquet
 2026-03-27/l2_chunk_0657.parquet
+2026-04-09/l2_chunk_0080.parquet
 2026-03-19/l2_chunk_0882.parquet
 2026-04-02/l2_chunk_0460.parquet
 2026-04-06/l2_chunk_0498.parquet
@@ -4127,6 +4183,7 @@
 2026-04-06/l2_chunk_0094.parquet
 2026-03-03/l2_chunk_0126.parquet
 2026-03-16/l2_chunk_0361.parquet
+2026-04-08/l2_chunk_0311.parquet
 2026-04-01/l2_chunk_0717.parquet
 2026-03-09/l2_chunk_0069.parquet
 2026-03-20/l2_chunk_0669.parquet
@@ -4135,6 +4192,7 @@
 2026-03-16/l2_chunk_0471.parquet
 2026-03-27/l2_chunk_0615.parquet
 2026-04-07/l2_chunk_0268.parquet
+2026-04-08/l2_chunk_0287.parquet
 2026-04-06/l2_chunk_0542.parquet
 2026-04-02/l2_chunk_0452.parquet
 2026-04-06/l2_chunk_0050.parquet
@@ -4240,6 +4298,7 @@
 2026-03-17/l2_chunk_0132.parquet
 2026-04-08/l2_chunk_0180.parquet
 2026-03-26/l2_chunk_0076.parquet
+2026-04-08/l2_chunk_0344.parquet
 2026-04-07/l2_chunk_0736.parquet
 2026-03-20/l2_chunk_0444.parquet
 2026-03-25/l2_chunk_0509.parquet
@@ -4347,6 +4406,7 @@
 2026-03-26/l2_chunk_0597.parquet
 2026-03-30/l2_chunk_0491.parquet
 2026-04-02/l2_chunk_0590.parquet
+2026-04-08/l2_chunk_0250.parquet
 2026-03-09/l2_chunk_0201.parquet
 2026-04-02/l2_chunk_0640.parquet
 2026-03-12/l2_chunk_0117.parquet
@@ -4462,6 +4522,7 @@
 2026-03-06/l2_chunk_0200.parquet
 2026-03-18/l2_chunk_0100.parquet
 2026-03-26/l2_chunk_0784.parquet
+2026-04-08/l2_chunk_0332.parquet
 2026-03-31/l2_chunk_0247.parquet
 2026-03-16/l2_chunk_0074.parquet
 2026-03-30/l2_chunk_0688.parquet
@@ -4696,6 +4757,7 @@
 2026-03-02/l2_chunk_0005.parquet
 2026-03-18/l2_chunk_0202.parquet
 2026-03-17/l2_chunk_0327.parquet
+2026-04-08/l2_chunk_0352.parquet
 2026-03-30/l2_chunk_0710.parquet
 2026-03-18/l2_chunk_0679.parquet
 2026-03-27/l2_chunk_0158.parquet
@@ -4708,6 +4770,7 @@
 2026-03-18/l2_chunk_0183.parquet
 2026-03-25/l2_chunk_0036.parquet
 2026-04-07/l2_chunk_0287.parquet
+2026-04-08/l2_chunk_0210.parquet
 2026-04-06/l2_chunk_0099.parquet
 2026-03-27/l2_chunk_0191.parquet
 2026-03-17/l2_chunk_0493.parquet
@@ -4721,6 +4784,7 @@
 2026-03-12/l2_chunk_0074.parquet
 2026-04-09/l2_chunk_0022.parquet
 2026-04-06/l2_chunk_0153.parquet
+2026-04-08/l2_chunk_0298.parquet
 2026-03-18/l2_chunk_0332.parquet
 2026-03-18/l2_chunk_0165.parquet
 2026-04-02/l2_chunk_0601.parquet
@@ -4728,6 +4792,7 @@
 2026-03-31/l2_chunk_0006.parquet
 2026-03-31/l2_chunk_0392.parquet
 2026-03-25/l2_chunk_0228.parquet
+2026-04-08/l2_chunk_0274.parquet
 2026-03-19/l2_chunk_0696.parquet
 2026-03-19/l2_chunk_0189.parquet
 2026-03-25/l2_chunk_0085.parquet
@@ -4759,6 +4824,7 @@
 2026-03-09/l2_chunk_0101.parquet
 2026-03-05/l2_chunk_0053.parquet
 2026-03-31/l2_chunk_0855.parquet
+2026-04-08/l2_chunk_0261.parquet
 2026-03-20/l2_chunk_0452.parquet
 2026-03-03/l2_chunk_0180.parquet
 2026-04-06/l2_chunk_0116.parquet
@@ -4968,6 +5034,7 @@
 2026-04-02/l2_chunk_0495.parquet
 2026-04-07/l2_chunk_0355.parquet
 2026-04-07/l2_chunk_0768.parquet
+2026-04-08/l2_chunk_0309.parquet
 2026-03-18/l2_chunk_0747.parquet
 2026-04-09/l2_chunk_0014.parquet
 2026-03-31/l2_chunk_0562.parquet
@@ -4976,6 +5043,7 @@
 2026-03-27/l2_chunk_0544.parquet
 2026-03-31/l2_chunk_0781.parquet
 2026-04-06/l2_chunk_0481.parquet
+2026-04-08/l2_chunk_0351.parquet
 2026-03-17/l2_chunk_0553.parquet
 2026-03-12/l2_chunk_0130.parquet
 2026-04-02/l2_chunk_0192.parquet
@@ -5025,6 +5093,7 @@
 2026-03-27/l2_chunk_0119.parquet
 2026-04-01/l2_chunk_0280.parquet
 2026-04-02/l2_chunk_0087.parquet
+2026-04-08/l2_chunk_0296.parquet
 2026-04-06/l2_chunk_0399.parquet
 2026-03-17/l2_chunk_0530.parquet
 2026-04-07/l2_chunk_0867.parquet
@@ -5244,6 +5313,7 @@
 2026-03-11/l2_chunk_0018.parquet
 2026-03-26/l2_chunk_0304.parquet
 2026-03-03/l2_chunk_0035.parquet
+2026-04-09/l2_chunk_0069.parquet
 2026-03-26/l2_chunk_0720.parquet
 2026-03-31/l2_chunk_0875.parquet
 2026-04-07/l2_chunk_0202.parquet
@@ -5350,6 +5420,7 @@
 2026-03-26/l2_chunk_0529.parquet
 2026-03-17/l2_chunk_0123.parquet
 2026-03-19/l2_chunk_0733.parquet
+2026-04-08/l2_chunk_0225.parquet
 2026-03-30/l2_chunk_0244.parquet
 2026-03-03/l2_chunk_0038.parquet
 2026-03-09/l2_chunk_0206.parquet
@@ -5455,6 +5526,7 @@
 2026-03-20/l2_chunk_0167.parquet
 2026-03-25/l2_chunk_0146.parquet
 2026-03-31/l2_chunk_0178.parquet
+2026-04-09/l2_chunk_0059.parquet
 2026-03-16/l2_chunk_0356.parquet
 2026-03-16/l2_chunk_0600.parquet
 2026-03-30/l2_chunk_0380.parquet
@@ -5714,6 +5786,7 @@
 2026-04-02/l2_chunk_0036.parquet
 2026-03-17/l2_chunk_0505.parquet
 2026-03-16/l2_chunk_0517.parquet
+2026-04-08/l2_chunk_0279.parquet
 2026-03-27/l2_chunk_0611.parquet
 2026-03-31/l2_chunk_0857.parquet
 2026-03-20/l2_chunk_0345.parquet
@@ -5752,9 +5825,11 @@
 2026-03-30/l2_chunk_0254.parquet
 2026-04-01/l2_chunk_0775.parquet
 2026-03-19/l2_chunk_0517.parquet
+2026-04-08/l2_chunk_0278.parquet
 2026-05-05/l2_chunk_0162.parquet
 2026-04-01/l2_chunk_0008.parquet
 2026-03-31/l2_chunk_0005.parquet
+2026-04-09/l2_chunk_0061.parquet
 2026-04-09/l2_chunk_0005.parquet
 2026-03-17/l2_chunk_0563.parquet
 2026-03-20/l2_chunk_0096.parquet
@@ -5779,6 +5854,7 @@
 2026-03-26/l2_chunk_0771.parquet
 2026-03-20/l2_chunk_0117.parquet
 2026-04-01/l2_chunk_0495.parquet
+2026-04-08/l2_chunk_0220.parquet
 2026-03-20/l2_chunk_0481.parquet
 2026-03-20/l2_chunk_0246.parquet
 2026-03-19/l2_chunk_0610.parquet
@@ -5848,6 +5924,7 @@
 2026-03-19/l2_chunk_0822.parquet
 2026-03-24/l2_chunk_0011.parquet
 2026-03-16/l2_chunk_0399.parquet
+2026-04-09/l2_chunk_0057.parquet
 2026-03-16/l2_chunk_0029.parquet
 2026-03-16/l2_chunk_0279.parquet
 2026-04-07/l2_chunk_0066.parquet
@@ -6257,6 +6334,7 @@
 2026-03-18/l2_chunk_0847.parquet
 2026-03-27/l2_chunk_0609.parquet
 2026-05-06/l2_chunk_0036.parquet
+2026-04-08/l2_chunk_0243.parquet
 2026-03-11/l2_chunk_0240.parquet
 2026-03-16/l2_chunk_0395.parquet
 2026-03-19/l2_chunk_0426.parquet
@@ -6360,6 +6438,7 @@
 2026-03-05/l2_chunk_0083.parquet
 2026-04-02/l2_chunk_0317.parquet
 2026-03-30/l2_chunk_0519.parquet
+2026-04-09/l2_chunk_0074.parquet
 2026-04-06/l2_chunk_0313.parquet
 2026-04-07/l2_chunk_0263.parquet
 2026-04-02/l2_chunk_0151.parquet
@@ -6387,6 +6466,7 @@
 2026-03-18/l2_chunk_0654.parquet
 2026-04-07/l2_chunk_0654.parquet
 2026-04-02/l2_chunk_0421.parquet
+2026-04-08/l2_chunk_0269.parquet
 2026-03-30/l2_chunk_0533.parquet
 2026-03-20/l2_chunk_0569.parquet
 2026-03-03/l2_chunk_0024.parquet
@@ -6565,6 +6645,7 @@
 2026-03-31/l2_chunk_0790.parquet
 2026-04-07/l2_chunk_0749.parquet
 2026-04-06/l2_chunk_0388.parquet
+2026-04-08/l2_chunk_0294.parquet
 2026-04-07/l2_chunk_0558.parquet
 2026-04-06/l2_chunk_0262.parquet
 2026-03-27/l2_chunk_0155.parquet
@@ -6588,6 +6669,7 @@
 2026-03-20/l2_chunk_0492.parquet
 2026-03-30/l2_chunk_0774.parquet
 2026-03-31/l2_chunk_0103.parquet
+2026-04-08/l2_chunk_0339.parquet
 2026-03-30/l2_chunk_0278.parquet
 2026-03-25/l2_chunk_0453.parquet
 2026-04-01/l2_chunk_0347.parquet
@@ -6603,6 +6685,7 @@
 2026-03-30/l2_chunk_0353.parquet
 2026-03-19/l2_chunk_0424.parquet
 2026-04-01/l2_chunk_0750.parquet
+2026-04-08/l2_chunk_0341.parquet
 2026-03-25/l2_chunk_0191.parquet
 2026-03-30/l2_chunk_0546.parquet
 2026-03-19/l2_chunk_0359.parquet
@@ -6619,6 +6702,7 @@
 2026-03-24/l2_chunk_0004.parquet
 2026-04-02/l2_chunk_0559.parquet
 2026-03-17/l2_chunk_0305.parquet
+2026-04-08/l2_chunk_0295.parquet
 2026-03-19/l2_chunk_0044.parquet
 2026-03-09/l2_chunk_0143.parquet
 2026-03-31/l2_chunk_0973.parquet
@@ -6636,6 +6720,7 @@
 2026-03-17/l2_chunk_0075.parquet
 2026-03-27/l2_chunk_0100.parquet
 2026-03-18/l2_chunk_0009.parquet
+2026-04-08/l2_chunk_0318.parquet
 2026-04-02/l2_chunk_0496.parquet
 2026-04-02/l2_chunk_0244.parquet
 2026-03-18/l2_chunk_0425.parquet
@@ -6727,11 +6812,13 @@
 2026-04-01/l2_chunk_0795.parquet
 2026-03-26/l2_chunk_0716.parquet
 2026-04-01/l2_chunk_0045.parquet
+2026-04-08/l2_chunk_0244.parquet
 2026-03-19/l2_chunk_0817.parquet
 2026-03-04/l2_chunk_0012.parquet
 2026-03-31/l2_chunk_0331.parquet
 2026-03-16/l2_chunk_0210.parquet
 2026-03-06/l2_chunk_0109.parquet
+2026-04-08/l2_chunk_0349.parquet
 2026-03-20/l2_chunk_0013.parquet
 2026-04-07/l2_chunk_0380.parquet
 2026-03-18/l2_chunk_0363.parquet
@@ -6801,6 +6888,7 @@
 2026-03-30/l2_chunk_0610.parquet
 2026-03-04/l2_chunk_0108.parquet
 2026-04-07/l2_chunk_0779.parquet
+2026-04-08/l2_chunk_0232.parquet
 2026-04-07/l2_chunk_0142.parquet
 2026-03-12/l2_chunk_0142.parquet
 2026-05-05/l2_chunk_0168.parquet
@@ -7111,6 +7199,7 @@
 2026-03-16/l2_chunk_0250.parquet
 2026-04-02/l2_chunk_0484.parquet
 2026-03-17/l2_chunk_0077.parquet
+2026-04-09/l2_chunk_0053.parquet
 2026-03-11/l2_chunk_0255.parquet
 2026-03-17/l2_chunk_0229.parquet
 2026-04-08/l2_chunk_0068.parquet
@@ -7127,6 +7216,7 @@
 2026-04-02/l2_chunk_0580.parquet
 2026-03-26/l2_chunk_0473.parquet
 2026-03-31/l2_chunk_0443.parquet
+2026-04-08/l2_chunk_0218.parquet
 2026-03-19/l2_chunk_0391.parquet
 2026-03-17/l2_chunk_0392.parquet
 2026-03-27/l2_chunk_0139.parquet
@@ -7242,6 +7332,7 @@
 2026-03-27/l2_chunk_0082.parquet
 2026-03-10/l2_chunk_0063.parquet
 2026-04-02/l2_chunk_0124.parquet
+2026-04-08/l2_chunk_0355.parquet
 2026-03-27/l2_chunk_0052.parquet
 2026-03-06/l2_chunk_0197.parquet
 2026-03-20/l2_chunk_0177.parquet
@@ -7296,6 +7387,7 @@
 2026-03-10/l2_chunk_0145.parquet
 2026-03-24/l2_chunk_0124.parquet
 2026-03-26/l2_chunk_0346.parquet
+2026-04-08/l2_chunk_0357.parquet
 2026-03-20/l2_chunk_0008.parquet
 2026-03-25/l2_chunk_0449.parquet
 2026-03-18/l2_chunk_0027.parquet
@@ -7308,6 +7400,7 @@
 2026-03-20/l2_chunk_0211.parquet
 2026-03-05/l2_chunk_0015.parquet
 2026-03-31/l2_chunk_0935.parquet
+2026-04-09/l2_chunk_0062.parquet
 2026-03-04/l2_chunk_0093.parquet
 2026-03-16/l2_chunk_0609.parquet
 2026-03-27/l2_chunk_0071.parquet
@@ -7317,6 +7410,7 @@
 2026-03-20/l2_chunk_0316.parquet
 2026-03-30/l2_chunk_0458.parquet
 2026-03-16/l2_chunk_0184.parquet
+2026-04-08/l2_chunk_0281.parquet
 2026-03-24/l2_chunk_0162.parquet
 2026-03-27/l2_chunk_0365.parquet
 2026-03-27/l2_chunk_0682.parquet
@@ -7325,6 +7419,7 @@
 2026-03-19/l2_chunk_0162.parquet
 2026-04-07/l2_chunk_0899.parquet
 2026-03-31/l2_chunk_0600.parquet
+2026-04-08/l2_chunk_0211.parquet
 2026-03-19/l2_chunk_0312.parquet
 2026-03-25/l2_chunk_0056.parquet
 2026-03-17/l2_chunk_0623.parquet
@@ -7379,6 +7474,7 @@
 2026-04-01/l2_chunk_0759.parquet
 2026-03-19/l2_chunk_0613.parquet
 2026-04-07/l2_chunk_0166.parquet
+2026-04-08/l2_chunk_0348.parquet
 2026-03-16/l2_chunk_0014.parquet
 2026-04-07/l2_chunk_0088.parquet
 2026-03-19/l2_chunk_1014.parquet
@@ -7484,11 +7580,13 @@
 2026-03-13/l2_chunk_0188.parquet
 2026-03-27/l2_chunk_0296.parquet
 2026-03-25/l2_chunk_0508.parquet
+2026-04-08/l2_chunk_0284.parquet
 2026-03-04/l2_chunk_0134.parquet
 2026-03-31/l2_chunk_0785.parquet
 2026-03-18/l2_chunk_0252.parquet
 2026-04-06/l2_chunk_0464.parquet
 2026-03-19/l2_chunk_0956.parquet
+2026-04-08/l2_chunk_0305.parquet
 2026-03-30/l2_chunk_0160.parquet
 2026-04-02/l2_chunk_0152.parquet
 2026-03-11/l2_chunk_0077.parquet
@@ -7513,6 +7611,7 @@
 2026-02-27/l2_chunk_0009.parquet
 2026-03-26/l2_chunk_0797.parquet
 2026-03-19/l2_chunk_0904.parquet
+2026-04-08/l2_chunk_0223.parquet
 2026-03-27/l2_chunk_0252.parquet
 2026-03-31/l2_chunk_0430.parquet
 2026-03-30/l2_chunk_0847.parquet
@@ -7520,6 +7619,7 @@
 2026-03-20/l2_chunk_0455.parquet
 2026-03-06/l2_chunk_0107.parquet
 2026-04-07/l2_chunk_0876.parquet
+2026-04-09/l2_chunk_0073.parquet
 2026-03-31/l2_chunk_0578.parquet
 2026-03-20/l2_chunk_0522.parquet
 2026-04-01/l2_chunk_0023.parquet
@@ -7535,6 +7635,7 @@
 2026-04-06/l2_chunk_0162.parquet
 2026-03-11/l2_chunk_0034.parquet
 2026-04-07/l2_chunk_0223.parquet
+2026-04-08/l2_chunk_0241.parquet
 2026-03-17/l2_chunk_0373.parquet
 2026-03-26/l2_chunk_0675.parquet
 2026-03-19/l2_chunk_0619.parquet
@@ -7559,6 +7660,7 @@
 2026-03-25/l2_chunk_0535.parquet
 2026-04-06/l2_chunk_0077.parquet
 2026-03-19/l2_chunk_0532.parquet
+2026-04-08/l2_chunk_0347.parquet
 2026-03-02/l2_chunk_0149.parquet
 2026-03-19/l2_chunk_0172.parquet
 2026-03-18/l2_chunk_0757.parquet
@@ -7594,6 +7696,7 @@
 2026-03-25/l2_chunk_0188.parquet
 2026-03-18/l2_chunk_0726.parquet
 2026-05-06/l2_chunk_0032.parquet
+2026-04-08/l2_chunk_0209.parquet
 2026-03-19/l2_chunk_0365.parquet
 2026-03-30/l2_chunk_0699.parquet
 2026-03-03/l2_chunk_0091.parquet
@@ -7661,6 +7764,9 @@
 2026-03-30/l2_chunk_0832.parquet
 2026-03-19/l2_chunk_0909.parquet
 2026-03-18/l2_chunk_0346.parquet
+2026-04-08/l2_chunk_0254.parquet
+2026-04-08/l2_chunk_0238.parquet
+2026-04-08/l2_chunk_0217.parquet
 2026-04-07/l2_chunk_0836.parquet
 2026-03-18/l2_chunk_0568.parquet
 2026-04-07/l2_chunk_0694.parquet
@@ -7701,6 +7807,7 @@
 2026-04-01/l2_chunk_0336.parquet
 2026-03-16/l2_chunk_0132.parquet
 2026-03-18/l2_chunk_0566.parquet
+2026-04-08/l2_chunk_0252.parquet
 2026-03-19/l2_chunk_0754.parquet
 2026-04-02/l2_chunk_0708.parquet
 2026-03-16/l2_chunk_0136.parquet
@@ -7783,6 +7890,7 @@
 2026-03-25/l2_chunk_0626.parquet
 2026-03-30/l2_chunk_0501.parquet
 2026-04-09/l2_chunk_0046.parquet
+2026-04-08/l2_chunk_0239.parquet
 2026-03-25/l2_chunk_0499.parquet
 2026-03-18/l2_chunk_0769.parquet
 2026-03-10/l2_chunk_0019.parquet
@@ -7867,6 +7975,7 @@
 2026-03-17/l2_chunk_0204.parquet
 2026-03-25/l2_chunk_0547.parquet
 2026-03-03/l2_chunk_0010.parquet
+2026-04-08/l2_chunk_0315.parquet
 2026-03-16/l2_chunk_0509.parquet
 2026-03-16/l2_chunk_0035.parquet
 2026-04-07/l2_chunk_0524.parquet
@@ -7946,6 +8055,7 @@
 2026-03-31/l2_chunk_1012.parquet
 2026-04-01/l2_chunk_0412.parquet
 2026-03-26/l2_chunk_0801.parquet
+2026-04-08/l2_chunk_0265.parquet
 2026-03-09/l2_chunk_0044.parquet
 2026-03-24/l2_chunk_0187.parquet
 2026-04-07/l2_chunk_0615.parquet
@@ -7982,6 +8092,7 @@
 2026-03-17/l2_chunk_0435.parquet
 2026-03-18/l2_chunk_0656.parquet
 2026-04-02/l2_chunk_0170.parquet
+2026-04-08/l2_chunk_0258.parquet
 2026-04-07/l2_chunk_0003.parquet
 2026-03-18/l2_chunk_0151.parquet
 2026-03-30/l2_chunk_0532.parquet
@@ -8051,6 +8162,7 @@
 2026-04-02/l2_chunk_0300.parquet
 2026-04-08/l2_chunk_0185.parquet
 2026-04-02/l2_chunk_0546.parquet
+2026-04-08/l2_chunk_0260.parquet
 2026-03-31/l2_chunk_0511.parquet
 2026-03-04/l2_chunk_0063.parquet
 2026-05-06/l2_chunk_0116.parquet
@@ -8071,12 +8183,14 @@
 2026-03-26/l2_chunk_0207.parquet
 2026-03-26/l2_chunk_0316.parquet
 2026-04-01/l2_chunk_0004.parquet
+2026-04-09/l2_chunk_0066.parquet
 2026-03-16/l2_chunk_0121.parquet
 2026-03-19/l2_chunk_0373.parquet
 2026-03-27/l2_chunk_0040.parquet
 2026-03-02/l2_chunk_0130.parquet
 2026-03-18/l2_chunk_0540.parquet
 2026-03-25/l2_chunk_0583.parquet
+2026-04-09/l2_chunk_0051.parquet
 2026-03-05/l2_chunk_0034.parquet
 2026-03-25/l2_chunk_0480.parquet
 2026-03-20/l2_chunk_0507.parquet
@@ -8236,6 +8350,7 @@
 2026-04-06/l2_chunk_0371.parquet
 2026-04-07/l2_chunk_0851.parquet
 2026-03-13/l2_chunk_0013.parquet
+2026-04-08/l2_chunk_0360.parquet
 2026-03-26/l2_chunk_0063.parquet
 2026-04-02/l2_chunk_0281.parquet
 2026-03-19/l2_chunk_0414.parquet
@@ -8301,6 +8416,7 @@
 2026-03-26/l2_chunk_0791.parquet
 2026-03-30/l2_chunk_0703.parquet
 2026-03-26/l2_chunk_0085.parquet
+2026-04-08/l2_chunk_0280.parquet
 2026-04-06/l2_chunk_0376.parquet
 2026-03-31/l2_chunk_0991.parquet
 2026-03-30/l2_chunk_0540.parquet
@@ -8627,6 +8743,7 @@
 2026-03-30/l2_chunk_0061.parquet
 2026-04-02/l2_chunk_0115.parquet
 2026-03-30/l2_chunk_0687.parquet
+2026-04-08/l2_chunk_0320.parquet
 2026-03-30/l2_chunk_0094.parquet
 2026-04-07/l2_chunk_0125.parquet
 2026-03-31/l2_chunk_0684.parquet
@@ -8642,12 +8759,14 @@
 2026-03-31/l2_chunk_0778.parquet
 2026-03-19/l2_chunk_0270.parquet
 2026-03-31/l2_chunk_0856.parquet
+2026-04-08/l2_chunk_0324.parquet
 2026-03-30/l2_chunk_0770.parquet
 2026-04-07/l2_chunk_0780.parquet
 2026-03-03/l2_chunk_0008.parquet
 2026-03-25/l2_chunk_0438.parquet
 2026-03-18/l2_chunk_0864.parquet
 2026-03-18/l2_chunk_0649.parquet
+2026-04-09/l2_chunk_0060.parquet
 2026-03-02/l2_chunk_0166.parquet
 2026-03-12/l2_chunk_0146.parquet
 2026-03-19/l2_chunk_0388.parquet
@@ -8676,6 +8795,7 @@
 2026-03-30/l2_chunk_0138.parquet
 2026-03-30/l2_chunk_0594.parquet
 2026-04-02/l2_chunk_0607.parquet
+2026-04-08/l2_chunk_0329.parquet
 2026-04-01/l2_chunk_0352.parquet
 2026-05-06/l2_chunk_0006.parquet
 2026-03-16/l2_chunk_0326.parquet
@@ -8689,6 +8809,7 @@
 2026-03-26/l2_chunk_0139.parquet
 2026-03-26/l2_chunk_0701.parquet
 2026-03-04/l2_chunk_0059.parquet
+2026-04-08/l2_chunk_0336.parquet
 2026-03-06/l2_chunk_0139.parquet
 2026-03-25/l2_chunk_0672.parquet
 2026-03-30/l2_chunk_0668.parquet
@@ -8716,6 +8837,7 @@
 2026-03-25/l2_chunk_0574.parquet
 2026-03-09/l2_chunk_0182.parquet
 2026-03-30/l2_chunk_0560.parquet
+2026-04-09/l2_chunk_0052.parquet
 2026-03-04/l2_chunk_0058.parquet
 2026-03-19/l2_chunk_0835.parquet
 2026-03-27/l2_chunk_0315.parquet
@@ -8783,12 +8905,14 @@
 2026-04-01/l2_chunk_0052.parquet
 2026-03-18/l2_chunk_0207.parquet
 2026-04-01/l2_chunk_0725.parquet
+2026-04-08/l2_chunk_0215.parquet
 2026-03-19/l2_chunk_0555.parquet
 2026-03-09/l2_chunk_0010.parquet
 2026-03-11/l2_chunk_0125.parquet
 2026-03-30/l2_chunk_0352.parquet
 2026-03-05/l2_chunk_0059.parquet
 2026-03-13/l2_chunk_0059.parquet
+2026-04-08/l2_chunk_0364.parquet
 2026-04-02/l2_chunk_0224.parquet
 2026-03-31/l2_chunk_0681.parquet
 2026-03-31/l2_chunk_0866.parquet
@@ -8851,6 +8975,8 @@
 2026-03-24/l2_chunk_0241.parquet
 2026-05-05/l2_chunk_0075.parquet
 2026-03-19/l2_chunk_0695.parquet
+2026-04-08/l2_chunk_0343.parquet
+2026-04-08/l2_chunk_0319.parquet
 2026-04-02/l2_chunk_0175.parquet
 2026-03-30/l2_chunk_0663.parquet
 2026-03-18/l2_chunk_0200.parquet
@@ -8893,6 +9019,7 @@
 2026-03-30/l2_chunk_0593.parquet
 2026-04-01/l2_chunk_0472.parquet
 2026-04-02/l2_chunk_0074.parquet
+2026-04-08/l2_chunk_0301.parquet
 2026-03-17/l2_chunk_0067.parquet
 2026-04-08/l2_chunk_0189.parquet
 2026-03-26/l2_chunk_0251.parquet
@@ -8906,6 +9033,7 @@
 2026-03-04/l2_chunk_0102.parquet
 2026-03-27/l2_chunk_0323.parquet
 2026-03-17/l2_chunk_0259.parquet
+2026-04-08/l2_chunk_0262.parquet
 2026-03-18/l2_chunk_0402.parquet
 2026-03-11/l2_chunk_0258.parquet
 2026-03-25/l2_chunk_0346.parquet
@@ -8957,6 +9085,7 @@
 2026-04-07/l2_chunk_0441.parquet
 2026-03-09/l2_chunk_0133.parquet
 2026-04-01/l2_chunk_0153.parquet
+2026-04-08/l2_chunk_0330.parquet
 2026-04-06/l2_chunk_0118.parquet
 2026-03-06/l2_chunk_0146.parquet
 2026-03-27/l2_chunk_0188.parquet
@@ -9039,6 +9168,7 @@
 2026-03-25/l2_chunk_0483.parquet
 2026-03-17/l2_chunk_0113.parquet
 2026-03-31/l2_chunk_0508.parquet
+2026-04-09/l2_chunk_0070.parquet
 2026-03-27/l2_chunk_0736.parquet
 2026-03-31/l2_chunk_1009.parquet
 2026-03-19/l2_chunk_0504.parquet
@@ -9076,6 +9206,7 @@
 2026-04-07/l2_chunk_0561.parquet
 2026-03-27/l2_chunk_0029.parquet
 2026-03-26/l2_chunk_0383.parquet
+2026-04-08/l2_chunk_0257.parquet
 2026-04-02/l2_chunk_0199.parquet
 2026-03-16/l2_chunk_0284.parquet
 2026-03-26/l2_chunk_0197.parquet
@@ -9342,6 +9473,7 @@
 2026-04-07/l2_chunk_0623.parquet
 2026-03-30/l2_chunk_0293.parquet
 2026-03-17/l2_chunk_0031.parquet
+2026-04-09/l2_chunk_0078.parquet
 2026-04-01/l2_chunk_0312.parquet
 2026-03-02/l2_chunk_0023.parquet
 2026-03-27/l2_chunk_0770.parquet
@@ -9479,6 +9611,7 @@
 2026-04-01/l2_chunk_0625.parquet
 2026-03-06/l2_chunk_0143.parquet
 2026-04-02/l2_chunk_0032.parquet
+2026-04-08/l2_chunk_0293.parquet
 2026-03-16/l2_chunk_0126.parquet
 2026-03-05/l2_chunk_0177.parquet
 2026-03-19/l2_chunk_0911.parquet
@@ -9607,6 +9740,7 @@
 2026-03-16/l2_chunk_0161.parquet
 2026-04-01/l2_chunk_0028.parquet
 2026-03-31/l2_chunk_0467.parquet
+2026-04-08/l2_chunk_0231.parquet
 2026-03-26/l2_chunk_0822.parquet
 2026-03-03/l2_chunk_0120.parquet
 2026-04-01/l2_chunk_0693.parquet
@@ -9751,6 +9885,7 @@
 2026-03-31/l2_chunk_0689.parquet
 2026-03-20/l2_chunk_0136.parquet
 2026-03-16/l2_chunk_0453.parquet
+2026-04-08/l2_chunk_0216.parquet
 2026-03-25/l2_chunk_0136.parquet
 2026-03-17/l2_chunk_0572.parquet
 2026-04-06/l2_chunk_0440.parquet
@@ -10018,6 +10153,7 @@
 2026-03-27/l2_chunk_0170.parquet
 2026-03-27/l2_chunk_0573.parquet
 2026-04-07/l2_chunk_0857.parquet
+2026-04-08/l2_chunk_0313.parquet
 2026-03-25/l2_chunk_0477.parquet
 2026-03-16/l2_chunk_0558.parquet
 2026-04-07/l2_chunk_0405.parquet
@@ -10145,6 +10281,7 @@
 2026-03-06/l2_chunk_0090.parquet
 2026-03-27/l2_chunk_0351.parquet
 2026-03-31/l2_chunk_0648.parquet
+2026-04-08/l2_chunk_0322.parquet
 2026-03-25/l2_chunk_0026.parquet
 2026-03-20/l2_chunk_0592.parquet
 2026-03-27/l2_chunk_0035.parquet
@@ -10418,6 +10555,7 @@
 2026-03-19/l2_chunk_0820.parquet
 2026-03-31/l2_chunk_0800.parquet
 2026-03-18/l2_chunk_0297.parquet
+2026-04-08/l2_chunk_0207.parquet
 2026-03-31/l2_chunk_0809.parquet
 2026-03-26/l2_chunk_0028.parquet
 2026-03-05/l2_chunk_0139.parquet
@@ -10498,6 +10636,7 @@
 2026-03-18/l2_chunk_0461.parquet
 2026-03-17/l2_chunk_0167.parquet
 2026-04-01/l2_chunk_0578.parquet
+2026-04-08/l2_chunk_0307.parquet
 2026-03-17/l2_chunk_0480.parquet
 2026-04-02/l2_chunk_0741.parquet
 2026-02-27/l2_chunk_0038.parquet
@@ -10519,6 +10658,7 @@
 2026-04-08/l2_chunk_0078.parquet
 2026-04-07/l2_chunk_0685.parquet
 2026-03-31/l2_chunk_0920.parquet
+2026-04-08/l2_chunk_0365.parquet
 2026-03-18/l2_chunk_0807.parquet
 2026-04-01/l2_chunk_0234.parquet
 2026-03-18/l2_chunk_0146.parquet
@@ -10740,6 +10880,7 @@
 2026-03-03/l2_chunk_0198.parquet
 2026-03-26/l2_chunk_0734.parquet
 2026-04-01/l2_chunk_0748.parquet
+2026-04-08/l2_chunk_0312.parquet
 2026-05-06/l2_chunk_0119.parquet
 2026-03-16/l2_chunk_0241.parquet
 2026-03-24/l2_chunk_0048.parquet
@@ -10772,6 +10913,7 @@
 2026-03-31/l2_chunk_0682.parquet
 2026-03-16/l2_chunk_0713.parquet
 2026-03-19/l2_chunk_0880.parquet
+2026-04-08/l2_chunk_0286.parquet
 2026-03-24/l2_chunk_0260.parquet
 2026-03-19/l2_chunk_0119.parquet
 2026-03-31/l2_chunk_0312.parquet
@@ -10828,6 +10970,7 @@
 2026-03-26/l2_chunk_0228.parquet
 2026-03-20/l2_chunk_0727.parquet
 2026-03-26/l2_chunk_0191.parquet
+2026-04-08/l2_chunk_0323.parquet
 2026-03-10/l2_chunk_0089.parquet
 2026-03-30/l2_chunk_0334.parquet
 2026-03-27/l2_chunk_0180.parquet
@@ -10867,6 +11010,7 @@
 2026-03-30/l2_chunk_0830.parquet
 2026-03-16/l2_chunk_0077.parquet
 2026-03-27/l2_chunk_0778.parquet
+2026-04-08/l2_chunk_0234.parquet
 2026-03-19/l2_chunk_0753.parquet
 2026-04-01/l2_chunk_0437.parquet
 2026-03-18/l2_chunk_0387.parquet
@@ -10963,6 +11107,7 @@
 2026-03-24/l2_chunk_0025.parquet
 2026-04-07/l2_chunk_0466.parquet
 2026-03-25/l2_chunk_0260.parquet
+2026-04-08/l2_chunk_0300.parquet
 2026-03-17/l2_chunk_0581.parquet
 2026-03-19/l2_chunk_0534.parquet
 2026-03-04/l2_chunk_0042.parquet
@@ -10982,6 +11127,7 @@
 2026-03-27/l2_chunk_0266.parquet
 2026-03-18/l2_chunk_0502.parquet
 2026-03-27/l2_chunk_0423.parquet
+2026-04-08/l2_chunk_0276.parquet
 2026-03-19/l2_chunk_0774.parquet
 2026-03-19/l2_chunk_0245.parquet
 2026-03-19/l2_chunk_0983.parquet
@@ -11108,6 +11254,7 @@
 2026-03-31/l2_chunk_0053.parquet
 2026-04-08/l2_chunk_0192.parquet
 2026-03-16/l2_chunk_0062.parquet
+2026-04-08/l2_chunk_0310.parquet
 2026-03-27/l2_chunk_0049.parquet
 2026-04-06/l2_chunk_0416.parquet
 2026-03-18/l2_chunk_0874.parquet
@@ -11143,6 +11290,7 @@
 2026-03-30/l2_chunk_0730.parquet
 2026-03-30/l2_chunk_0071.parquet
 2026-03-20/l2_chunk_0500.parquet
+2026-04-08/l2_chunk_0242.parquet
 2026-04-01/l2_chunk_0680.parquet
 2026-03-25/l2_chunk_0003.parquet
 2026-03-30/l2_chunk_0066.parquet
@@ -11214,6 +11362,7 @@
 2026-03-25/l2_chunk_0445.parquet
 2026-03-16/l2_chunk_0508.parquet
 2026-04-02/l2_chunk_0686.parquet
+2026-04-08/l2_chunk_0268.parquet
 2026-04-06/l2_chunk_0469.parquet
 2026-04-02/l2_chunk_0361.parquet
 2026-03-19/l2_chunk_0051.parquet
@@ -11355,6 +11504,7 @@
 2026-04-02/l2_chunk_0581.parquet
 2026-04-01/l2_chunk_0154.parquet
 2026-03-11/l2_chunk_0094.parquet
+2026-04-09/l2_chunk_0058.parquet
 2026-04-07/l2_chunk_0566.parquet
 2026-03-20/l2_chunk_0610.parquet
 2026-03-26/l2_chunk_0262.parquet
@@ -11542,6 +11692,7 @@
 2026-03-17/l2_chunk_0271.parquet
 2026-03-05/l2_chunk_0161.parquet
 2026-03-13/l2_chunk_0163.parquet
+2026-04-08/l2_chunk_0299.parquet
 2026-04-07/l2_chunk_0477.parquet
 2026-03-31/l2_chunk_0291.parquet
 2026-04-07/l2_chunk_0005.parquet
@@ -11605,6 +11756,7 @@
 2026-05-06/l2_chunk_0071.parquet
 2026-03-16/l2_chunk_0584.parquet
 2026-03-20/l2_chunk_0400.parquet
+2026-04-09/l2_chunk_0075.parquet
 2026-03-20/l2_chunk_0297.parquet
 2026-03-05/l2_chunk_0017.parquet
 2026-03-13/l2_chunk_0058.parquet
@@ -11636,6 +11788,7 @@
 2026-03-19/l2_chunk_0465.parquet
 2026-03-30/l2_chunk_0180.parquet
 2026-03-25/l2_chunk_0474.parquet
+2026-04-08/l2_chunk_0249.parquet
 2026-03-09/l2_chunk_0035.parquet
 2026-03-27/l2_chunk_0394.parquet
 2026-03-25/l2_chunk_0178.parquet
@@ -11664,6 +11817,7 @@
 2026-04-01/l2_chunk_0633.parquet
 2026-03-20/l2_chunk_0141.parquet
 2026-04-06/l2_chunk_0065.parquet
+2026-04-08/l2_chunk_0327.parquet
 2026-04-02/l2_chunk_0632.parquet
 2026-03-31/l2_chunk_0193.parquet
 2026-03-03/l2_chunk_0203.parquet
@@ -11759,6 +11913,7 @@
 2026-03-19/l2_chunk_0152.parquet
 2026-03-11/l2_chunk_0244.parquet
 2026-03-17/l2_chunk_0433.parquet
+2026-04-08/l2_chunk_0316.parquet
 2026-04-06/l2_chunk_0173.parquet
 2026-03-25/l2_chunk_0070.parquet
 2026-03-26/l2_chunk_0445.parquet
@@ -11780,6 +11935,7 @@
 2026-03-16/l2_chunk_0496.parquet
 2026-05-05/l2_chunk_0174.parquet
 2026-03-30/l2_chunk_0446.parquet
+2026-04-08/l2_chunk_0247.parquet
 2026-04-01/l2_chunk_0716.parquet
 2026-04-07/l2_chunk_0325.parquet
 2026-03-16/l2_chunk_0589.parquet
@@ -11824,6 +11980,7 @@
 2026-03-19/l2_chunk_0076.parquet
 2026-03-27/l2_chunk_0233.parquet
 2026-03-19/l2_chunk_0235.parquet
+2026-04-09/l2_chunk_0076.parquet
 2026-03-27/l2_chunk_0512.parquet
 2026-03-26/l2_chunk_0343.parquet
 2026-03-06/l2_chunk_0228.parquet
@@ -11837,6 +11994,7 @@
 2026-03-03/l2_chunk_0032.parquet
 2026-03-16/l2_chunk_0256.parquet
 2026-03-06/l2_chunk_0164.parquet
+2026-04-08/l2_chunk_0266.parquet
 2026-03-26/l2_chunk_0411.parquet
 2026-03-09/l2_chunk_0047.parquet
 2026-03-24/l2_chunk_0082.parquet
@@ -12028,6 +12186,7 @@
 2026-03-19/l2_chunk_0456.parquet
 2026-03-25/l2_chunk_0192.parquet
 2026-04-06/l2_chunk_0123.parquet
+2026-04-08/l2_chunk_0272.parquet
 2026-03-18/l2_chunk_0166.parquet
 2026-04-06/l2_chunk_0199.parquet
 2026-04-02/l2_chunk_0620.parquet
@@ -12164,6 +12323,7 @@
 2026-03-30/l2_chunk_0621.parquet
 2026-03-18/l2_chunk_0168.parquet
 2026-03-25/l2_chunk_0312.parquet
+2026-04-08/l2_chunk_0248.parquet
 2026-04-02/l2_chunk_0063.parquet
 2026-03-31/l2_chunk_0910.parquet
 2026-03-24/l2_chunk_0114.parquet
@@ -12339,6 +12499,7 @@
 2026-03-04/l2_chunk_0117.parquet
 2026-03-20/l2_chunk_0633.parquet
 2026-03-24/l2_chunk_0251.parquet
+2026-04-08/l2_chunk_0363.parquet
 2026-03-27/l2_chunk_0186.parquet
 2026-04-07/l2_chunk_0293.parquet
 2026-03-02/l2_chunk_0126.parquet
@@ -12690,6 +12851,7 @@
 2026-03-27/l2_chunk_0497.parquet
 2026-04-01/l2_chunk_0746.parquet
 2026-03-13/l2_chunk_0096.parquet
+2026-04-08/l2_chunk_0354.parquet
 2026-03-18/l2_chunk_0106.parquet
 2026-03-24/l2_chunk_0098.parquet
 2026-03-31/l2_chunk_0758.parquet
@@ -12761,7 +12923,9 @@
 2026-03-31/l2_chunk_0441.parquet
 2026-04-01/l2_chunk_0201.parquet
 2026-03-19/l2_chunk_0037.parquet
+2026-04-08/l2_chunk_0237.parquet
 2026-03-27/l2_chunk_0149.parquet
+2026-04-09/l2_chunk_0079.parquet
 2026-03-27/l2_chunk_0712.parquet
 2026-03-16/l2_chunk_0056.parquet
 2026-03-05/l2_chunk_0165.parquet
@@ -12814,6 +12978,7 @@
 2026-03-16/l2_chunk_0352.parquet
 2026-03-31/l2_chunk_0175.parquet
 2026-03-31/l2_chunk_0831.parquet
+2026-04-08/l2_chunk_0317.parquet
 2026-03-16/l2_chunk_0649.parquet
 2026-04-07/l2_chunk_0754.parquet
 2026-03-20/l2_chunk_0756.parquet
@@ -12850,6 +13015,7 @@
 2026-03-24/l2_chunk_0074.parquet
 2026-03-19/l2_chunk_0646.parquet
 2026-03-16/l2_chunk_0276.parquet
+2026-04-08/l2_chunk_0328.parquet
 2026-04-07/l2_chunk_0680.parquet
 2026-05-05/l2_chunk_0017.parquet
 2026-05-05/l2_chunk_0137.parquet
@@ -12857,6 +13023,7 @@
 2026-03-18/l2_chunk_0053.parquet
 2026-03-19/l2_chunk_0760.parquet
 2026-03-25/l2_chunk_0320.parquet
+2026-04-08/l2_chunk_0331.parquet
 2026-04-08/l2_chunk_0091.parquet
 2026-03-25/l2_chunk_0024.parquet
 2026-03-06/l2_chunk_0181.parquet
@@ -12876,6 +13043,7 @@
 2026-03-30/l2_chunk_0790.parquet
 2026-03-19/l2_chunk_0834.parquet
 2026-04-06/l2_chunk_0312.parquet
+2026-04-08/l2_chunk_0270.parquet
 2026-03-25/l2_chunk_0664.parquet
 2026-04-07/l2_chunk_0316.parquet
 2026-04-01/l2_chunk_0324.parquet
@@ -12927,6 +13095,7 @@
 2026-03-25/l2_chunk_0124.parquet
 2026-03-19/l2_chunk_0548.parquet
 2026-04-01/l2_chunk_0745.parquet
+2026-04-08/l2_chunk_0334.parquet
 2026-04-01/l2_chunk_0560.parquet
 2026-03-06/l2_chunk_0165.parquet
 2026-03-26/l2_chunk_0006.parquet
@@ -13055,6 +13224,7 @@
 2026-03-27/l2_chunk_0330.parquet
 2026-04-01/l2_chunk_0573.parquet
 2026-04-01/l2_chunk_0079.parquet
+2026-04-08/l2_chunk_0314.parquet
 2026-03-16/l2_chunk_0510.parquet
 2026-03-19/l2_chunk_0181.parquet
 2026-03-19/l2_chunk_0676.parquet
@@ -13082,6 +13252,7 @@
 2026-03-20/l2_chunk_0135.parquet
 2026-04-08/l2_chunk_0094.parquet
 2026-03-27/l2_chunk_0572.parquet
+2026-04-08/l2_chunk_0277.parquet
 2026-03-27/l2_chunk_0475.parquet
 2026-03-17/l2_chunk_0520.parquet
 2026-03-12/l2_chunk_0128.parquet
@@ -13137,6 +13308,7 @@
 2026-03-06/l2_chunk_0226.parquet
 2026-03-13/l2_chunk_0022.parquet
 2026-03-19/l2_chunk_0213.parquet
+2026-04-08/l2_chunk_0340.parquet
 2026-04-01/l2_chunk_0118.parquet
 2026-04-08/l2_chunk_0131.parquet
 2026-03-17/l2_chunk_0379.parquet
@@ -13206,10 +13378,12 @@
 2026-04-01/l2_chunk_0691.parquet
 2026-04-02/l2_chunk_0111.parquet
 2026-04-08/l2_chunk_0150.parquet
+2026-04-08/l2_chunk_0224.parquet
 2026-03-16/l2_chunk_0165.parquet
 2026-03-17/l2_chunk_0154.parquet
 2026-03-26/l2_chunk_0642.parquet
 2026-03-30/l2_chunk_0434.parquet
+2026-04-08/l2_chunk_0236.parquet
 2026-03-26/l2_chunk_0110.parquet
 2026-03-27/l2_chunk_0751.parquet
 2026-03-19/l2_chunk_0611.parquet
@@ -13286,6 +13460,7 @@
 2026-03-16/l2_chunk_0090.parquet
 2026-03-12/l2_chunk_0095.parquet
 2026-04-02/l2_chunk_0707.parquet
+2026-04-08/l2_chunk_0362.parquet
 2026-03-12/l2_chunk_0033.parquet
 2026-03-30/l2_chunk_0586.parquet
 2026-03-31/l2_chunk_0657.parquet
@@ -13311,9 +13486,11 @@
 2026-04-01/l2_chunk_0656.parquet
 2026-04-01/l2_chunk_0486.parquet
 2026-03-18/l2_chunk_0311.parquet
+2026-04-08/l2_chunk_0302.parquet
 2026-03-18/l2_chunk_0528.parquet
 2026-03-10/l2_chunk_0201.parquet
 2026-03-13/l2_chunk_0056.parquet
+2026-04-08/l2_chunk_0275.parquet
 2026-04-08/l2_chunk_0179.parquet
 2026-03-11/l2_chunk_0217.parquet
 2026-04-08/l2_chunk_0088.parquet
@@ -13596,10 +13773,12 @@
 2026-03-27/l2_chunk_0130.parquet
 2026-03-26/l2_chunk_0168.parquet
 2026-03-31/l2_chunk_0374.parquet
+2026-04-08/l2_chunk_0251.parquet
 2026-03-20/l2_chunk_0544.parquet
 2026-03-20/l2_chunk_0523.parquet
 2026-03-18/l2_chunk_0118.parquet
 2026-03-31/l2_chunk_0700.parquet
+2026-04-08/l2_chunk_0288.parquet
 2026-03-26/l2_chunk_0666.parquet
 2026-05-05/l2_chunk_0015.parquet
 2026-04-02/l2_chunk_0479.parquet
@@ -13645,6 +13824,7 @@
 2026-03-25/l2_chunk_0722.parquet
 2026-03-25/l2_chunk_0037.parquet
 2026-03-27/l2_chunk_0647.parquet
+2026-04-08/l2_chunk_0356.parquet
 2026-03-04/l2_chunk_0034.parquet
 2026-03-17/l2_chunk_0629.parquet
 2026-03-10/l2_chunk_0020.parquet
@@ -13652,6 +13832,7 @@
 2026-04-01/l2_chunk_0239.parquet
 2026-05-05/l2_chunk_0155.parquet
 2026-03-30/l2_chunk_0156.parquet
+2026-04-08/l2_chunk_0353.parquet
 2026-03-30/l2_chunk_0534.parquet
 2026-03-17/l2_chunk_0269.parquet
 2026-03-05/l2_chunk_0156.parquet
@@ -13712,6 +13893,7 @@
 2026-03-31/l2_chunk_0527.parquet
 2026-03-12/l2_chunk_0178.parquet
 2026-03-24/l2_chunk_0203.parquet
+2026-04-08/l2_chunk_0289.parquet
 2026-03-09/l2_chunk_0121.parquet
 2026-03-18/l2_chunk_0219.parquet
 2026-04-07/l2_chunk_0056.parquet
@@ -13892,6 +14074,7 @@
 2026-04-01/l2_chunk_0450.parquet
 2026-03-30/l2_chunk_0727.parquet
 2026-03-19/l2_chunk_0980.parquet
+2026-04-08/l2_chunk_0345.parquet
 2026-03-25/l2_chunk_0104.parquet
 2026-03-26/l2_chunk_0641.parquet
 2026-05-05/l2_chunk_0057.parquet
@@ -13959,6 +14142,7 @@
 2026-03-19/l2_chunk_0723.parquet
 2026-03-31/l2_chunk_0183.parquet
 2026-03-20/l2_chunk_0554.parquet
+2026-04-08/l2_chunk_0273.parquet
 2026-04-01/l2_chunk_0182.parquet
 2026-04-07/l2_chunk_0446.parquet
 2026-03-30/l2_chunk_0376.parquet
@@ -13976,6 +14160,7 @@
 2026-03-30/l2_chunk_0576.parquet
 2026-05-05/l2_chunk_0128.parquet
 2026-03-27/l2_chunk_0004.parquet
+2026-04-08/l2_chunk_0259.parquet
 2026-03-31/l2_chunk_0982.parquet
 2026-03-26/l2_chunk_0100.parquet
 2026-03-26/l2_chunk_0118.parquet
@@ -13987,6 +14172,7 @@
 2026-03-27/l2_chunk_0217.parquet
 2026-04-07/l2_chunk_0160.parquet
 2026-03-18/l2_chunk_0777.parquet
+2026-04-08/l2_chunk_0321.parquet
 2026-03-26/l2_chunk_0786.parquet
 2026-03-18/l2_chunk_0399.parquet
 2026-04-01/l2_chunk_0204.parquet
@@ -14102,6 +14288,7 @@
 2026-05-06/l2_chunk_0102.parquet
 2026-04-02/l2_chunk_0173.parquet
 2026-03-30/l2_chunk_0393.parquet
+2026-04-09/l2_chunk_0063.parquet
 2026-03-18/l2_chunk_0805.parquet
 2026-03-30/l2_chunk_0039.parquet
 2026-03-17/l2_chunk_0230.parquet
@@ -14245,6 +14432,7 @@
 2026-04-01/l2_chunk_0772.parquet
 2026-04-07/l2_chunk_0506.parquet
 2026-03-17/l2_chunk_0331.parquet
+2026-04-09/l2_chunk_0068.parquet
 2026-03-25/l2_chunk_0341.parquet
 2026-03-17/l2_chunk_0651.parquet
 2026-03-30/l2_chunk_0874.parquet
@@ -14359,6 +14547,7 @@
 2026-03-27/l2_chunk_0219.parquet
 2026-03-24/l2_chunk_0211.parquet
 2026-03-10/l2_chunk_0165.parquet
+2026-04-08/l2_chunk_0291.parquet
 2026-03-24/l2_chunk_0265.parquet
 2026-03-19/l2_chunk_0319.parquet
 2026-03-19/l2_chunk_0845.parquet
@@ -14408,6 +14597,7 @@
 2026-03-31/l2_chunk_0876.parquet
 2026-04-07/l2_chunk_0012.parquet
 2026-05-05/l2_chunk_0054.parquet
+2026-04-08/l2_chunk_0290.parquet
 2026-03-13/l2_chunk_0045.parquet
 2026-04-06/l2_chunk_0479.parquet
 2026-03-11/l2_chunk_0095.parquet

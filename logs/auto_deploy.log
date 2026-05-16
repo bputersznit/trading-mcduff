@@ -36,3 +36,115 @@
 [2026-05-16 00:02:35] === Starting deployment of CG_OrderFlow_Aggression_v2_7_STAGE2_RESPONSE_MTF.cs ===
 [2026-05-16 00:02:35] Step 1: Moving to ninjascript directory
 [2026-05-16 00:02:35] Step 3: Git commit
+[2026-05-16 00:05:21] Step 4: Push to GitHub (automatic via post-commit hook)
+[2026-05-16 00:05:21] Step 5: Deploying to Windows VM
+[2026-05-16 00:05:22] === Auto-deploy check started ===
+[2026-05-16 00:05:22] Found in Downloads: CG_OrderFlow_Aggression_v2_6_HEADLESS_SERIES_ENFORCED.cs
+[2026-05-16 00:05:22] No current version in ninjascript directory
+[2026-05-16 00:05:22] === Starting deployment of CG_OrderFlow_Aggression_v2_6_HEADLESS_SERIES_ENFORCED.cs ===
+[2026-05-16 00:05:22] Step 1: Moving to ninjascript directory
+[2026-05-16 00:05:22] Step 3: Git commit
+[2026-05-16 00:08:04] Step 4: Push to GitHub (automatic via post-commit hook)
+[2026-05-16 00:08:04] Step 5: Deploying to Windows VM
+[2026-05-16 00:08:04] === Auto-deploy check started ===
+[2026-05-16 00:08:04] Found in Downloads: CG_OrderFlow_Aggression_v2_5_HYBRID_DISCOVERY.cs
+[2026-05-16 00:08:04] No current version in ninjascript directory
+[2026-05-16 00:08:04] === Starting deployment of CG_OrderFlow_Aggression_v2_5_HYBRID_DISCOVERY.cs ===
+[2026-05-16 00:08:04] Step 1: Moving to ninjascript directory
+[2026-05-16 00:08:04] Step 3: Git commit
+[2026-05-16 00:10:51] Step 4: Push to GitHub (automatic via post-commit hook)
+[2026-05-16 00:10:51] Step 5: Deploying to Windows VM
+[2026-05-16 00:10:53] ✅ Deployed to Windows VM successfully (exit code 0)
+[2026-05-16 00:10:53] === Deployment complete: v2_5 (HYBRID_DISCOVERY) ===
+[2026-05-16 00:10:53] Next step: Compile in NinjaTrader (F5)
+[2026-05-16 00:10:53] === Auto-deploy check finished ===
+[2026-05-16 00:10:53] === Auto-deploy check started ===
+[2026-05-16 00:10:53] Found in Downloads: CG_OrderFlow_Aggression_v2_4_REGIME_ACCEPTANCE.cs
+[2026-05-16 00:10:53] No current version in ninjascript directory
+[2026-05-16 00:10:53] === Starting deployment of CG_OrderFlow_Aggression_v2_4_REGIME_ACCEPTANCE.cs ===
+[2026-05-16 00:10:53] Step 1: Moving to ninjascript directory
+[2026-05-16 00:10:53] Step 3: Git commit
+[2026-05-16 00:13:40] Step 4: Push to GitHub (automatic via post-commit hook)
+[2026-05-16 00:13:40] Step 5: Deploying to Windows VM
+[2026-05-16 00:13:41] ✅ Deployed to Windows VM successfully (exit code 0)
+[2026-05-16 00:13:41] === Deployment complete: v2_4 (REGIME_ACCEPTANCE) ===
+[2026-05-16 00:13:41] Next step: Compile in NinjaTrader (F5)
+[2026-05-16 00:13:41] === Auto-deploy check finished ===
+[2026-05-16 00:13:41] === Auto-deploy check started ===
+[2026-05-16 00:13:41] Found in Downloads: CG_OrderFlow_Aggression_v2_3_UNBLOCKED.cs
+[2026-05-16 00:13:41] No current version in ninjascript directory
+[2026-05-16 00:13:41] === Starting deployment of CG_OrderFlow_Aggression_v2_3_UNBLOCKED.cs ===
+[2026-05-16 00:13:41] Step 1: Moving to ninjascript directory
+[2026-05-16 00:13:41] Step 3: Git commit
+[2026-05-16 00:16:17] Step 4: Push to GitHub (automatic via post-commit hook)
+[2026-05-16 00:16:17] Step 5: Deploying to Windows VM
+[2026-05-16 00:16:19] ✅ Deployed to Windows VM successfully (exit code 0)
+[2026-05-16 00:16:19] === Deployment complete: v2_3 (UNBLOCKED) ===
+[2026-05-16 00:16:19] Next step: Compile in NinjaTrader (F5)
+[2026-05-16 00:16:19] === Auto-deploy check finished ===
+[2026-05-16 00:16:19] === Auto-deploy check started ===
+[2026-05-16 00:16:19] Found in Downloads: CG_OrderFlow_Aggression_v2_2_PERSISTENCE_AUCTION (1).cs
+[2026-05-16 00:16:19] No current version in ninjascript directory
+[2026-05-16 00:16:19] === Starting deployment of CG_OrderFlow_Aggression_v2_2_PERSISTENCE_AUCTION (1).cs ===
+[2026-05-16 00:16:19] Step 1: Moving to ninjascript directory
+[2026-05-16 00:16:19] Step 3: Git commit
+[2026-05-16 00:19:08] Step 4: Push to GitHub (automatic via post-commit hook)
+[2026-05-16 00:19:08] Step 5: Deploying to Windows VM
+[2026-05-16 00:19:09] ✅ Deployed to Windows VM successfully (exit code 0)
+[2026-05-16 00:19:09] === Deployment complete: v2_2 (PERSISTENCE_AUCTION (1)) ===
+[2026-05-16 00:19:09] Next step: Compile in NinjaTrader (F5)
+[2026-05-16 00:19:09] === Auto-deploy check finished ===
+[2026-05-16 00:19:09] === Auto-deploy check started ===
+[2026-05-16 00:19:09] Found in Downloads: CG_OrderFlow_Aggression_v2_2_PERSISTENCE_AUCTION.cs
+[2026-05-16 00:19:09] No current version in ninjascript directory
+[2026-05-16 00:19:09] === Starting deployment of CG_OrderFlow_Aggression_v2_2_PERSISTENCE_AUCTION.cs ===
+[2026-05-16 00:19:09] Step 1: Moving to ninjascript directory
+[2026-05-16 00:19:09] Step 3: Git commit
+[2026-05-16 00:21:51] Step 4: Push to GitHub (automatic via post-commit hook)
+[2026-05-16 00:21:51] Step 5: Deploying to Windows VM
+[2026-05-16 00:21:52] ✅ Deployed to Windows VM successfully (exit code 0)
+[2026-05-16 00:21:52] === Deployment complete: v2_2 (PERSISTENCE_AUCTION) ===
+[2026-05-16 00:21:52] Next step: Compile in NinjaTrader (F5)
+[2026-05-16 00:21:52] === Auto-deploy check finished ===
+[2026-05-16 00:21:52] === Auto-deploy check started ===
+[2026-05-16 00:21:52] Found in Downloads: CG_OrderFlow_Aggression_v2_1_OCO_ORFIX.cs
+[2026-05-16 00:21:52] No current version in ninjascript directory
+[2026-05-16 00:21:52] === Starting deployment of CG_OrderFlow_Aggression_v2_1_OCO_ORFIX.cs ===
+[2026-05-16 00:21:52] Step 1: Moving to ninjascript directory
+[2026-05-16 00:21:52] Step 3: Git commit
+[2026-05-16 00:24:44] Step 4: Push to GitHub (automatic via post-commit hook)
+[2026-05-16 00:24:44] Step 5: Deploying to Windows VM
+[2026-05-16 00:24:46] ✅ Deployed to Windows VM successfully (exit code 0)
+[2026-05-16 00:24:46] === Deployment complete: v2_1 (OCO_ORFIX) ===
+[2026-05-16 00:24:46] Next step: Compile in NinjaTrader (F5)
+[2026-05-16 00:24:46] === Auto-deploy check finished ===
+[2026-05-16 00:24:46] === Auto-deploy check started ===
+[2026-05-16 00:24:46] Found in Downloads: CG_MNQ_CHBlueprintExec_v1.cs
+[2026-05-16 00:24:46] No current version in ninjascript directory
+[2026-05-16 00:24:46] === Starting deployment of CG_MNQ_CHBlueprintExec_v1.cs ===
+[2026-05-16 00:24:46] Step 1: Moving to ninjascript directory
+[2026-05-16 00:24:46] Step 3: Git commit
+[2026-05-16 00:27:28] Step 4: Push to GitHub (automatic via post-commit hook)
+[2026-05-16 00:27:28] Step 5: Deploying to Windows VM
+[2026-05-16 00:27:30] ✅ Deployed to Windows VM successfully (exit code 0)
+[2026-05-16 00:27:30] === Deployment complete: CG_MNQ_CHBlueprintExec_v1.cs ===
+[2026-05-16 00:27:30] Next step: Compile in NinjaTrader (F5)
+[2026-05-16 00:27:30] === Auto-deploy check finished ===
+[2026-05-16 00:27:30] === Auto-deploy check started ===
+[2026-05-16 00:27:30] Found in Downloads: CG_OrderFlow_Aggression_v2_10_DESTRUCTIVE_DISCOVERY.cs
+[2026-05-16 00:27:30] No current version in ninjascript directory
+[2026-05-16 00:27:30] === Starting deployment of CG_OrderFlow_Aggression_v2_10_DESTRUCTIVE_DISCOVERY.cs ===
+[2026-05-16 00:27:30] Step 1: Moving to ninjascript directory
+[2026-05-16 00:27:30] Step 3: Git commit
+[2026-05-16 00:30:19] Step 4: Push to GitHub (automatic via post-commit hook)
+[2026-05-16 00:30:19] Step 5: Deploying to Windows VM
+[2026-05-16 00:30:21] ✅ Deployed to Windows VM successfully (exit code 0)
+[2026-05-16 00:30:21] === Deployment complete: v2_10 (DESTRUCTIVE_DISCOVERY) ===
+[2026-05-16 00:30:21] Next step: Compile in NinjaTrader (F5)
+[2026-05-16 00:30:21] === Auto-deploy check finished ===
+[2026-05-16 00:30:21] === Auto-deploy check started ===
+[2026-05-16 00:30:21] Found in Downloads: CG_MNQ_DeployShell_v1_16.cs
+[2026-05-16 00:30:21] No current version in ninjascript directory
+[2026-05-16 00:30:21] === Starting deployment of CG_MNQ_DeployShell_v1_16.cs ===
+[2026-05-16 00:30:21] Step 1: Moving to ninjascript directory
+[2026-05-16 00:30:21] Step 3: Git commit

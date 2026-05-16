@@ -10,7 +10,7 @@ using NinjaTrader.NinjaScript;
 #endregion
 
 // =================================================================================================
-// CG_OrderFlow_Aggression_v2_7_STAGE2_RESPONSE_MTF.cs
+// CG_OrderFlow_Aggression_v2_8_STAGE2_DISCOVERY_RESPONSE.cs
 // Generated: 2026-05-15 20:35:00 ET
 //
 // Purpose
@@ -33,12 +33,12 @@ using NinjaTrader.NinjaScript;
 // Important design stance
 // -----------------------
 // v2.7 Stage 2 stops treating aggression as a direct entry trigger.
-// Default behavior: TrendUp/TrendDown continuation requires acceptance; Range requires absorption/rejection response.
+// Default behavior: TrendUp/TrendDown continuation requires acceptance; Range permits acceptance discovery with optional absorption.
 // =================================================================================================
 
 namespace NinjaTrader.NinjaScript.Strategies
 {
-    public class CG_OrderFlow_Aggression_v2_7_STAGE2_RESPONSE_MTF : Strategy
+    public class CG_OrderFlow_Aggression_v2_8_STAGE2_DISCOVERY_RESPONSE : Strategy
     {
         #region Enums
         private enum DirectionSignal { None = 0, Long = 1, Short = -1 }
@@ -152,8 +152,8 @@ namespace NinjaTrader.NinjaScript.Strategies
         {
             if (State == State.SetDefaults)
             {
-                Description = "CG OrderFlow Aggression v2.7 - Stage 2 response MTF: acceptance/rejection/absorption";
-                Name = "CG_OrderFlow_Aggression_v2_7_STAGE2_RESPONSE_MTF";
+                Description = "CG OrderFlow Aggression v2.8 - Stage 2 discovery response: acceptance-first range/trend entries";
+                Name = "CG_OrderFlow_Aggression_v2_8_STAGE2_DISCOVERY_RESPONSE";
 
                 Calculate = Calculate.OnEachTick;
                 EntriesPerDirection = 1;
@@ -197,13 +197,13 @@ namespace NinjaTrader.NinjaScript.Strategies
                 ORBreakoutBufferTicks = 4;
                 AllowReversalTrades = false;
                 AllowRangeDiscoveryTrades = true;
-                MinRangeDiscoveryPersistenceScore = 2.25;
+                MinRangeDiscoveryPersistenceScore = 1.50;
 
                 // Sweep / acceptance / absorption
                 EnablePostSweepDelay = true;
                 SweepDeltaThreshold = 250;
                 SweepImbalanceThreshold = 0.85;
-                PostSweepDelayMs = 1250;
+                PostSweepDelayMs = 500;
                 EnablePriceAcceptance = false; // legacy gate; Stage 2 response engine supersedes this
                 AcceptanceTicks = 6;
                 AcceptanceBucketsRequired = 2;
@@ -214,16 +214,16 @@ namespace NinjaTrader.NinjaScript.Strategies
                 // Stage 2 response engine
                 EnableStage2ResponseEngine = true;
                 Stage2ResponseWindowMs = 3000;
-                Stage2AcceptanceTicks = 5;
-                Stage2AcceptanceBucketsRequired = 2;
-                Stage2MaxAdverseTicks = 4;
-                Stage2RangeRequiresAbsorption = true;
+                Stage2AcceptanceTicks = 4;
+                Stage2AcceptanceBucketsRequired = 1;
+                Stage2MaxAdverseTicks = 6;
+                Stage2RangeRequiresAbsorption = false;
                 Stage2AbsorptionLookbackMs = 5000;
-                Stage2AbsorptionDelta = 350;
-                Stage2AbsorptionMaxProgressTicks = 4;
+                Stage2AbsorptionDelta = 250;
+                Stage2AbsorptionMaxProgressTicks = 6;
                 Stage2RejectionTicks = 5;
-                Stage2RejectionCooldownMs = 1500;
-                Stage2SweepCooldownMs = 1500;
+                Stage2RejectionCooldownMs = 750;
+                Stage2SweepCooldownMs = 750;
 
                 // Risk
                 TargetTicks = 40;
@@ -747,8 +747,8 @@ namespace NinjaTrader.NinjaScript.Strategies
             if (auctionState == AuctionState.Unknown)
                 return false;
 
-            // Stage 2: Range is not a normal continuation regime. Let it through only as
-            // a candidate; Stage2Allows() must then confirm absorption/rejection response.
+            // Stage 2.8: Range remains discovery-only, but no longer requires absorption by default.
+            // Stage2Allows() must still confirm post-aggression price acceptance.
             if (auctionState == AuctionState.Range && AllowRangeDiscoveryTrades)
             {
                 if (signal == DirectionSignal.Long && weightedPersistenceScore >= MinRangeDiscoveryPersistenceScore)

@@ -10,9 +10,9 @@ using NinjaTrader.NinjaScript;
 #endregion
 
 // =================================================================================================
-// CG_OrderFlow_Aggression_v2_16B_RTH_OPEN_DRIVE_HTF_FIX.cs
+// CG_OrderFlow_Aggression_v2_16C_OPEN_DRIVE_PERMISSION_FIX.cs
 // Generated: 2026-05-16 ET
-// Patch: v2.16B loosens HTF NoTrade only during the RTH opening-drive discovery window.
+// Patch: v2.16C fixes opening-drive override propagation through all HTF migration gates.
 //
 // Purpose
 // -------
@@ -39,7 +39,7 @@ using NinjaTrader.NinjaScript;
 
 namespace NinjaTrader.NinjaScript.Strategies
 {
-    public class CG_OrderFlow_Aggression_v2_16B_RTH_OPEN_DRIVE_HTF_FIX : Strategy
+    public class CG_OrderFlow_Aggression_v2_16C_OPEN_DRIVE_PERMISSION_FIX : Strategy
     {
         #region Enums
         private enum DirectionSignal { None = 0, Long = 1, Short = -1 }
@@ -178,7 +178,7 @@ namespace NinjaTrader.NinjaScript.Strategies
             if (State == State.SetDefaults)
             {
                 Description = "CG OrderFlow Aggression v2.16 - RTH-only discovery with authoritative 5m auction migration permissions";
-                Name = "CG_OrderFlow_Aggression_v2_16B_RTH_OPEN_DRIVE_HTF_FIX";
+                Name = "CG_OrderFlow_Aggression_v2_16C_OPEN_DRIVE_PERMISSION_FIX";
 
                 Calculate = Calculate.OnEachTick;
                 EntriesPerDirection = 1;
@@ -322,7 +322,7 @@ namespace NinjaTrader.NinjaScript.Strategies
                 AllowOpeningDriveWhenHTFNoTrade = true;
                 OpeningDriveEndHour = 9;
                 OpeningDriveEndMinute = 45;
-                OpeningDriveMinPersistence = 3.00;
+                OpeningDriveMinPersistence = 2.50;
             }
             else if (State == State.Configure)
             {
@@ -1006,6 +1006,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 
             bool isLong = signal == DirectionSignal.Long;
             bool isShort = signal == DirectionSignal.Short;
+            bool openingDriveNoTradeOverride = false;
 
             if (EnableHTFAuctionMigration)
             {
@@ -1014,17 +1015,18 @@ namespace NinjaTrader.NinjaScript.Strategies
 
                 if (EnableHTFNoTradeRegime && htfRegime == HTFAuctionRegime.NoTrade)
                 {
-                    // v2.16B: pre-RTH overlap correctly says "do not trade", but it was also freezing the
-                    // 09:30 opening drive. During 09:30-09:45, allow only strong RTH impulse discovery,
-                    // still subject to quote, VWAP/OR, auction, Stage2, and risk gates below.
-                    if (!OpeningDriveAllowsHTFNoTradeOverride(signal, price))
+                    // v2.16C: opening-drive permission must propagate beyond the first NoTrade check.
+                    // v2.16B passed this check, then immediately failed the generic migration requirement,
+                    // leaving all 09:30-09:45 candidates rejected as HTF_PERMISSION.
+                    openingDriveNoTradeOverride = OpeningDriveAllowsHTFNoTradeOverride(signal, price);
+                    if (!openingDriveNoTradeOverride)
                         return false;
                 }
 
-                if (IsInsideHTFFailedMigrationCooldown(signal))
+                if (!openingDriveNoTradeOverride && IsInsideHTFFailedMigrationCooldown(signal))
                     return false;
 
-                if (RequireHTFMigrationForBreakouts)
+                if (RequireHTFMigrationForBreakouts && !openingDriveNoTradeOverride)
                 {
                     bool directionalMigration = (signal == DirectionSignal.Long && (htfRegime == HTFAuctionRegime.MigratingUp || htfRegime == HTFAuctionRegime.ExpandingUp))
                         || (signal == DirectionSignal.Short && (htfRegime == HTFAuctionRegime.MigratingDown || htfRegime == HTFAuctionRegime.ExpandingDown));
@@ -1099,6 +1101,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 
             if (EnableOpeningRangeFilter && !orCalculated && RequireHTFPermissionForRange && auctionState == AuctionState.Range)
             {
+                if (openingDriveNoTradeOverride)
+                    return true;
+
                 if (htfBias == signal)
                     return true;
                 if (sessionVwap > 0.0)
@@ -1370,7 +1375,10 @@ namespace NinjaTrader.NinjaScript.Strategies
 
         private bool IsRangePowerMove(DirectionSignal signal)
         {
-            if (DisableRangePowerOverrideWhenHTFNoTrade && htfRegime == HTFAuctionRegime.NoTrade)
+            bool openingDriveNoTradeOverride = htfRegime == HTFAuctionRegime.NoTrade
+                && OpeningDriveAllowsHTFNoTradeOverride(signal, lastTradePrice > 0.0 ? lastTradePrice : currentBestBid);
+
+            if (DisableRangePowerOverrideWhenHTFNoTrade && htfRegime == HTFAuctionRegime.NoTrade && !openingDriveNoTradeOverride)
                 return false;
 
             if (EnableHTFAuctionMigration && htfRegime == HTFAuctionRegime.Balanced && RequireHTFMigrationForBreakouts)

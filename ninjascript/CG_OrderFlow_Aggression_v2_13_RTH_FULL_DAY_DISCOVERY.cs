@@ -10,7 +10,7 @@ using NinjaTrader.NinjaScript;
 #endregion
 
 // =================================================================================================
-// CG_OrderFlow_Aggression_v2_12_RTH_EXECUTION_GATE.cs
+// CG_OrderFlow_Aggression_v2_13_RTH_FULL_DAY_DISCOVERY.cs
 // Generated: 2026-05-15 20:35:00 ET
 //
 // Purpose
@@ -32,13 +32,13 @@ using NinjaTrader.NinjaScript;
 //
 // Important design stance
 // -----------------------
-// v2.12 keeps the context-first design and adds an execution-only RTH gate.
-// Default behavior: pre/post-RTH data may still be inspected and used for diagnostics, but actual order entry is enabled only inside the configured RTH window and open positions are flattened at RTH end.
+// v2.13 keeps the context-first design, enforces RTH-only execution, and removes all safety/panic trading stoppages for full-day discovery.
+// Default behavior: pre/post-RTH data may still be inspected and used for diagnostics, but actual order entry is enabled only inside the configured RTH window. No daily loss, profit lock, max trade, consecutive-loss, or cooldown stoppages are enabled by default.
 // =================================================================================================
 
 namespace NinjaTrader.NinjaScript.Strategies
 {
-    public class CG_OrderFlow_Aggression_v2_12_RTH_EXECUTION_GATE : Strategy
+    public class CG_OrderFlow_Aggression_v2_13_RTH_FULL_DAY_DISCOVERY : Strategy
     {
         #region Enums
         private enum DirectionSignal { None = 0, Long = 1, Short = -1 }
@@ -162,8 +162,8 @@ namespace NinjaTrader.NinjaScript.Strategies
         {
             if (State == State.SetDefaults)
             {
-                Description = "CG OrderFlow Aggression v2.12 - context-first power-swim branch with RTH execution gate";
-                Name = "CG_OrderFlow_Aggression_v2_12_RTH_EXECUTION_GATE";
+                Description = "CG OrderFlow Aggression v2.13 - RTH-only execution, full-day destructive discovery with no panic stoppages";
+                Name = "CG_OrderFlow_Aggression_v2_13_RTH_FULL_DAY_DISCOVERY";
 
                 Calculate = Calculate.OnEachTick;
                 EntriesPerDirection = 1;
@@ -249,15 +249,14 @@ namespace NinjaTrader.NinjaScript.Strategies
                 Quantity = 1;
 
                 // Frequency control
-                EnableCooldown = true;
-                CooldownSeconds = 180;
-                PostStopCooldownSeconds = 360;
-                MinimumSecondsBetweenEntries = 60;
+                EnableCooldown = false;
+                CooldownSeconds = 0;
+                PostStopCooldownSeconds = 0;
+                MinimumSecondsBetweenEntries = 0;
                 MaxTradesPerDay = 0;
 
-                // Destructive discovery branch: no panic/daily/consecutive/profit-lock shutdowns.
-                // Let the strategy continue through loss streaks so replay reveals full-session
-                // behavior and whether it can participate in later power moves.
+                // Full-day destructive discovery branch: no panic/daily/consecutive/profit-lock/max-trade/cooldown shutdowns.
+                // Let the strategy continue through all RTH loss streaks so replay reveals full-session behavior.
                 EnableDailyLimits = false;
                 MaxDailyLoss = 999999;
                 MaxConsecutiveLosses = 999;

@@ -10,8 +10,8 @@ using NinjaTrader.NinjaScript;
 #endregion
 
 // =================================================================================================
-// CG_OrderFlow_Aggression_v2_13_RTH_FULL_DAY_DISCOVERY.cs
-// Generated: 2026-05-15 20:35:00 ET
+// CG_OrderFlow_Aggression_v2_14_RTH_DISCOVERY_DIAGNOSTIC.cs
+// Generated: 2026-05-16 ET
 //
 // Purpose
 // -------
@@ -32,13 +32,13 @@ using NinjaTrader.NinjaScript;
 //
 // Important design stance
 // -----------------------
-// v2.13 keeps the context-first design, enforces RTH-only execution, and removes all safety/panic trading stoppages for full-day discovery.
+// v2.14 keeps RTH-only execution and no safety/panic stoppages, but relaxes the context-first gate for full-day discovery and prints exact rejection reasons.
 // Default behavior: pre/post-RTH data may still be inspected and used for diagnostics, but actual order entry is enabled only inside the configured RTH window. No daily loss, profit lock, max trade, consecutive-loss, or cooldown stoppages are enabled by default.
 // =================================================================================================
 
 namespace NinjaTrader.NinjaScript.Strategies
 {
-    public class CG_OrderFlow_Aggression_v2_13_RTH_FULL_DAY_DISCOVERY : Strategy
+    public class CG_OrderFlow_Aggression_v2_14_RTH_DISCOVERY_DIAGNOSTIC : Strategy
     {
         #region Enums
         private enum DirectionSignal { None = 0, Long = 1, Short = -1 }
@@ -162,8 +162,8 @@ namespace NinjaTrader.NinjaScript.Strategies
         {
             if (State == State.SetDefaults)
             {
-                Description = "CG OrderFlow Aggression v2.13 - RTH-only execution, full-day destructive discovery with no panic stoppages";
-                Name = "CG_OrderFlow_Aggression_v2_13_RTH_FULL_DAY_DISCOVERY";
+                Description = "CG OrderFlow Aggression v2.14 - RTH-only discovery with relaxed gates and rejection diagnostics";
+                Name = "CG_OrderFlow_Aggression_v2_14_RTH_DISCOVERY_DIAGNOSTIC";
 
                 Calculate = Calculate.OnEachTick;
                 EntriesPerDirection = 1;
@@ -199,7 +199,7 @@ namespace NinjaTrader.NinjaScript.Strategies
                 // Auction / structure
                 EnableOpeningRangeFilter = true;
                 EnableVWAPFilter = false;
-                EnableStructureFilter = true;
+                EnableStructureFilter = false;
                 EnableAuctionStateMachine = true;
                 SwingLookbackMinutes = 6;
                 MinDistanceFromVWAPTicks = 0;
@@ -207,7 +207,7 @@ namespace NinjaTrader.NinjaScript.Strategies
                 ORBreakoutBufferTicks = 4;
                 AllowReversalTrades = false;
                 AllowRangeDiscoveryTrades = true;
-                MinRangeDiscoveryPersistenceScore = 3.25;
+                MinRangeDiscoveryPersistenceScore = 2.75;
 
                 // Sweep / acceptance / absorption
                 EnablePostSweepDelay = true;
@@ -235,10 +235,10 @@ namespace NinjaTrader.NinjaScript.Strategies
                 Stage2RejectionCooldownMs = 750;
                 Stage2SweepCooldownMs = 750;
                 EnableStage2DirectionalAgreement = true;
-                Stage2MinDirectionalPersistence = 2.75;
-                Stage2MinAcceptanceDominance = 2;
-                Stage2MinContinuationBuckets = 2;
-                Stage2RangeStrongAcceptanceBuckets = 12;
+                Stage2MinDirectionalPersistence = 2.25;
+                Stage2MinAcceptanceDominance = 0;
+                Stage2MinContinuationBuckets = 1;
+                Stage2RangeStrongAcceptanceBuckets = 8;
 
                 // Risk
                 TargetTicks = 40;
@@ -273,19 +273,20 @@ namespace NinjaTrader.NinjaScript.Strategies
 
                 PrintDiagnostics = true;
                 DiagnosticEveryBuckets = 100;
-                            // Context-first suppression defaults
-                RequireORCompleteBeforeTrading = true;
-                EnableHTFBiasFilter = true;
+                            // v2.14 discovery defaults: keep RTH-only execution, but stop choking the system.
+                // The prior context-first defaults were too strict and produced zero trades while rejectEvents climbed.
+                RequireORCompleteBeforeTrading = false;
+                EnableHTFBiasFilter = false;
                 HTFBiasSlopeTicks = 18;
-                CounterBiasOverridePersistence = 5.25;
-                EnableRangeCenterSuppression = true;
+                CounterBiasOverridePersistence = 4.00;
+                EnableRangeCenterSuppression = false;
                 RangeCenterBandPct = 0.40;
-                RangePowerOverridePersistence = 4.75;
+                RangePowerOverridePersistence = 3.00;
                 RangeEdgeBandPct = 0.22;
-                EnableFailedDirectionCooldown = true;
-                FailedDirectionCooldownSeconds = 360;
+                EnableFailedDirectionCooldown = false;
+                FailedDirectionCooldownSeconds = 0;
                 FailedDirectionZoneTicks = 16;
-                FailedDirectionOverridePersistence = 5.50;
+                FailedDirectionOverridePersistence = 4.00;
             }
             else if (State == State.Configure)
             {
@@ -653,10 +654,19 @@ namespace NinjaTrader.NinjaScript.Strategies
 
             if (candidate != DirectionSignal.None)
             {
-                if (CanTakeSignal(candidate, lastPrice, delta100, imb100))
+                string rejectionReason = GetSignalRejectionReason(candidate, lastPrice, delta100, imb100);
+                if (string.IsNullOrEmpty(rejectionReason))
+                {
                     EnterPosition(candidate, lastPrice);
+                }
                 else
+                {
                     rejectedSignalCount++;
+                    Print(string.Format("{0} | REJECT {1} reason={2} state={3} pers={4:F2} cL={5} cS={6} accL={7} accS={8} absL={9} absS={10} price={11:F2}",
+                        currentMarketTime.ToString("HH:mm:ss.fff"), candidate, rejectionReason, auctionState, weightedPersistenceScore,
+                        consecutiveLongBuckets, consecutiveShortBuckets, acceptedLongBuckets, acceptedShortBuckets,
+                        rangeAbsorptionLongBuckets, rangeAbsorptionShortBuckets, lastPrice));
+                }
             }
 
             if (PrintDiagnostics && DiagnosticEveryBuckets > 0 && processedBuckets % DiagnosticEveryBuckets == 0)
@@ -726,29 +736,34 @@ namespace NinjaTrader.NinjaScript.Strategies
 
         private bool CanTakeSignal(DirectionSignal signal, double lastPrice, long delta100, double imb100)
         {
+            return string.IsNullOrEmpty(GetSignalRejectionReason(signal, lastPrice, delta100, imb100));
+        }
+
+        private string GetSignalRejectionReason(DirectionSignal signal, double lastPrice, long delta100, double imb100)
+        {
             if (Position.MarketPosition != MarketPosition.Flat)
-                return false;
+                return "POSITION_NOT_FLAT";
 
             if (Quantity != 1)
-                return false;
+                return "QUANTITY_NOT_ONE";
 
             if (EnforceRTHExecutionOnly && !IsRTH(currentMarketTime))
-                return false;
+                return "OUTSIDE_RTH";
 
             if (EnableDailyLimits && dailyLimitHit)
-                return false;
+                return "DAILY_LIMIT";
 
             if (MaxTradesPerDay > 0 && tradesCountToday >= MaxTradesPerDay)
-                return false;
+                return "MAX_TRADES";
 
-            if (EnableOpeningRangeFilter && !orCalculated)
-                return false;
+            if (EnableOpeningRangeFilter && RequireORCompleteBeforeTrading && !orCalculated)
+                return "OR_NOT_COMPLETE";
 
             if (!QuoteIsFreshAndSane())
-                return false;
+                return "QUOTE_BAD_OR_STALE";
 
             if (!ContextFirstAllows(signal, lastPrice))
-                return false;
+                return "CONTEXT_FIRST";
 
             if (EnableCooldown)
             {
@@ -756,35 +771,35 @@ namespace NinjaTrader.NinjaScript.Strategies
                 {
                     double required = lastExitKind == ExitKind.Stop ? PostStopCooldownSeconds : CooldownSeconds;
                     if ((currentMarketTime - lastTradeExitTime).TotalSeconds < required)
-                        return false;
+                        return "COOLDOWN_AFTER_EXIT";
                 }
 
                 if (lastEntryTime != DateTime.MinValue && (currentMarketTime - lastEntryTime).TotalSeconds < MinimumSecondsBetweenEntries)
-                    return false;
+                    return "MIN_SECONDS_BETWEEN_ENTRIES";
             }
 
             if (EnablePostSweepDelay && lastSweepTime != DateTime.MinValue)
             {
                 if ((currentMarketTime - lastSweepTime).TotalMilliseconds < PostSweepDelayMs)
-                    return false;
+                    return "POST_SWEEP_DELAY";
             }
 
             if (EnableAuctionStateMachine && !AuctionAllows(signal))
-                return false;
+                return "AUCTION_STATE";
 
             if (EnableStage2ResponseEngine && !Stage2Allows(signal, lastPrice))
-                return false;
+                return "STAGE2_RESPONSE";
 
             if (EnableVWAPFilter && !VWAPAllows(signal, lastPrice))
-                return false;
+                return "VWAP";
 
             if (EnableStructureFilter && !StructureAllows(signal, lastPrice))
-                return false;
+                return "STRUCTURE";
 
             if (EnableAbsorptionFilter && AbsorptionVeto(signal, lastPrice, delta100))
-                return false;
+                return "ABSORPTION_VETO";
 
-            return true;
+            return string.Empty;
         }
         #endregion
 
@@ -1016,8 +1031,11 @@ namespace NinjaTrader.NinjaScript.Strategies
                 if (Stage2RangeRequiresAbsorption)
                     return Stage2AbsorptionConfirmed(signal);
 
-                // v2.9: Range is allowed only when acceptance is directional AND quality is confirmed.
-                // This prevents v2.8's accL/accS noise from producing raw range-chase entries.
+                // v2.14 discovery: allow genuine range power moves without requiring the older
+                // acceptance/absorption stack, because v2.13 proved that stack can block every trade.
+                if (IsRangePowerMove(signal))
+                    return true;
+
                 return Stage2AcceptanceConfirmed(signal, price) && Stage2LightweightConfirmation(signal);
             }
 
@@ -1029,6 +1047,21 @@ namespace NinjaTrader.NinjaScript.Strategies
 
             if (AllowReversalTrades && (auctionState == AuctionState.ReversalUp || auctionState == AuctionState.ReversalDown))
                 return Stage2AbsorptionConfirmed(signal);
+
+            return false;
+        }
+
+        private bool IsRangePowerMove(DirectionSignal signal)
+        {
+            if (signal == DirectionSignal.Long)
+                return weightedPersistenceScore >= RangePowerOverridePersistence
+                    && consecutiveLongBuckets >= 1
+                    && acceptedLongBuckets >= acceptedShortBuckets;
+
+            if (signal == DirectionSignal.Short)
+                return weightedPersistenceScore <= -RangePowerOverridePersistence
+                    && consecutiveShortBuckets >= 1
+                    && acceptedShortBuckets >= acceptedLongBuckets;
 
             return false;
         }

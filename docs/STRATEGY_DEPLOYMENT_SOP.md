@@ -39,6 +39,16 @@ cp ~/Downloads/[new-file].cs ninjascript/
 
 Or create directly in ninjascript directory if developing from scratch.
 
+### 3a. Move to Local NinjaTrader Directory
+
+**CRITICAL**: Also copy to local NinjaTrader installation for direct access:
+
+```bash
+cp ~/Downloads/[new-file].cs ~/NinjaTrader/8/footprint.diagonal/Strategies/
+```
+
+This makes the strategy immediately available in the local NinjaTrader instance without needing to go through the VirtualBox shared folder.
+
 ### 4. Delete Old Version from Working Directory
 
 ```bash
@@ -114,9 +124,10 @@ Examples:
 
 **Active Strategy**: CG_OrderFlow_Aggression_v2_7_STAGE2_RESPONSE_MTF.cs
 - Deployed: 2026-05-15
-- Commit: 1e37bec
+- Commit: 1e37bec (initial), 4cb8d11 (SOP update)
 - Location: master branch
-- VirtualBox: Available
+- VirtualBox: Available at \\VBOXSVR\CG_MNQ_MarketReplayLab\ninjascript\
+- Local NinjaTrader: ~/NinjaTrader/8/footprint.diagonal/Strategies/
 
 **Active Utilities**:
 - CG_L2_Capture_Chunked.cs
@@ -144,3 +155,5 @@ Examples:
 - Git history preserves all deleted versions
 - Always test compile in NinjaTrader after deployment
 - Verify series requirements (e.g., v2.7 requires MNQ 1 Tick primary series)
+- Local NinjaTrader path: `~/NinjaTrader/8/footprint.diagonal/Strategies/`
+- Downloads are processed through Step 3a to ensure local NinjaTrader has latest version

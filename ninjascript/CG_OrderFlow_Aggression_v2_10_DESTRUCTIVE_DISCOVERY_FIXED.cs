@@ -1790,7 +1790,7 @@ namespace NinjaTrader.NinjaScript.Strategies
         public int MinimumSecondsBetweenEntries { get; set; }
 
         [NinjaScriptProperty]
-        [Range(1, 200)]
+        [Range(0, 200)]
         [Display(Name = "Max Trades Per Day", Order = 5, GroupName = "5. Frequency")]
         public int MaxTradesPerDay { get; set; }
 
@@ -1799,22 +1799,22 @@ namespace NinjaTrader.NinjaScript.Strategies
         public bool EnableDailyLimits { get; set; }
 
         [NinjaScriptProperty]
-        [Range(30, 2000)]
+        [Range(0, 1000000)]
         [Display(Name = "Max Daily Loss", Order = 2, GroupName = "6. Daily Limits")]
         public double MaxDailyLoss { get; set; }
 
         [NinjaScriptProperty]
-        [Range(1, 20)]
+        [Range(0, 1000)]
         [Display(Name = "Max Consecutive Losses", Order = 3, GroupName = "6. Daily Limits")]
         public int MaxConsecutiveLosses { get; set; }
 
         [NinjaScriptProperty]
-        [Range(50, 10000)]
+        [Range(0, 1000000)]
         [Display(Name = "Profit Lock Peak", Order = 4, GroupName = "6. Daily Limits")]
         public double ProfitLockPeak { get; set; }
 
         [NinjaScriptProperty]
-        [Range(20, 5000)]
+        [Range(0, 1000000)]
         [Display(Name = "Profit Lock Drawdown", Order = 5, GroupName = "6. Daily Limits")]
         public double ProfitLockDrawdown { get; set; }
 

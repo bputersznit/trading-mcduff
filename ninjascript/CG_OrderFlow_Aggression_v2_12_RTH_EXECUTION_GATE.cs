@@ -10,7 +10,7 @@ using NinjaTrader.NinjaScript;
 #endregion
 
 // =================================================================================================
-// CG_OrderFlow_Aggression_v2_11_CONTEXT_FIRST_POWER_SWIM.cs
+// CG_OrderFlow_Aggression_v2_12_RTH_EXECUTION_GATE.cs
 // Generated: 2026-05-15 20:35:00 ET
 //
 // Purpose
@@ -32,13 +32,13 @@ using NinjaTrader.NinjaScript;
 //
 // Important design stance
 // -----------------------
-// v2.11 makes the strategy context-first instead of trigger-first.
-// Default behavior: Range-center microbursts are suppressed; failed-direction zones cool down; 5-minute bias blocks counter-bias probes unless persistence is extreme.
+// v2.12 keeps the context-first design and adds an execution-only RTH gate.
+// Default behavior: pre/post-RTH data may still be inspected and used for diagnostics, but actual order entry is enabled only inside the configured RTH window and open positions are flattened at RTH end.
 // =================================================================================================
 
 namespace NinjaTrader.NinjaScript.Strategies
 {
-    public class CG_OrderFlow_Aggression_v2_11_CONTEXT_FIRST_POWER_SWIM : Strategy
+    public class CG_OrderFlow_Aggression_v2_12_RTH_EXECUTION_GATE : Strategy
     {
         #region Enums
         private enum DirectionSignal { None = 0, Long = 1, Short = -1 }
@@ -128,6 +128,9 @@ namespace NinjaTrader.NinjaScript.Strategies
         private int processedBuckets = 0;
         private bool fatalSeriesConfiguration = false;
         private string fatalSeriesMessage = string.Empty;
+        private bool rthExecutionGateWasOpen = false;
+        private DateTime lastRthGateDateEt = DateTime.MinValue;
+        private DateTime lastRthFlattenDateEt = DateTime.MinValue;
 
         private struct ResponseBucket
         {
@@ -159,8 +162,8 @@ namespace NinjaTrader.NinjaScript.Strategies
         {
             if (State == State.SetDefaults)
             {
-                Description = "CG OrderFlow Aggression v2.11 - context-first power-swim branch: suppress rotational chop, allow strong initiative bursts";
-                Name = "CG_OrderFlow_Aggression_v2_11_CONTEXT_FIRST_POWER_SWIM";
+                Description = "CG OrderFlow Aggression v2.12 - context-first power-swim branch with RTH execution gate";
+                Name = "CG_OrderFlow_Aggression_v2_12_RTH_EXECUTION_GATE";
 
                 Calculate = Calculate.OnEachTick;
                 EntriesPerDirection = 1;
@@ -266,6 +269,8 @@ namespace NinjaTrader.NinjaScript.Strategies
                 RTHStartMinute = 30;
                 RTHEndHour = 16;
                 RTHEndMinute = 0;
+                EnforceRTHExecutionOnly = true;
+                FlattenAtRTHEnd = true;
 
                 PrintDiagnostics = true;
                 DiagnosticEveryBuckets = 100;
@@ -390,6 +395,8 @@ namespace NinjaTrader.NinjaScript.Strategies
 
             DateTime eventTime = Times[BarsInProgress][0];
             currentMarketTime = eventTime;
+            if (BarsInProgress == 0)
+                HandleRTHExecutionBoundary(eventTime);
 
             DateTime etDate = ToEastern(eventTime).Date;
             if (lastTradeDateEt == DateTime.MinValue || etDate != lastTradeDateEt)
@@ -512,6 +519,7 @@ namespace NinjaTrader.NinjaScript.Strategies
                 return;
 
             currentMarketTime = e.Time;
+            HandleRTHExecutionBoundary(e.Time);
             marketDataEvents++;
 
             if (e.MarketDataType == MarketDataType.Bid)
@@ -725,7 +733,7 @@ namespace NinjaTrader.NinjaScript.Strategies
             if (Quantity != 1)
                 return false;
 
-            if (!IsRTH(currentMarketTime))
+            if (EnforceRTHExecutionOnly && !IsRTH(currentMarketTime))
                 return false;
 
             if (EnableDailyLimits && dailyLimitHit)
@@ -1571,6 +1579,9 @@ namespace NinjaTrader.NinjaScript.Strategies
             marketDataEvents = 0;
             depthEvents = 0;
             processedBuckets = 0;
+            rthExecutionGateWasOpen = false;
+            lastRthGateDateEt = DateTime.MinValue;
+            lastRthFlattenDateEt = DateTime.MinValue;
 
             if (full)
             {
@@ -1593,6 +1604,63 @@ namespace NinjaTrader.NinjaScript.Strategies
         {
             try { return TimeZoneInfo.ConvertTime(t, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time")); }
             catch { return t; }
+        }
+
+        private void HandleRTHExecutionBoundary(DateTime t)
+        {
+            if (!EnforceRTHExecutionOnly)
+                return;
+
+            DateTime et = ToEastern(t);
+            DateTime etDate = et.Date;
+            TimeSpan now = et.TimeOfDay;
+            TimeSpan rthEnd = new TimeSpan(RTHEndHour, RTHEndMinute, 0);
+            bool insideRth = IsRTH(t);
+
+            if (lastRthGateDateEt.Date != etDate)
+            {
+                lastRthGateDateEt = etDate;
+                rthExecutionGateWasOpen = false;
+                lastRthFlattenDateEt = DateTime.MinValue;
+            }
+
+            if (insideRth && !rthExecutionGateWasOpen)
+            {
+                rthExecutionGateWasOpen = true;
+                pendingDirection = DirectionSignal.None;
+                pendingAcceptanceBuckets = 0;
+                lastStage2RejectionTime = DateTime.MinValue;
+                lastStage2SweepTime = DateTime.MinValue;
+                lastRejectionDirection = DirectionSignal.None;
+                if (PrintDiagnostics)
+                    Print(et.ToString("HH:mm:ss.fff") + " | RTH EXECUTION GATE OPEN: entries enabled");
+            }
+
+            if (!insideRth && rthExecutionGateWasOpen && now >= rthEnd)
+            {
+                rthExecutionGateWasOpen = false;
+                pendingDirection = DirectionSignal.None;
+                pendingAcceptanceBuckets = 0;
+
+                if (FlattenAtRTHEnd && lastRthFlattenDateEt.Date != etDate)
+                {
+                    lastRthFlattenDateEt = etDate;
+                    if (Position.MarketPosition == MarketPosition.Long)
+                    {
+                        ExitLong("RTH_Close", "OFI_Long");
+                        if (PrintDiagnostics) Print(et.ToString("HH:mm:ss.fff") + " | RTH EXECUTION GATE CLOSED: flattening long");
+                    }
+                    else if (Position.MarketPosition == MarketPosition.Short)
+                    {
+                        ExitShort("RTH_Close", "OFI_Short");
+                        if (PrintDiagnostics) Print(et.ToString("HH:mm:ss.fff") + " | RTH EXECUTION GATE CLOSED: flattening short");
+                    }
+                    else if (PrintDiagnostics)
+                    {
+                        Print(et.ToString("HH:mm:ss.fff") + " | RTH EXECUTION GATE CLOSED: entries disabled");
+                    }
+                }
+            }
         }
 
         private bool IsRTH(DateTime t)
@@ -2030,6 +2098,14 @@ namespace NinjaTrader.NinjaScript.Strategies
         [Range(0, 59)]
         [Display(Name = "RTH End Minute", Order = 4, GroupName = "7. RTH")]
         public int RTHEndMinute { get; set; }
+
+        [NinjaScriptProperty]
+        [Display(Name = "Enforce RTH Execution Only", Order = 5, GroupName = "7. RTH")]
+        public bool EnforceRTHExecutionOnly { get; set; }
+
+        [NinjaScriptProperty]
+        [Display(Name = "Flatten At RTH End", Order = 6, GroupName = "7. RTH")]
+        public bool FlattenAtRTHEnd { get; set; }
 
         [NinjaScriptProperty]
         [Display(Name = "Print Diagnostics", Order = 1, GroupName = "8. Diagnostics")]

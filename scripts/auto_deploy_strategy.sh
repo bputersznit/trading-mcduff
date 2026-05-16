@@ -109,26 +109,30 @@ Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>" || {
     # Step 5: Deploy to Windows VM via PowerShell
     log "Step 5: Deploying to Windows VM"
 
-    # Create PowerShell deployment script
-    cat > /tmp/deploy_auto.ps1 <<EOF
-Copy-Item "\\\\VBOXSVR\\CG_MNQ_MarketReplayLab\\ninjascript\\$NEWEST_DL_NAME" -Destination "\$env:USERPROFILE\\Documents\\NinjaTrader 8\\bin\\Custom\\Strategies\\" -Force
+    # Execute via guest control
+    if VBoxManage list runningvms | grep -q "win"; then
+        # Create PowerShell deployment script in shared folder
+        cat > "$PROJECT_DIR/deploy_auto_temp.ps1" <<EOF
+Copy-Item "\\\\VBOXSVR\\CG_MNQ_MarketReplayLab\\ninjascript\\$NEWEST_DL_NAME" -Destination "\\\$env:USERPROFILE\\Documents\\NinjaTrader 8\\bin\\Custom\\Strategies\\" -Force
 Write-Host "Auto-deployment complete: $NEWEST_DL_NAME"
 EOF
 
-    # Execute via guest control
-    if VBoxManage list runningvms | grep -q "win"; then
+        # Execute the script via guest control
+        VM_DEPLOY_EXIT=0
         VBoxManage guestcontrol "win" run \
           --exe "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe" \
           --username "Administrator" \
           --password "13!XenoZendo" \
           --no-wait-stdout --no-wait-stderr \
-          -- -ExecutionPolicy Bypass -File "C:\\Windows\\Temp\\deploy_auto.ps1" 2>&1
+          -- -ExecutionPolicy Bypass -File "\\\\VBOXSVR\\CG_MNQ_MarketReplayLab\\deploy_auto_temp.ps1" 2>&1 || VM_DEPLOY_EXIT=$?
 
-        if [ $? -eq 0 ]; then
-            log "✅ Deployed to Windows VM successfully"
+        if [ $VM_DEPLOY_EXIT -eq 0 ]; then
+            log "✅ Deployed to Windows VM successfully (exit code 0)"
         else
-            log "⚠️  Windows VM deployment failed (VM may not be running)"
+            log "⚠️  Windows VM deployment failed (exit code $VM_DEPLOY_EXIT)"
         fi
+
+        rm -f "$PROJECT_DIR/deploy_auto_temp.ps1"
     else
         log "⚠️  Windows VM not running - skipping VM deployment"
     fi

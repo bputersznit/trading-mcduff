@@ -89,18 +89,43 @@ Verify on GitHub:
 
 ### 7. VirtualBox Deployment
 
-File is automatically available in Windows VM via shared folder:
-
+File is automatically available in Windows VM via shared folder at:
 ```
 \\VBOXSVR\CG_MNQ_MarketReplayLab\ninjascript\[new-version].cs
 ```
 
-**Windows VM Steps:**
-1. Open shared folder in Windows Explorer
-2. Copy file to: `C:\Users\[YourUser]\Documents\NinjaTrader 8\bin\Custom\Strategies\`
-3. Open NinjaTrader 8
-4. Compile: Tools → Compile (F5)
-5. Attach to chart (ensure correct series requirements are met)
+#### Option A: Automated Remote Deployment (Recommended)
+
+Use VBoxManage guest control to deploy remotely from Linux:
+
+```bash
+# Deploy strategy file to NinjaTrader
+VBoxManage guestcontrol "win" run \
+  --exe "C:\\Windows\\System32\\cmd.exe" \
+  --username "Administrator" \
+  --password "unlucky-strange" \
+  --no-wait-stdout --no-wait-stderr \
+  -- /c "copy /Y \\\\VBOXSVR\\CG_MNQ_MarketReplayLab\\ninjascript\\[new-file].cs \"C:\\Users\\Administrator\\Documents\\NinjaTrader 8\\bin\\Custom\\Strategies\\\""
+```
+
+**Requirements:**
+- Windows VM must be running
+- User must be logged in to Windows
+- Guest control authentication configured (run `Fix_GuestControl_Auth.ps1` once)
+
+**Then compile in NinjaTrader:**
+- Open NinjaTrader 8
+- Press F5 (or Tools → Compile)
+- Strategy appears in Strategy list
+
+#### Option B: Manual Deployment
+
+1. In Windows VM, open File Explorer
+2. Navigate to: `\\VBOXSVR\CG_MNQ_MarketReplayLab\ninjascript\`
+3. Copy file to: `C:\Users\Administrator\Documents\NinjaTrader 8\bin\Custom\Strategies\`
+4. Open NinjaTrader 8
+5. Press F5 to compile
+6. Attach to chart (ensure correct series requirements are met)
 
 ## Version Naming Convention
 
@@ -116,14 +141,52 @@ Examples:
 
 **Active Strategy**: CG_OrderFlow_Aggression_v2_7_STAGE2_RESPONSE_MTF.cs
 - Deployed: 2026-05-15
-- Commit: 1e37bec (initial), 4cb8d11 (SOP update)
+- Commit: 1e37bec (initial), bd16279 (guest control), ffa8528 (cleanup)
 - Location: master branch
 - VirtualBox: Available at \\VBOXSVR\CG_MNQ_MarketReplayLab\ninjascript\
+- Guest Control: ✅ Configured and working
 
 **Active Utilities**:
 - CG_L2_Capture_Chunked.cs
 - CGL2CaptureChunked.cs
 - CG_L2_Quality_v1_0.cs
+
+**Setup Scripts**:
+- Fix_GuestControl_Auth.ps1 (Windows - enables remote deployment)
+- DEPLOY_TO_NINJATRADER.bat (Windows - manual deployment helper)
+
+## Guest Control Setup (One-Time)
+
+To enable automated remote deployment, configure guest control authentication:
+
+**In Windows VM (as Administrator):**
+1. Navigate to: `\\VBOXSVR\CG_MNQ_MarketReplayLab\`
+2. Right-click `Fix_GuestControl_Auth.ps1` → Run with PowerShell
+3. Script will configure Windows Server security policies
+4. Keep Windows session logged in
+
+**Test from Linux:**
+```bash
+VBoxManage guestcontrol "win" run \
+  --exe "C:\\Windows\\System32\\cmd.exe" \
+  --username "Administrator" \
+  --password "unlucky-strange" \
+  --no-wait-stdout --no-wait-stderr \
+  -- /c "echo test > C:\\guestcontrol_test.txt"
+```
+
+If successful (exit code 0), guest control is working.
+
+**What the script fixes:**
+- Enables LocalAccountTokenFilterPolicy (remote admin access)
+- Configures network logon authentication policies
+- Verifies VBoxService is running
+- Enables Administrator account
+
+**Limitations:**
+- `VERR_NOT_IMPLEMENTED` warnings for stdout/stderr are normal (VirtualBox limitation)
+- PowerShell execution may fail; use cmd.exe instead
+- Windows must be logged in for guest control to work
 
 ## Troubleshooting
 
@@ -137,8 +200,22 @@ Examples:
 
 ### VirtualBox shared folder not accessible
 - Verify VM is running
-- Check shared folder is configured: `VBoxManage showvminfo [VM-Name] | grep -i shared`
+- Check shared folder is configured: `VBoxManage showvminfo "win" | grep -i shared`
 - Mount in Windows: `net use * \\VBOXSVR\CG_MNQ_MarketReplayLab`
+
+### Guest control authentication fails
+- Run `Fix_GuestControl_Auth.ps1` in Windows VM
+- Ensure Windows user is logged in (not just VM running)
+- Verify password is correct: `unlucky-strange`
+- Check VBoxService status: `Get-Service VBoxService` in Windows PowerShell
+- Use `--no-wait-stdout --no-wait-stderr` flags to avoid VERR_NOT_IMPLEMENTED errors
+
+### KVM/VirtualBox conflict
+If VM won't start with "VERR_SVM_IN_USE" error:
+```bash
+sudo rmmod kvm_amd kvm
+VBoxManage startvm "win" --type headless
+```
 
 ## Notes
 

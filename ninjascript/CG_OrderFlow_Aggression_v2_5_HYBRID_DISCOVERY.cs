@@ -10,8 +10,8 @@ using NinjaTrader.NinjaScript;
 #endregion
 
 // =================================================================================================
-// CG_OrderFlow_Aggression_v2_2_PERSISTENCE_AUCTION.cs
-// Generated: 2026-05-15 11:00:00 ET
+// CG_OrderFlow_Aggression_v2_5_HYBRID_DISCOVERY.cs
+// Generated: 2026-05-15 20:20:00 ET
 //
 // Purpose
 // -------
@@ -32,13 +32,13 @@ using NinjaTrader.NinjaScript;
 //
 // Important design stance
 // -----------------------
-// This is intentionally selective. The prior version overtraded heavily. Default gates are stricter.
-// For debugging, enable PrintDiagnostics and/or relax MinPersistenceScore / ConsecutiveBucketsRequired.
+// v2.5 hybrid discovery relaxes v2.4's hard Range lockout, which produced zero trades.
+// Default behavior: TrendUp -> longs, TrendDown -> shorts, Range -> high-persistence discovery trades only.
 // =================================================================================================
 
 namespace NinjaTrader.NinjaScript.Strategies
 {
-    public class CG_OrderFlow_Aggression_v2_3_UNBLOCKED : Strategy
+    public class CG_OrderFlow_Aggression_v2_5_HYBRID_DISCOVERY : Strategy
     {
         #region Enums
         private enum DirectionSignal { None = 0, Long = 1, Short = -1 }
@@ -126,8 +126,8 @@ namespace NinjaTrader.NinjaScript.Strategies
         {
             if (State == State.SetDefaults)
             {
-                Description = "CG OrderFlow Aggression v2.3 UNBLOCKED - relaxed gates for trade discovery";
-                Name = "CG_OrderFlow_Aggression_v2_3_UNBLOCKED";
+                Description = "CG OrderFlow Aggression v2.4 - regime-gated persistence with price acceptance";
+                Name = "CG_OrderFlow_Aggression_v2_5_HYBRID_DISCOVERY";
 
                 Calculate = Calculate.OnEachTick;
                 EntriesPerDirection = 1;
@@ -155,7 +155,7 @@ namespace NinjaTrader.NinjaScript.Strategies
                 MinAggressionImbalance5s = 0.05;
                 ConsecutiveBucketsRequired = 1;
                 PersistenceWindowBuckets = 10;
-                MinPersistenceScore = 1.00;
+                MinPersistenceScore = 1.15;
                 Require1sConfirmation = true;
                 Require5sNonOpposition = false;
 
@@ -163,19 +163,23 @@ namespace NinjaTrader.NinjaScript.Strategies
                 EnableOpeningRangeFilter = true;
                 EnableVWAPFilter = false;
                 EnableStructureFilter = false;
-                EnableAuctionStateMachine = false;
+                EnableAuctionStateMachine = true;
                 SwingLookbackMinutes = 6;
                 MinDistanceFromVWAPTicks = 0;
+                TrendSlopeTicks = 6;
+                ORBreakoutBufferTicks = 4;
                 AllowReversalTrades = false;
+                AllowRangeDiscoveryTrades = true;
+                MinRangeDiscoveryPersistenceScore = 1.75;
 
                 // Sweep / acceptance / absorption
                 EnablePostSweepDelay = false;
-                SweepDeltaThreshold = 180;
-                SweepImbalanceThreshold = 0.80;
-                PostSweepDelayMs = 1000;
+                SweepDeltaThreshold = 250;
+                SweepImbalanceThreshold = 0.85;
+                PostSweepDelayMs = 750;
                 EnablePriceAcceptance = false;
-                AcceptanceTicks = 4;
-                AcceptanceBucketsRequired = 1;
+                AcceptanceTicks = 6;
+                AcceptanceBucketsRequired = 2;
                 EnableAbsorptionFilter = false;
                 AbsorptionPriceMoveMaxTicks = 2;
                 AbsorptionAggressionDelta = 200;
@@ -190,10 +194,10 @@ namespace NinjaTrader.NinjaScript.Strategies
 
                 // Frequency control
                 EnableCooldown = true;
-                CooldownSeconds = 90;
-                PostStopCooldownSeconds = 180;
-                MinimumSecondsBetweenEntries = 20;
-                MaxTradesPerDay = 40;
+                CooldownSeconds = 120;
+                PostStopCooldownSeconds = 240;
+                MinimumSecondsBetweenEntries = 30;
+                MaxTradesPerDay = 20;
 
                 // Daily limits: ON by default now, because prior run overtraded into large negative drift.
                 EnableDailyLimits = true;
@@ -596,6 +600,18 @@ namespace NinjaTrader.NinjaScript.Strategies
             if (auctionState == AuctionState.Unknown)
                 return false;
 
+            // v2.5: v2.4 produced zero trades because most usable aggression arrived while
+            // the coarse 1-minute auction state was still Range. Permit Range only when the
+            // microstructure persistence score is materially stronger than the base trigger.
+            if (auctionState == AuctionState.Range && AllowRangeDiscoveryTrades)
+            {
+                if (signal == DirectionSignal.Long && weightedPersistenceScore >= MinRangeDiscoveryPersistenceScore)
+                    return true;
+                if (signal == DirectionSignal.Short && weightedPersistenceScore <= -MinRangeDiscoveryPersistenceScore)
+                    return true;
+                return false;
+            }
+
             if (signal == DirectionSignal.Long)
             {
                 if (auctionState == AuctionState.TrendUp)
@@ -876,26 +892,30 @@ namespace NinjaTrader.NinjaScript.Strategies
             bool aboveVwap = sessionVwap > 0.0 && close > sessionVwap;
             bool belowVwap = sessionVwap > 0.0 && close < sessionVwap;
 
+            double trendSlope = Math.Max(2, TrendSlopeTicks);
+            double orBuffer = Math.Max(0, ORBreakoutBufferTicks) * TickSize;
+
             if (EnableOpeningRangeFilter && orCalculated)
             {
-                if (orLoc == "ABOVE_OR" && aboveVwap && slopeTicks >= 8)
+                bool acceptedAboveOr = close >= orHigh + orBuffer;
+                bool acceptedBelowOr = close <= orLow - orBuffer;
+
+                if ((acceptedAboveOr || close > localSwingHigh) && slopeTicks >= trendSlope && aboveVwap)
                     auctionState = AuctionState.TrendUp;
-                else if (orLoc == "BELOW_OR" && belowVwap && slopeTicks <= -8)
+                else if ((acceptedBelowOr || close < localSwingLow) && slopeTicks <= -trendSlope && belowVwap)
                     auctionState = AuctionState.TrendDown;
-                else if (orLoc == "INSIDE_OR")
-                    auctionState = AuctionState.Range;
-                else if (slopeTicks >= 12 && aboveVwap)
+                else if (slopeTicks >= trendSlope * 1.5 && aboveVwap)
                     auctionState = AuctionState.TrendUp;
-                else if (slopeTicks <= -12 && belowVwap)
+                else if (slopeTicks <= -trendSlope * 1.5 && belowVwap)
                     auctionState = AuctionState.TrendDown;
                 else
                     auctionState = AuctionState.Range;
             }
             else
             {
-                if (slopeTicks >= 12 && aboveVwap)
+                if (slopeTicks >= trendSlope && aboveVwap)
                     auctionState = AuctionState.TrendUp;
-                else if (slopeTicks <= -12 && belowVwap)
+                else if (slopeTicks <= -trendSlope && belowVwap)
                     auctionState = AuctionState.TrendDown;
                 else
                     auctionState = AuctionState.Range;
@@ -1159,8 +1179,27 @@ namespace NinjaTrader.NinjaScript.Strategies
         public int MinDistanceFromVWAPTicks { get; set; }
 
         [NinjaScriptProperty]
-        [Display(Name = "Allow Reversal Trades", Order = 7, GroupName = "3. Structure")]
+        [Range(2, 50)]
+        [Display(Name = "Trend Slope Ticks", Order = 7, GroupName = "3. Structure")]
+        public int TrendSlopeTicks { get; set; }
+
+        [NinjaScriptProperty]
+        [Range(0, 40)]
+        [Display(Name = "OR Breakout Buffer Ticks", Order = 8, GroupName = "3. Structure")]
+        public int ORBreakoutBufferTicks { get; set; }
+
+        [NinjaScriptProperty]
+        [Display(Name = "Allow Reversal Trades", Order = 9, GroupName = "3. Structure")]
         public bool AllowReversalTrades { get; set; }
+
+        [NinjaScriptProperty]
+        [Display(Name = "Allow Range Discovery Trades", Order = 10, GroupName = "3. Structure")]
+        public bool AllowRangeDiscoveryTrades { get; set; }
+
+        [NinjaScriptProperty]
+        [Range(0.50, 20.00)]
+        [Display(Name = "Min Range Discovery Persistence", Order = 11, GroupName = "3. Structure")]
+        public double MinRangeDiscoveryPersistenceScore { get; set; }
 
         [NinjaScriptProperty]
         [Display(Name = "Enable Post Sweep Delay", Order = 1, GroupName = "4. Sweep/Acceptance")]

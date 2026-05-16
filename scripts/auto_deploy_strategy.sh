@@ -70,8 +70,14 @@ if [ "$DEPLOY_NEW" = true ]; then
     log "Step 1: Moving to ninjascript directory"
     mv "$NEWEST_DL" "$NINJASCRIPT_DIR/"
 
-    # Step 2: Delete old version if exists
-    if [ -n "$OLD_VERSION" ]; then
+    # Step 2: Delete ALL old OrderFlow versions except the new one (per SOP)
+    if echo "$NEWEST_DL_NAME" | grep -q "CG_OrderFlow_Aggression"; then
+        log "Step 2: Removing old OrderFlow versions (keep only latest)"
+        find "$NINJASCRIPT_DIR" -maxdepth 1 -name "CG_OrderFlow_Aggression_v*.cs" ! -name "$NEWEST_DL_NAME" -type f | while read old_file; do
+            log "  Removing: $(basename "$old_file")"
+            rm "$old_file"
+        done
+    elif [ -n "$OLD_VERSION" ]; then
         log "Step 2: Removing old version: $(basename "$OLD_VERSION")"
         rm "$OLD_VERSION"
     fi

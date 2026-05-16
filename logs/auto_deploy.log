@@ -1,0 +1,38 @@
+[2026-05-15 23:51:51] === Auto-deploy check started ===
+[2026-05-15 23:51:51] Found in Downloads: CG_OrderFlow_Aggression_v2_7_STAGE2_RESPONSE_MTF (3).cs
+[2026-05-15 23:51:51] No current version in ninjascript directory
+[2026-05-15 23:51:51] === Starting deployment of CG_OrderFlow_Aggression_v2_7_STAGE2_RESPONSE_MTF (3).cs ===
+[2026-05-15 23:51:51] Step 1: Moving to ninjascript directory
+[2026-05-15 23:51:51] Step 3: Git commit
+[2026-05-15 23:54:35] Step 4: Push to GitHub (automatic via post-commit hook)
+[2026-05-15 23:54:35] Step 5: Deploying to Windows VM
+[2026-05-15 23:54:36] === Auto-deploy check started ===
+[2026-05-15 23:54:36] Found in Downloads: CG_OrderFlow_Aggression_v2_9_STAGE2_QUALITY_FILTER.cs
+[2026-05-15 23:54:36] No current version in ninjascript directory
+[2026-05-15 23:54:36] === Starting deployment of CG_OrderFlow_Aggression_v2_9_STAGE2_QUALITY_FILTER.cs ===
+[2026-05-15 23:54:36] Step 1: Moving to ninjascript directory
+[2026-05-15 23:54:36] Step 3: Git commit
+[2026-05-15 23:57:16] Step 4: Push to GitHub (automatic via post-commit hook)
+[2026-05-15 23:57:16] Step 5: Deploying to Windows VM
+[2026-05-15 23:57:17] === Auto-deploy check started ===
+[2026-05-15 23:57:17] Found in Downloads: CG_OrderFlow_Aggression_v2_7_STAGE2_RESPONSE_MTF (2).cs
+[2026-05-15 23:57:17] No current version in ninjascript directory
+[2026-05-15 23:57:17] === Starting deployment of CG_OrderFlow_Aggression_v2_7_STAGE2_RESPONSE_MTF (2).cs ===
+[2026-05-15 23:57:17] Step 1: Moving to ninjascript directory
+[2026-05-15 23:57:17] Step 3: Git commit
+[2026-05-15 23:59:57] Step 4: Push to GitHub (automatic via post-commit hook)
+[2026-05-15 23:59:57] Step 5: Deploying to Windows VM
+[2026-05-15 23:59:57] === Auto-deploy check started ===
+[2026-05-15 23:59:58] Found in Downloads: CG_OrderFlow_Aggression_v2_7_STAGE2_RESPONSE_MTF (1).cs
+[2026-05-15 23:59:58] No current version in ninjascript directory
+[2026-05-15 23:59:58] === Starting deployment of CG_OrderFlow_Aggression_v2_7_STAGE2_RESPONSE_MTF (1).cs ===
+[2026-05-15 23:59:58] Step 1: Moving to ninjascript directory
+[2026-05-15 23:59:58] Step 3: Git commit
+[2026-05-16 00:02:34] Step 4: Push to GitHub (automatic via post-commit hook)
+[2026-05-16 00:02:34] Step 5: Deploying to Windows VM
+[2026-05-16 00:02:35] === Auto-deploy check started ===
+[2026-05-16 00:02:35] Found in Downloads: CG_OrderFlow_Aggression_v2_7_STAGE2_RESPONSE_MTF.cs
+[2026-05-16 00:02:35] No current version in ninjascript directory
+[2026-05-16 00:02:35] === Starting deployment of CG_OrderFlow_Aggression_v2_7_STAGE2_RESPONSE_MTF.cs ===
+[2026-05-16 00:02:35] Step 1: Moving to ninjascript directory
+[2026-05-16 00:02:35] Step 3: Git commit

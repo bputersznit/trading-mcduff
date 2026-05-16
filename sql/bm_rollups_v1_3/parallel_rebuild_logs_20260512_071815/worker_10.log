@@ -1,0 +1,6 @@
+[W10] Starting worker for 2 dates
+[W10] Rebuilding 2025-10-14...
+[W10]   Fetching MBO events...
+[W10]   Loaded 42,972,075 events
+[W10]   Processing 86,401 time buckets
+[W10]   → Inserted 100,050 rows (297/86,401 buckets)

@@ -1,0 +1,16 @@
+[W11] Starting worker for 2 dates
+Traceback (most recent call last):
+  File "/home/bernard/trading4/CG_MNQ_MarketReplayLab/sql/bm_rollups_v1_3/rebuild_heatmap_worker_1S.py", line 289, in <module>
+    main()
+  File "/home/bernard/trading4/CG_MNQ_MarketReplayLab/sql/bm_rollups_v1_3/rebuild_heatmap_worker_1S.py", line 281, in main
+    rows = rebuild_heatmap_for_date(client, date_str, worker_id)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bernard/trading4/CG_MNQ_MarketReplayLab/sql/bm_rollups_v1_3/rebuild_heatmap_worker_1S.py", line 144, in rebuild_heatmap_for_date
+    trade_date_obj = datetime.strptime(trade_date_str, '%Y-%m-%d').date()
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bernard/anaconda3/lib/python3.12/_strptime.py", line 554, in _strptime_datetime
+    tt, fraction, gmtoff_fraction = _strptime(data_string, format)
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bernard/anaconda3/lib/python3.12/_strptime.py", line 336, in _strptime
+    raise ValueError("unconverted data remains: %s" %
+ValueError: unconverted data remains:  00:00:00

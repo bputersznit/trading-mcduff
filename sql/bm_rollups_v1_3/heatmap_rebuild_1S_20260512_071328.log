@@ -1,0 +1,76 @@
+=== BM_MNQ Heatmap State-Based Rebuild 1S (Analytical) ===
+(With full order tracking for Modify events)
+
+Backing up existing table...
+✓ Backup created
+
+Recreating target table...
+✓ Table created
+
+Found 28 trading dates
+
+[1/28] 2025-09-21 00:00:00
+
+Rebuilding 2025-09-21...
+  Fetching MBO events...
+  Loaded 3,615 events
+/home/bernard/trading4/CG_MNQ_MarketReplayLab/sql/bm_rollups_v1_3/rebuild_heatmap_stateful_1S.py:200: FutureWarning: 'S' is deprecated and will be removed in a future version, please use 's' instead.
+  start_time = df['ts_event'].min().floor('1S')
+/home/bernard/trading4/CG_MNQ_MarketReplayLab/sql/bm_rollups_v1_3/rebuild_heatmap_stateful_1S.py:201: FutureWarning: 'S' is deprecated and will be removed in a future version, please use 's' instead.
+  end_time = df['ts_event'].max().ceil('1S')
+/home/bernard/trading4/CG_MNQ_MarketReplayLab/sql/bm_rollups_v1_3/rebuild_heatmap_stateful_1S.py:202: FutureWarning: 'S' is deprecated and will be removed in a future version, please use 's' instead.
+  time_buckets = pd.date_range(start=start_time, end=end_time, freq='1S')
+  Processing 57,131 time buckets
+  → Inserted 100,358 rows (138/57,131 buckets)
+  → Inserted 200,716 rows (277/57,131 buckets)
+  → Inserted 301,074 rows (416/57,131 buckets)
+  → Inserted 401,432 rows (555/57,131 buckets)
+  → Inserted 501,790 rows (694/57,131 buckets)
+  → Inserted 602,148 rows (833/57,131 buckets)
+  → Inserted 702,506 rows (972/57,131 buckets)
+  → Inserted 802,864 rows (1,111/57,131 buckets)
+  → Inserted 903,222 rows (1,250/57,131 buckets)
+  → Inserted 1,003,580 rows (1,389/57,131 buckets)
+  → Inserted 1,103,938 rows (1,528/57,131 buckets)
+  → Inserted 1,204,296 rows (1,667/57,131 buckets)
+  → Inserted 1,304,654 rows (1,806/57,131 buckets)
+  → Inserted 1,405,012 rows (1,945/57,131 buckets)
+  → Inserted 1,505,370 rows (2,084/57,131 buckets)
+  → Inserted 1,605,728 rows (2,223/57,131 buckets)
+  → Inserted 1,706,086 rows (2,362/57,131 buckets)
+  → Inserted 1,806,444 rows (2,501/57,131 buckets)
+  → Inserted 1,906,802 rows (2,640/57,131 buckets)
+  → Inserted 2,007,160 rows (2,779/57,131 buckets)
+  → Inserted 2,107,518 rows (2,918/57,131 buckets)
+  → Inserted 2,207,876 rows (3,057/57,131 buckets)
+  → Inserted 2,308,234 rows (3,196/57,131 buckets)
+  → Inserted 2,408,592 rows (3,335/57,131 buckets)
+  → Inserted 2,508,950 rows (3,474/57,131 buckets)
+  → Inserted 2,609,308 rows (3,613/57,131 buckets)
+  → Inserted 2,709,666 rows (3,752/57,131 buckets)
+  → Inserted 2,810,024 rows (3,891/57,131 buckets)
+  → Inserted 2,910,382 rows (4,030/57,131 buckets)
+  → Inserted 3,010,740 rows (4,169/57,131 buckets)
+  → Inserted 3,111,098 rows (4,308/57,131 buckets)
+  → Inserted 3,211,456 rows (4,447/57,131 buckets)
+  → Inserted 3,311,814 rows (4,586/57,131 buckets)
+  → Inserted 3,412,172 rows (4,725/57,131 buckets)
+  → Inserted 3,512,530 rows (4,864/57,131 buckets)
+  → Inserted 3,612,888 rows (5,003/57,131 buckets)
+  → Inserted 3,713,246 rows (5,142/57,131 buckets)
+  → Inserted 3,813,604 rows (5,281/57,131 buckets)
+  → Inserted 3,913,962 rows (5,420/57,131 buckets)
+  → Inserted 4,014,320 rows (5,559/57,131 buckets)
+  → Inserted 4,114,678 rows (5,698/57,131 buckets)
+  → Inserted 4,215,036 rows (5,837/57,131 buckets)
+  → Inserted 4,315,394 rows (5,976/57,131 buckets)
+  → Inserted 4,415,752 rows (6,115/57,131 buckets)
+  → Inserted 4,516,110 rows (6,254/57,131 buckets)
+  → Inserted 4,616,468 rows (6,393/57,131 buckets)
+  → Inserted 4,716,826 rows (6,532/57,131 buckets)
+  → Inserted 4,817,184 rows (6,671/57,131 buckets)
+  → Inserted 4,917,542 rows (6,810/57,131 buckets)
+  → Inserted 5,017,900 rows (6,949/57,131 buckets)
+  → Inserted 5,118,258 rows (7,088/57,131 buckets)
+  → Inserted 5,218,616 rows (7,227/57,131 buckets)
+  → Inserted 5,318,974 rows (7,366/57,131 buckets)

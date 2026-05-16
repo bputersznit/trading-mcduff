@@ -1,0 +1,35 @@
+Traceback (most recent call last):
+  File "/home/bernard/trading4/CG_MNQ_MarketReplayLab/scripts/backtest_wall_rejection_synthetic.py", line 452, in <module>
+    bt = WallRejectionBacktest(timeframe_minutes=args.timeframe)
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bernard/trading4/CG_MNQ_MarketReplayLab/scripts/backtest_wall_rejection_synthetic.py", line 40, in __init__
+    self.client = clickhouse_connect.get_client(host='localhost', port=8123)
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bernard/anaconda3/lib/python3.12/site-packages/clickhouse_connect/driver/__init__.py", line 138, in create_client
+    return HttpClient(interface, host, port, username, password, database, access_token,
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bernard/anaconda3/lib/python3.12/site-packages/clickhouse_connect/driver/httpclient.py", line 184, in __init__
+    super().__init__(database=database,
+  File "/home/bernard/anaconda3/lib/python3.12/site-packages/clickhouse_connect/driver/client.py", line 229, in __init__
+    self._init_common_settings(resolved_tz_source)
+  File "/home/bernard/anaconda3/lib/python3.12/site-packages/clickhouse_connect/driver/client.py", line 234, in _init_common_settings
+    tuple(self.command('SELECT version(), timezone()', use_database=False))
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bernard/anaconda3/lib/python3.12/site-packages/clickhouse_connect/driver/httpclient.py", line 432, in command
+    response = self._raw_request(payload, params, headers, method, fields=fields, server_wait=False)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bernard/anaconda3/lib/python3.12/site-packages/clickhouse_connect/driver/httpclient.py", line 571, in _raw_request
+    self._error_handler(response)
+  File "/home/bernard/anaconda3/lib/python3.12/site-packages/clickhouse_connect/driver/httpclient.py", line 488, in _error_handler
+    raise OperationalError(err_str) if retried else DatabaseError(err_str) from None
+clickhouse_connect.driver.exceptions.DatabaseError: Received ClickHouse exception, code: 194, server response: Code: 194. DB::Exception: default: Authentication failed: password is incorrect, or there is no user with such name
+
+If you use ClickHouse Cloud, the password can be reset at https://clickhouse.cloud/
+on the settings page for the corresponding service.
+
+If you have installed ClickHouse and forgot password you can reset it in the configuration file.
+The password for default user is typically located at /etc/clickhouse-server/users.d/default-password.xml
+and deleting this file will reset the password.
+See also /etc/clickhouse-server/users.xml on the server where ClickHouse is installed.
+
+. (REQUIRED_PASSWORD) (for url http://localhost:8123)

@@ -1,0 +1,57 @@
+=== L2 DATA QUALITY ANALYSIS ===
+
+OVERALL STATUS: GOOD with some gaps
+
+1. DEPTH LEVELS: ✓ GOOD
+   - 11 levels (0-10) captured correctly
+   - Position 0 (best bid/ask): 47.8% (expected high)
+   - Positions 1-8: Decreasing frequency (normal)
+   - Positions 9-10: 13% each (edge behavior, acceptable)
+   - Positions 11-14: <10 events total (noise)
+
+2. TIME GAPS: ⚠️  EXPECTED GAPS ONLY
+   - Weekends: Normal (Fri close → Mon open)
+   - Overnight: Normal (RTH close → next open)
+   - NO unexpected gaps during trading hours ✓
+
+3. EVENT DENSITY: ⚠️  SOME ANOMALIES
+   Normal days (300-400 events/sec RTH):
+   ✓ March 2-11: Consistent
+   ✓ March 9-11: Good quality
+   
+   Suspicious days:
+   ⚠️  March 12-13: Low rate (130-150/sec) - possible low volatility
+   ⚠️  March 16-18: Very high (1000-1400/sec) - possible news event or data issue
+   ⚠️  March 19: INCOMPLETE - stopped at 8:38 AM (only captured 2M RTH events)
+   ⚠️  March 25: Only partial day (1.2M events)
+
+4. DATA LOSS EVENTS DETECTED:
+   ❌ March 19: Capture stopped at 8:38 AM (missing rest of trading day)
+   ❌ March 20-24: Likely incomplete or missing days
+   ❌ March 25: Partial capture
+   ❌ March 26 - May 5: MISSING (known gap from restart)
+
+5. COMPLETE DAYS (high confidence):
+   ✓ March 1-11: 11 days
+   ✓ March 16-18: 3 days (high volume)
+   ✓ May 6: 1 day
+   Total: ~15 solid trading days
+
+6. AT 500X SPEED DATA LOSS:
+   ❌ March 19 stopped mid-day - indicates possible:
+      - Strategy crashed
+      - NinjaTrader error
+      - System resource issue
+      - At 500x, may be hitting limits
+
+RECOMMENDATION:
+✓ Data is USABLE for March 1-11 (11 solid days)
+⚠️  March 12-25 has quality issues/gaps
+✓ May 6 data looks good
+⚠️  500x speed may have caused March 19 failure
+✓ Current run (March 12 → May 13) should complete if NT stays stable
+
+CONFIDENCE LEVEL: 75%
+- Core data (March 1-11): HIGH confidence
+- Later March data: MEDIUM confidence  
+- 500x capture quality: ACCEPTABLE but not perfect

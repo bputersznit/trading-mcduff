@@ -1,0 +1,41 @@
+======================================================================
+WALL REJECTION REVERSAL STRATEGY
+Per Bookmap Framework Document
+======================================================================
+Entry: Wall absorption + reversal confirmation
+Stop: Thesis invalidation (2.0 pts beyond wall)
+Exit: Opposing wall, aggression exhaustion, or trailing
+======================================================================
+
+2025-10-13: Trades= 15 | P&L=$    +87
+2025-10-14: Trades= 37 | P&L=$   -348
+2025-10-15: Trades= 38 | P&L=$   +144
+
+======================================================================
+WALL REJECTION REVERSAL STRATEGY - BOOKMAP FRAMEWORK
+======================================================================
+
+SIGNAL STATS:
+  walls_detected: 21529
+  absorption_detected: 558
+  confirmation_failed: 0
+  qualified_entries: 96
+
+EXIT BREAKDOWN:
+  opposing_wall: 12 (12.5%)
+  aggression_exhaustion: 51 (53.1%)
+  trailing_stop: 3 (3.1%)
+  thesis_invalidation: 30 (31.2%)
+  time_exit: 0 (0.0%)
+
+TRADE RESULTS:
+  Trades: 96 | Winners: 34 (35.4%)
+  Gross P&L: $+142.00
+  Total Costs: $259.20
+  Net P&L: $-117.20
+  Return: -0.23%
+
+  Avg Gross/Trade: $+1.48
+  Avg Net/Trade: $-1.22
+======================================================================
+

@@ -1,0 +1,50 @@
+======================================================================
+T2-ENHANCED WALL BREAKOUT STRATEGY
+======================================================================
+Timeframe: 30-second bars
+
+NEW LOGIC:
+  ✓ ENTRY: After clearing wall cluster + continuation aggression
+  ✓ STOP: At broken wall ± 1.0 pts (breakout failure)
+  ✓ EXIT: Opposing wall absorption or aggression reversal
+
+Breakout Detection:
+  Wall threshold: 200
+  Clearance: 1.0-8.0 points
+  Lookback: 5.0 points
+======================================================================
+
+2025-10-13: Trades=  0 | P&L=$     +0 | Regimes: UP=11% DN=0% CH=89%
+2025-10-14: Trades=  7 | P&L=$   -336 | Regimes: UP=0% DN=39% CH=61%
+2025-10-15: Trades=  6 | P&L=$    -83 | Regimes: UP=9% DN=0% CH=91%
+
+======================================================================
+T2-ENHANCED WALL BREAKOUT STRATEGY
+======================================================================
+
+ENTRY FILTER EFFECTIVENESS:
+  total_checked: 8,247 (100.0%)
+  no_walls: 541 (6.6%)
+  price_not_clear: 2,232 (27.1%)
+  weak_aggression: 3,977 (48.2%)
+  failed_violence: 1,482 (18.0%)
+  failed_lockout: 1 (0.0%)
+  qualified: 14 (0.2%)
+
+EXIT BREAKDOWN:
+  Wall absorption: 6 (42.9%)
+  Aggression reversal: 0 (0.0%)
+  Stop loss (wall reclaim): 6 (42.9%)
+  Time exit: 2 (14.3%)
+
+TRADE RESULTS:
+  Trades: 14 | Winners: 2 (14.3%)
+  Gross P&L: $-382.00
+  Total Costs: $37.80
+  Net P&L: $-419.80
+  Return: -0.84%
+
+  Avg Gross/Trade: $-27.29
+  Avg Net/Trade: $-29.99
+======================================================================
+

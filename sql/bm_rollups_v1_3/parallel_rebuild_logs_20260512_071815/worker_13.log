@@ -1,0 +1,9 @@
+[W13] Starting worker for 2 dates
+[W13] Rebuilding 2025-10-21...
+[W13]   Fetching MBO events...
+[W13]   Loaded 25,660,612 events
+[W13]   Processing 86,401 time buckets
+[W13]   → Inserted 100,286 rows (452/86,401 buckets)
+[W13]   → Inserted 200,637 rows (776/86,401 buckets)
+[W13]   → Inserted 300,992 rows (1,035/86,401 buckets)
+[W13]   → Inserted 401,213 rows (1,279/86,401 buckets)

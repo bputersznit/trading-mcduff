@@ -1,0 +1,2 @@
+/home/bernard/trading4/CG_MNQ_MarketReplayLab/data/l2_parquet/2026-02-27/l2_depth_2026-02-27.parquet
+/home/bernard/trading4/CG_MNQ_MarketReplayLab/data/l2_parquet/2026-03-02/l2_depth_2026-03-02.parquet

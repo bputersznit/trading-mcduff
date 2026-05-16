@@ -1,0 +1,67 @@
+=== BM_MNQ Parallel Heatmap Rebuild 1S ===
+(Multi-process state-based rebuild)
+
+Found 28 trading dates
+
+Setting up 1S heatmap table...
+✓ Backup created
+✓ Table created
+
+Launching 14 parallel workers...
+Logs: parallel_rebuild_logs_20260512_095642/
+
+Worker 0: 2 dates (2025-09-21 00:00:00 to 2025-09-22 00:00:00) -> parallel_rebuild_logs_20260512_095642/worker_0.log
+Worker 1: 2 dates (2025-09-23 00:00:00 to 2025-09-24 00:00:00) -> parallel_rebuild_logs_20260512_095642/worker_1.log
+Worker 2: 2 dates (2025-09-25 00:00:00 to 2025-09-26 00:00:00) -> parallel_rebuild_logs_20260512_095642/worker_2.log
+Worker 3: 2 dates (2025-09-28 00:00:00 to 2025-09-29 00:00:00) -> parallel_rebuild_logs_20260512_095642/worker_3.log
+Worker 4: 2 dates (2025-09-30 00:00:00 to 2025-10-01 00:00:00) -> parallel_rebuild_logs_20260512_095642/worker_4.log
+Worker 5: 2 dates (2025-10-02 00:00:00 to 2025-10-03 00:00:00) -> parallel_rebuild_logs_20260512_095642/worker_5.log
+Worker 6: 2 dates (2025-10-05 00:00:00 to 2025-10-06 00:00:00) -> parallel_rebuild_logs_20260512_095642/worker_6.log
+Worker 7: 2 dates (2025-10-07 00:00:00 to 2025-10-08 00:00:00) -> parallel_rebuild_logs_20260512_095642/worker_7.log
+Worker 8: 2 dates (2025-10-09 00:00:00 to 2025-10-10 00:00:00) -> parallel_rebuild_logs_20260512_095642/worker_8.log
+Worker 9: 2 dates (2025-10-12 00:00:00 to 2025-10-13 00:00:00) -> parallel_rebuild_logs_20260512_095642/worker_9.log
+Worker 10: 2 dates (2025-10-14 00:00:00 to 2025-10-15 00:00:00) -> parallel_rebuild_logs_20260512_095642/worker_10.log
+Worker 11: 2 dates (2025-10-16 00:00:00 to 2025-10-17 00:00:00) -> parallel_rebuild_logs_20260512_095642/worker_11.log
+Worker 12: 2 dates (2025-10-19 00:00:00 to 2025-10-20 00:00:00) -> parallel_rebuild_logs_20260512_095642/worker_12.log
+Worker 13: 2 dates (2025-10-21 00:00:00 to 2025-10-22 00:00:00) -> parallel_rebuild_logs_20260512_095642/worker_13.log
+
+14 workers launched
+
+Monitor progress:
+  tail -f parallel_rebuild_logs_20260512_095642/worker_*.log
+  clickhouse-client --query="SELECT count(DISTINCT trade_date) FROM BM_MNQ_HEATMAP_LIQUIDITY_EVENTS_1S"
+
+Waiting for completion...
+Worker 0 finished (1/14) - 54.5m elapsed
+Worker 11 finished (2/14) - 64.0m elapsed
+Worker 9 finished (3/14) - 65.6m elapsed
+Worker 3 finished (4/14) - 141.0m elapsed
+Worker 6 finished (5/14) - 145.5m elapsed
+Worker 5 finished (6/14) - 150.5m elapsed
+Worker 12 finished (7/14) - 154.1m elapsed
+Worker 1 finished (8/14) - 164.3m elapsed
+Worker 2 finished (9/14) - 164.5m elapsed
+Worker 8 finished (10/14) - 168.5m elapsed
+Worker 7 finished (11/14) - 171.0m elapsed
+Worker 13 finished (12/14) - 174.6m elapsed
+Worker 4 finished (13/14) - 175.5m elapsed
+Worker 10 finished (14/14) - 206.5m elapsed
+
+✓ All workers complete in 206.5 minutes
+Traceback (most recent call last):
+  File "/home/bernard/trading4/CG_MNQ_MarketReplayLab/sql/bm_rollups_v1_3/rebuild_heatmap_parallel_1S.py", line 190, in <module>
+    main()
+  File "/home/bernard/trading4/CG_MNQ_MarketReplayLab/sql/bm_rollups_v1_3/rebuild_heatmap_parallel_1S.py", line 170, in main
+    result = client.query("""
+             ^^^^^^^^^^^^^^^^
+  File "/home/bernard/anaconda3/lib/python3.12/site-packages/clickhouse_connect/driver/client.py", line 402, in query
+    return self._query_with_context(query_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bernard/anaconda3/lib/python3.12/site-packages/clickhouse_connect/driver/httpclient.py", line 304, in _query_with_context
+    response = self._raw_request(body,
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bernard/anaconda3/lib/python3.12/site-packages/clickhouse_connect/driver/httpclient.py", line 571, in _raw_request
+    self._error_handler(response)
+  File "/home/bernard/anaconda3/lib/python3.12/site-packages/clickhouse_connect/driver/httpclient.py", line 488, in _error_handler
+    raise OperationalError(err_str) if retried else DatabaseError(err_str) from None
+clickhouse_connect.driver.exceptions.DatabaseError: Received ClickHouse exception, code: 206, server response: Code: 206. DB::Exception: JOIN , ... no alias for subquery or table function SELECT sum(data_compressed_bytes) AS data_compressed_bytes FROM system.parts WHERE (`table` = 'BM_MNQ_HEATMAP_LIQUIDITY_EVENTS_1S') AND active. In scope SELECT countDistinct(trade_date) AS dates, formatReadableQuantity(count()) AS rows, formatReadableSize(sum(data_compressed_bytes)) AS size FROM BM_MNQ_HEATMAP_LIQUIDITY_EVENTS_1S, (SELECT sum(data_compressed_bytes) AS data_compressed_bytes FROM system.parts WHERE (`table` = 'BM_MNQ_HEATMAP_LIQUIDITY_EVENTS_1S') AND active) (set joined_subquery_requires_alias = 0 to disable restriction). (ALIAS_REQUIRED) (for url http://localhost:8123)

@@ -1,0 +1,17 @@
+[W3] Starting worker for 2 dates
+[W3] Rebuilding 2025-09-28...
+[W3]   Fetching MBO events...
+[W3]   Loaded 1,026,528 events
+[W3]   Processing 57,596 time buckets
+[W3]   → Inserted 100,891 rows (70/57,596 buckets)
+[W3]   → Inserted 201,782 rows (141/57,596 buckets)
+[W3]   → Inserted 302,673 rows (212/57,596 buckets)
+[W3]   → Inserted 403,564 rows (283/57,596 buckets)
+[W3]   → Inserted 504,455 rows (354/57,596 buckets)
+[W3]   → Inserted 605,346 rows (425/57,596 buckets)
+[W3]   → Inserted 706,237 rows (496/57,596 buckets)
+[W3]   → Inserted 807,128 rows (567/57,596 buckets)
+[W3]   → Inserted 908,019 rows (638/57,596 buckets)
+[W3]   → Inserted 1,008,910 rows (709/57,596 buckets)
+[W3]   → Inserted 1,109,801 rows (780/57,596 buckets)
+[W3]   → Inserted 1,210,692 rows (851/57,596 buckets)

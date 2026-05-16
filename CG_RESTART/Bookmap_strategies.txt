@@ -1,0 +1,192 @@
+Bookmap strategies are mainly **liquidity-and-order-flow strategies**. They use the heatmap, resting liquidity, market orders, absorption, pulling/stacking, and volume dots to infer where price is likely to react.
+
+## 1. Liquidity Wall Rejection
+
+A large bid/ask wall appears on the heatmap.
+
+**Short idea:** price rises into a large ask wall, aggressive buyers hit it, but price cannot lift through.
+
+Signal stack:
+
+* Bright ask wall above price
+* Large buy volume dots into the wall
+* Price stalls
+* Delta positive but price does not advance
+* Ask liquidity remains or reloads
+
+Trade: short against the wall.
+Stop: above the wall.
+Target: midpoint, VWAP, prior liquidity, or opposite bid wall.
+
+## 2. Liquidity Wall Breakout
+
+A large wall gets consumed instead of rejecting price.
+
+**Long idea:** price attacks an ask wall and trades through it.
+
+Signal stack:
+
+* Bright ask wall
+* Increasing buy volume
+* Wall size decreases through trading, not just canceling
+* Price lifts through wall
+* Liquidity above disappears or becomes thin
+
+Trade: long after break / retest.
+Stop: below broken wall.
+Target: next liquidity cluster.
+
+## 3. Absorption Reversal
+
+Aggressive market orders fail to move price.
+
+**Bullish absorption:** sellers hit bid repeatedly, but price does not go lower.
+
+Signal stack:
+
+* Large red sell dots at/near low
+* Bid holds
+* Price stops making lower lows
+* Delta very negative
+* Sellers appear trapped
+* Bid reloads
+
+Trade: long after sellers fail.
+Stop: below absorption low.
+Target: VWAP / prior high / liquidity above.
+
+## 4. Stop-Run Fade
+
+Price spikes through a known level, triggers stops, then fails.
+
+Example: price breaks prior high, prints big buy volume, then cannot continue.
+
+Signal stack:
+
+* Fast move through high/low
+* Large aggressive volume
+* Liquidity vanishes
+* Immediate rejection back inside range
+* Opposite-side aggression appears
+
+Trade: fade the failed breakout.
+Stop: beyond stop-run extreme.
+Target: range midpoint or opposite side.
+
+## 5. Pulling / Stacking Momentum
+
+Book pressure changes before price moves.
+
+**Bullish version:**
+
+* Asks pull above price
+* Bids stack below price
+* Buy market orders increase
+* Heatmap thins overhead
+
+Trade: long with order-book pressure.
+Stop: below stacked bid / recent swing.
+Target: next ask wall.
+
+## 6. Liquidity Vacuum Continuation
+
+Price moves quickly through an area with little resting liquidity.
+
+Signal stack:
+
+* Thin heatmap ahead
+* Strong market buys/sells
+* No major opposing wall
+* Fast tape speed
+* Pulling on opposite side
+
+Trade: continuation scalp.
+Stop: behind last microstructure pivot.
+Target: next major liquidity cluster.
+
+## 7. Iceberg / Reload Detection
+
+A level trades far more volume than visible liquidity suggests.
+
+Signal stack:
+
+* Same price keeps absorbing trades
+* Visible size refreshes
+* Large volume dots print repeatedly
+* Price cannot pass through
+* Hidden liquidity suspected
+
+Trade depends on failure or break:
+
+* If iceberg holds: fade into it.
+* If iceberg breaks: trade breakout because trapped liquidity may unwind.
+
+## 8. Opening Range Liquidity Strategy
+
+Use Bookmap around the RTH open.
+
+Key levels:
+
+* 9:30–9:45 opening range
+* Prior day high/low
+* Overnight high/low
+* VWAP
+* Large heatmap walls
+
+Best setups:
+
+* OR high stop-run fade
+* OR low stop-run fade
+* OR breakout through wall
+* Retest of broken liquidity wall
+* Absorption at OR boundary
+
+## 9. Whale-Hunting Strategy
+
+Look for very large resting liquidity that shapes price behavior.
+
+Signal stack:
+
+* Large bid/ask wall persists
+* Price repeatedly reacts there
+* Wall moves intentionally
+* Liquidity attracts price
+* Aggressive orders either fail into it or consume it
+
+Two modes:
+
+* **Magnet mode:** price is drawn toward the wall.
+* **Defense mode:** wall rejects price.
+
+## 10. Confluence Strategy
+
+The strongest Bookmap trades usually combine:
+
+* Heatmap level
+* Aggressive volume dots
+* Delta behavior
+* Pulling/stacking
+* VWAP / OR / prior high-low
+* MBO confirmation
+* Volatility expansion
+* Failed continuation or successful break
+
+For your MNQ work, I would classify them into three families:
+
+| Family        |            Best For | Core Signal                                         |
+| ------------- | ------------------: | --------------------------------------------------- |
+| Scalping      |      5–30 sec moves | pulling/stacking, vacuum, micro absorption          |
+| Medium moves  |      1–10 min moves | wall rejection/break, OR interaction                |
+| Whale hunting | larger displacement | persistent heatmap walls, iceberg, stop-run failure |
+
+The best candidates for your ClickHouse/MBO pipeline are:
+
+1. **Absorption failure**
+2. **Wall rejection**
+3. **Wall breakout**
+4. **Stop-run fade**
+5. **Liquidity vacuum continuation**
+6. **Pulling/stacking pressure**
+7. **Iceberg/reload detection**
+8. **Opening range wall interaction**
+

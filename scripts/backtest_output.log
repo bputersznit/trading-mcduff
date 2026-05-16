@@ -1,0 +1,27 @@
+============================================================
+WALL + AGGRESSION BACKTEST
+============================================================
+
+Parameters:
+  initial_capital: 50000
+  tick_size: 0.25
+  tick_value: 2.0
+  wall_threshold: 5000.0
+  wall_distance_ticks: 5
+  aggression_threshold: 1000.0
+  aggression_ratio: 2.0
+  mode: breakout
+  profit_target_ticks: 10
+  stop_loss_ticks: 5
+  max_bars_in_position: 50
+
+Backtesting 2025-10-01...
+  Processing 1441 bars...
+
+Backtesting 2025-10-02...
+  Processing 1440 bars...
+
+Backtesting 2025-10-03...
+  Processing 1021 bars...
+
+No trades executed.

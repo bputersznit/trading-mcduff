@@ -1,0 +1,59 @@
+======================================================================
+T2-ENHANCED STRATEGY - DYNAMIC MARKET-DRIVEN EXITS
+======================================================================
+Timeframe: 30-second bars
+Entry: Wall=200, Aggr=150, Ratio=2.0
+
+T2 Entry Filters:
+  ✓ Violence Suppression: abs(delta) > 300
+  ✓ Stopout Lockout: 120s
+  ✓ Wall Absorption: 1.5x threshold
+
+NEW Dynamic Exits:
+  ✓ Exit on opposing wall absorption (natural resistance/support)
+  ✓ Exit on aggression reversal (80% ratio + 70% delta)
+  ✓ Stop loss safety: 5 ticks (choppy), 8 ticks (trending)
+======================================================================
+
+2025-10-13: Trades=  1 | P&L=$    -13 | Regimes: UP=11% DN=0% CH=89%
+2025-10-14: Trades= 16 | P&L=$   +797 | Regimes: UP=0% DN=39% CH=61%
+2025-10-15: Trades=  9 | P&L=$   +334 | Regimes: UP=9% DN=0% CH=91%
+
+======================================================================
+T2-ENHANCED STRATEGY - DYNAMIC MARKET-DRIVEN EXITS
+======================================================================
+
+ENTRY FILTER EFFECTIVENESS:
+  Signals checked: 8,169
+  Passed basic: 3,372
+  Blocked by violence: 1,362
+  Blocked by lockout: 18
+  Failed absorption: 10
+  QUALIFIED: 31 (0.38%)
+
+EXIT BREAKDOWN:
+  Wall absorption: 3 (9.7%)
+  Aggression reversal: 0 (0.0%)
+  Stop loss: 21 (67.7%)
+  Time exit: 7 (22.6%)
+
+TRADE RESULTS:
+  Trades: 31 | Winners: 10 (32.3%)
+  Gross P&L: $+1,202.00
+  Total Costs: $83.70
+  Net P&L: $+1,118.30
+  Return: +2.24%
+
+  Avg Gross/Trade: $+38.77
+  Avg Net/Trade: $+36.07
+
+----------------------------------------------------------------------
+BY REGIME
+choppy       :  31 trades | WR: 32.3% | Net P&L: $+1,118.30
+
+----------------------------------------------------------------------
+BY DIRECTION
+LONG :  20 trades | WR: 35.0% | Net P&L: $ +370.00
+SHORT:  11 trades | WR: 27.3% | Net P&L: $ +748.30
+======================================================================
+

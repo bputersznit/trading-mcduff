@@ -1,0 +1,38 @@
+=== BM_MNQ Heatmap State-Based Rebuild v2 ===
+(With full order tracking for Modify events)
+
+Backing up existing table...
+✓ Backup created
+
+Recreating target table...
+✓ Table created
+
+Found 28 trading dates
+
+[1/28] 2025-09-21 00:00:00
+
+Rebuilding 2025-09-21 00:00:00...
+  Fetching MBO events...
+Traceback (most recent call last):
+  File "/home/bernard/trading4/CG_MNQ_MarketReplayLab/sql/bm_rollups_v1_3/rebuild_heatmap_stateful_v2.py", line 385, in <module>
+    main()
+  File "/home/bernard/trading4/CG_MNQ_MarketReplayLab/sql/bm_rollups_v1_3/rebuild_heatmap_stateful_v2.py", line 341, in main
+    rows = rebuild_heatmap_for_date(client, trade_date)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bernard/trading4/CG_MNQ_MarketReplayLab/sql/bm_rollups_v1_3/rebuild_heatmap_stateful_v2.py", line 180, in rebuild_heatmap_for_date
+    df = client.query_df(query)
+         ^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bernard/anaconda3/lib/python3.12/site-packages/clickhouse_connect/driver/client.py", line 582, in query_df
+    return self._context_query(locals(), use_numpy=True, as_pandas=True).df_result
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bernard/anaconda3/lib/python3.12/site-packages/clickhouse_connect/driver/client.py", line 1238, in _context_query
+    return self._query_with_context((self.create_query_context(**kwargs)))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bernard/anaconda3/lib/python3.12/site-packages/clickhouse_connect/driver/httpclient.py", line 304, in _query_with_context
+    response = self._raw_request(body,
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bernard/anaconda3/lib/python3.12/site-packages/clickhouse_connect/driver/httpclient.py", line 571, in _raw_request
+    self._error_handler(response)
+  File "/home/bernard/anaconda3/lib/python3.12/site-packages/clickhouse_connect/driver/httpclient.py", line 488, in _error_handler
+    raise OperationalError(err_str) if retried else DatabaseError(err_str) from None
+clickhouse_connect.driver.exceptions.DatabaseError: Received ClickHouse exception, code: 53, server response: Code: 53. DB::Exception: Cannot convert string '2025-09-21 00:00:00' to type Date: while executing function equals on arguments __table1.trade_date Date UInt16(size = 0), '2025-09-21 00:00:00'_String String Const(size = 0, String(size = 1)). (TYPE_MISMATCH) (for url http://localhost:8123)

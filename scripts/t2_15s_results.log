@@ -1,0 +1,4 @@
+  File "/home/bernard/trading4/CG_MNQ_MarketReplayLab/scripts/backtest_t2_enhanced_15s.py", line 421
+    'max_bars_in_position: 20  # 60 bars @ 15S = 5 minutes max hold
+    ^
+SyntaxError: unterminated string literal (detected at line 421)

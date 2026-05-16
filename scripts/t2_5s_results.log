@@ -1,0 +1,49 @@
+======================================================================
+T2-ENHANCED STRATEGY - 5S TIMEFRAME
+======================================================================
+Timeframe: 5-second bars
+Wall: 200 | Aggression: 150 | Ratio: 2.0
+T2 Filters:
+  ✓ Violence Suppression: abs(delta) > 300 blocked
+  ✓ Stopout Lockout: 120s cooldown after stops
+  ✓ Wall Absorption: Wall must be 1.5x threshold to qualify
+Costs: $0.7/RT + 1 tick slip
+======================================================================
+
+2025-10-13: Trades= 26 | P&L=$    +27 | Regimes: UP=11% DN=0% CH=89%
+2025-10-14: Trades=103 | P&L=$     +3 | Regimes: UP=0% DN=39% CH=61%
+2025-10-15: Trades= 84 | P&L=$   -130 | Regimes: UP=9% DN=0% CH=91%
+
+======================================================================
+T2-ENHANCED STRATEGY - 5S TIMEFRAME
+======================================================================
+
+T2 FILTER EFFECTIVENESS:
+  Signals checked: 48,576
+  Passed basic: 6,383 (13.1%)
+  Blocked by violence: 1,454
+  Blocked by lockout: 284
+  Failed absorption: 66
+  QUALIFIED: 237 (0.49%)
+
+TRADE RESULTS:
+  Trades: 236 | Winners: 96 (40.7%)
+  Gross P&L: $+538.00
+  Total Costs: $637.20
+  Net P&L: $-99.20
+  Return: -0.20%
+
+  Avg Gross/Trade: $+2.28
+  Avg Net/Trade: $-0.42
+
+----------------------------------------------------------------------
+BY REGIME
+trending_down:  23 trades | WR: 26.1% | Net P&L: $  -94.10
+choppy       : 213 trades | WR: 42.3% | Net P&L: $   -5.10
+
+----------------------------------------------------------------------
+BY DIRECTION
+LONG : 129 trades | WR: 38.0% | Net P&L: $ -168.30
+SHORT: 107 trades | WR: 43.9% | Net P&L: $  +69.10
+======================================================================
+

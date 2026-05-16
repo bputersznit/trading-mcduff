@@ -1,0 +1,60 @@
+=== BM_MNQ Heatmap State-Based Rebuild v2 ===
+(With full order tracking for Modify events)
+
+Backing up existing table...
+✓ Backup created
+
+Recreating target table...
+✓ Table created
+
+Found 28 trading dates
+
+[1/28] 2025-09-21 00:00:00
+
+Rebuilding 2025-09-21...
+  Fetching MBO events...
+  Loaded 3,615 events
+  Processing 571,295 time buckets
+Error serializing column `trade_date` into data type `Date`
+Traceback (most recent call last):
+  File "/home/bernard/anaconda3/lib/python3.12/site-packages/clickhouse_connect/driver/transform.py", line 114, in chunk_gen
+    col_type.write_column(data, output, context)
+  File "/home/bernard/anaconda3/lib/python3.12/site-packages/clickhouse_connect/datatypes/base.py", line 216, in write_column
+    self.write_column_data(column, dest, ctx)
+  File "/home/bernard/anaconda3/lib/python3.12/site-packages/clickhouse_connect/datatypes/base.py", line 231, in write_column_data
+    self._write_column_binary(column, dest, ctx)
+  File "/home/bernard/anaconda3/lib/python3.12/site-packages/clickhouse_connect/datatypes/temporal.py", line 60, in _write_column_binary
+    column = [(x - esd).days for x in column]
+               ~~^~~~~
+TypeError: unsupported operand type(s) for -: 'str' and 'datetime.date'
+Traceback (most recent call last):
+  File "/home/bernard/trading4/CG_MNQ_MarketReplayLab/sql/bm_rollups_v1_3/rebuild_heatmap_stateful_v2.py", line 400, in <module>
+    main()
+  File "/home/bernard/trading4/CG_MNQ_MarketReplayLab/sql/bm_rollups_v1_3/rebuild_heatmap_stateful_v2.py", line 356, in main
+    rows = rebuild_heatmap_for_date(client, trade_date)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bernard/trading4/CG_MNQ_MarketReplayLab/sql/bm_rollups_v1_3/rebuild_heatmap_stateful_v2.py", line 269, in rebuild_heatmap_for_date
+    client.insert_df('BM_MNQ_HEATMAP_LIQUIDITY_EVENTS_100MS', heatmap_df)
+  File "/home/bernard/anaconda3/lib/python3.12/site-packages/clickhouse_connect/driver/client.py", line 1013, in insert_df
+    return self.insert(table,
+           ^^^^^^^^^^^^^^^^^^
+  File "/home/bernard/anaconda3/lib/python3.12/site-packages/clickhouse_connect/driver/client.py", line 978, in insert
+    return self.data_insert(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bernard/anaconda3/lib/python3.12/site-packages/clickhouse_connect/driver/httpclient.py", line 347, in data_insert
+    response = self._raw_request(block_gen, params, headers, error_handler=error_handler, server_wait=False)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/bernard/anaconda3/lib/python3.12/site-packages/clickhouse_connect/driver/httpclient.py", line 569, in _raw_request
+    error_handler(response)
+  File "/home/bernard/anaconda3/lib/python3.12/site-packages/clickhouse_connect/driver/httpclient.py", line 331, in error_handler
+    raise ex
+  File "/home/bernard/anaconda3/lib/python3.12/site-packages/clickhouse_connect/driver/transform.py", line 114, in chunk_gen
+    col_type.write_column(data, output, context)
+  File "/home/bernard/anaconda3/lib/python3.12/site-packages/clickhouse_connect/datatypes/base.py", line 216, in write_column
+    self.write_column_data(column, dest, ctx)
+  File "/home/bernard/anaconda3/lib/python3.12/site-packages/clickhouse_connect/datatypes/base.py", line 231, in write_column_data
+    self._write_column_binary(column, dest, ctx)
+  File "/home/bernard/anaconda3/lib/python3.12/site-packages/clickhouse_connect/datatypes/temporal.py", line 60, in _write_column_binary
+    column = [(x - esd).days for x in column]
+               ~~^~~~~
+TypeError: unsupported operand type(s) for -: 'str' and 'datetime.date'

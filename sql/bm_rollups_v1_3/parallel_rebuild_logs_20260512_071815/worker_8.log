@@ -1,0 +1,10 @@
+[W8] Starting worker for 2 dates
+[W8] Rebuilding 2025-10-09...
+[W8]   Fetching MBO events...
+[W8]   Loaded 24,064,692 events
+[W8]   Processing 86,401 time buckets
+[W8]   → Inserted 100,198 rows (433/86,401 buckets)
+[W8]   → Inserted 200,249 rows (767/86,401 buckets)
+[W8]   → Inserted 300,261 rows (1,061/86,401 buckets)
+[W8]   → Inserted 400,462 rows (1,309/86,401 buckets)
+[W8]   → Inserted 500,532 rows (1,535/86,401 buckets)

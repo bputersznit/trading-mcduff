@@ -112,7 +112,7 @@ namespace NinjaTrader.NinjaScript.Strategies
         {
             if (State == State.SetDefaults)
             {
-                Description = @"CG MNQ Hybrid v5 ClanMarshal - 100ms Order Flow Imbalance Strategy";
+                Description = @"CG MNQ Hybrid v5 ClanMarshal - 100ms Order Flow Imbalance Strategy (Central Time)";
                 Name = "CG_MNQ_Hybrid_v5_ClanMarshal";
                 Calculate = Calculate.OnEachTick;
                 EntriesPerDirection = 1;
@@ -131,11 +131,11 @@ namespace NinjaTrader.NinjaScript.Strategies
                 BarsRequiredToTrade = 20;
                 IsInstantiatedOnEachOptimizationIteration = true;
 
-                // Default Parameters (from v5opt SQL)
-                EventDeltaThreshold = 50;
-                EventImbalanceThreshold = 0.60;
-                TargetTicks = 40;  // 10 points
-                StopTicks = 20;    // 5 points
+                // Default Parameters (v5 ClanMarshal - conservative to reduce overtrading)
+                EventDeltaThreshold = 100;           // Raised from 50 (fewer signals)
+                EventImbalanceThreshold = 0.70;      // Raised from 0.60 (stronger imbalance required)
+                TargetTicks = 40;                    // 10 points = $20
+                StopTicks = 20;                      // 5 points = $10
                 DailyLossLimit = 60;
                 MaxConsecutiveLosses = 4;
                 ProfitLockPeak = 3000;
@@ -167,22 +167,22 @@ namespace NinjaTrader.NinjaScript.Strategies
             if (BarsInProgress != 0) return;
 
             // Check if new trading day
+            // NinjaTrader uses exchange timezone (Central Time for CME/MNQ)
             DateTime now = Time[0];
-            DateTime nowET = TimeZoneInfo.ConvertTime(now, TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
-            DateTime tradeDateET = nowET.Date;
+            DateTime tradeDate = now.Date;
 
-            if (tradeDateET != lastTradeDate)
+            if (tradeDate != lastTradeDate)
             {
-                OnNewTradingDay(nowET);
-                lastTradeDate = tradeDateET;
+                OnNewTradingDay(now);
+                lastTradeDate = tradeDate;
             }
 
-            // RTH Check (9:30 AM - 4:00 PM ET)
-            if (!IsRTH(nowET))
+            // RTH Check (8:30 AM - 3:00 PM CT)
+            if (!IsRTH(now))
                 return;
 
-            // Update Opening Range (9:30-9:45 AM)
-            UpdateOpeningRange(nowET);
+            // Update Opening Range (8:30-8:45 AM CT)
+            UpdateOpeningRange(now);
 
             // Check daily guards
             if (dailyLimitHit || profitLockHit)
@@ -248,6 +248,14 @@ namespace NinjaTrader.NinjaScript.Strategies
 
             if (dailyLimitHit || profitLockHit)
                 return;
+
+            // Cooldown: Wait 5 seconds after last exit before new entry
+            if (exitTime != DateTime.MinValue)
+            {
+                TimeSpan timeSinceExit = currentBucket - exitTime;
+                if (timeSinceExit.TotalSeconds < 5)
+                    return;
+            }
 
             double eventDelta = bidEventSize - askEventSize;
             double totalEventSize = bidEventSize + askEventSize;
@@ -336,28 +344,41 @@ namespace NinjaTrader.NinjaScript.Strategies
                     targetPrice = entryPrice + (TargetTicks * TickSize);
                     stopPrice = entryPrice - (StopTicks * TickSize);
 
-                    SetProfitTarget("ClanMarshal_Long", CalculationMode.Price, targetPrice);
-                    SetStopLoss("ClanMarshal_Long", CalculationMode.Price, stopPrice, false);
+                    SetProfitTarget("ClanMarshal_Long", CalculationMode.Ticks, TargetTicks);
+                    SetStopLoss("ClanMarshal_Long", CalculationMode.Ticks, StopTicks, false);
                 }
                 else if (Position.MarketPosition == MarketPosition.Short)
                 {
                     targetPrice = entryPrice - (TargetTicks * TickSize);
                     stopPrice = entryPrice + (StopTicks * TickSize);
 
-                    SetProfitTarget("ClanMarshal_Short", CalculationMode.Price, targetPrice);
-                    SetStopLoss("ClanMarshal_Short", CalculationMode.Price, stopPrice, false);
+                    SetProfitTarget("ClanMarshal_Short", CalculationMode.Ticks, TargetTicks);
+                    SetStopLoss("ClanMarshal_Short", CalculationMode.Ticks, StopTicks, false);
                 }
             }
             else if (execution.Order.Name.Contains("Profit") || execution.Order.Name.Contains("Stop"))
             {
-                // Exit execution
+                // Exit execution - calculate realized P&L
                 exitTime = time;
-                double pnl = Position.GetUnrealizedProfitLoss(PerformanceUnit.Currency, Close[0]);
+                double exitPrice = execution.Price;
+
+                // Calculate P&L based on entry/exit prices
+                double pnl = 0;
+                if (execution.Order.Name.Contains("ClanMarshal_Long") || execution.MarketPosition == MarketPosition.Flat)
+                {
+                    // Was long, now flat
+                    pnl = (exitPrice - entryPrice) * 2.0; // MNQ = $2/point
+                }
+                else if (execution.Order.Name.Contains("ClanMarshal_Short"))
+                {
+                    // Was short, now flat
+                    pnl = (entryPrice - exitPrice) * 2.0; // MNQ = $2/point
+                }
 
                 UpdateDailyStats(pnl, execution.Order.Name.Contains("Stop"));
 
                 Print(string.Format("{0} | EXIT @ {1:F2} | P&L: ${2:F2} | Daily: ${3:F2} | Losses: {4}",
-                    exitTime, execution.Price, pnl, runningDailyPnL, consecutiveLosses));
+                    exitTime, exitPrice, pnl, runningDailyPnL, consecutiveLosses));
             }
         }
 
@@ -416,9 +437,9 @@ namespace NinjaTrader.NinjaScript.Strategies
             }
         }
 
-        private void OnNewTradingDay(DateTime nowET)
+        private void OnNewTradingDay(DateTime nowCT)
         {
-            Print(string.Format("\n========== {0:yyyy-MM-dd} - NEW TRADING DAY ==========", nowET));
+            Print(string.Format("\n========== {0:yyyy-MM-dd} - NEW TRADING DAY (CT) ==========", nowCT));
             Print(string.Format("Previous Day: Trades={0}, P&L=${1:F2}, Peak=${2:F2}",
                 tradesToday, runningDailyPnL, runningDailyPeak));
 
@@ -438,16 +459,16 @@ namespace NinjaTrader.NinjaScript.Strategies
         #endregion
 
         #region Opening Range
-        private void UpdateOpeningRange(DateTime nowET)
+        private void UpdateOpeningRange(DateTime nowCT)
         {
             if (orCalculated)
                 return;
 
-            int hour = nowET.Hour;
-            int minute = nowET.Minute;
+            int hour = nowCT.Hour;
+            int minute = nowCT.Minute;
 
-            // Calculate OR during 9:30-9:45
-            if (hour == 9 && minute >= 30 && minute < 45)
+            // Calculate OR during 8:30-8:45 CT
+            if (hour == 8 && minute >= 30 && minute < 45)
             {
                 double high = High[0];
                 double low = Low[0];
@@ -455,10 +476,10 @@ namespace NinjaTrader.NinjaScript.Strategies
                 if (high > orHigh) orHigh = high;
                 if (low < orLow) orLow = low;
             }
-            else if (hour == 9 && minute >= 45)
+            else if (hour == 8 && minute >= 45)
             {
                 orCalculated = true;
-                Print(string.Format("9:45 AM | OR CALCULATED: High={0:F2} Low={1:F2}", orHigh, orLow));
+                Print(string.Format("8:45 AM CT | OR CALCULATED: High={0:F2} Low={1:F2}", orHigh, orLow));
             }
         }
 
@@ -475,16 +496,17 @@ namespace NinjaTrader.NinjaScript.Strategies
                 return "INSIDE_OR";
         }
 
-        private string GetTimeZone(DateTime nowET)
+        private string GetTimeZone(DateTime nowCT)
         {
-            int hour = nowET.Hour;
-            int minute = nowET.Minute;
+            int hour = nowCT.Hour;
+            int minute = nowCT.Minute;
 
-            if (hour == 9 && minute < 45)
+            // CT time zones (RTH: 8:30-15:00)
+            if (hour == 8 && minute >= 30 && minute < 45)
                 return "OPEN_15";
-            else if ((hour == 9 && minute >= 45) || (hour == 10 && minute < 30))
+            else if ((hour == 8 && minute >= 45) || (hour == 9 && minute < 30))
                 return "POST_OPEN";
-            else if (hour == 15 && minute >= 30)
+            else if (hour == 14 && minute >= 30)
                 return "CLOSE_30";
             else
                 return "NORMAL";
@@ -497,8 +519,9 @@ namespace NinjaTrader.NinjaScript.Strategies
             if (!orCalculated)
                 return false;  // Wait for OR
 
-            DateTime nowET = TimeZoneInfo.ConvertTime(Time[0], TimeZoneInfo.FindSystemTimeZoneById("Eastern Standard Time"));
-            string timeZone = GetTimeZone(nowET);
+            // NinjaTrader Time[0] is already in exchange timezone (CT for CME)
+            DateTime nowCT = Time[0];
+            string timeZone = GetTimeZone(nowCT);
             string orLocation = GetORLocation(Close[0]);
 
             // Block patterns from v5opt SQL:
@@ -527,15 +550,15 @@ namespace NinjaTrader.NinjaScript.Strategies
         #endregion
 
         #region Helper Methods
-        private bool IsRTH(DateTime nowET)
+        private bool IsRTH(DateTime nowCT)
         {
-            int hour = nowET.Hour;
-            int minute = nowET.Minute;
+            int hour = nowCT.Hour;
+            int minute = nowCT.Minute;
 
-            // 9:30 AM - 4:00 PM ET
-            if (hour < 9 || (hour == 9 && minute < 30))
+            // 8:30 AM - 3:00 PM CT (CME RTH for equity index futures)
+            if (hour < 8 || (hour == 8 && minute < 30))
                 return false;
-            if (hour >= 16)
+            if (hour >= 15)
                 return false;
 
             return true;

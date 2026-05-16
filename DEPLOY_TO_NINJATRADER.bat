@@ -8,7 +8,7 @@ echo =========================================
 echo.
 
 REM Set source (VirtualBox shared folder)
-set SOURCE=\\VBOXSVR\CG_MNQ_MarketReplayLab\ninjascript\CG_OrderFlow_Aggression_v2_7_STAGE2_RESPONSE_MTF.cs
+set SOURCE=\\VBOXSVR\CG_MNQ_MarketReplayLab\ninjascript\CG_OrderFlow_Aggression_v2_8_STAGE2_DISCOVERY_RESPONSE.cs
 
 REM Set destination (NinjaTrader Custom Strategies)
 set DEST=%USERPROFILE%\Documents\NinjaTrader 8\bin\Custom\Strategies\
@@ -44,7 +44,7 @@ if %ERRORLEVEL% EQU 0 (
     echo Next steps:
     echo 1. Open NinjaTrader 8
     echo 2. Press F5 to compile
-    echo 3. Look for CG_OrderFlow_Aggression_v2_7_STAGE2_RESPONSE_MTF in Strategy list
+    echo 3. Look for CG_OrderFlow_Aggression_v2_8_STAGE2_DISCOVERY_RESPONSE in Strategy list
     echo.
 ) else (
     echo.

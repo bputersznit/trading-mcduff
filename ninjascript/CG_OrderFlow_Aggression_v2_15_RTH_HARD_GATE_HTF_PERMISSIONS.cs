@@ -10,7 +10,7 @@ using NinjaTrader.NinjaScript;
 #endregion
 
 // =================================================================================================
-// CG_OrderFlow_Aggression_v2_14_RTH_DISCOVERY_DIAGNOSTIC.cs
+// CG_OrderFlow_Aggression_v2_15_RTH_HARD_GATE_HTF_PERMISSIONS.cs
 // Generated: 2026-05-16 ET
 //
 // Purpose
@@ -32,13 +32,13 @@ using NinjaTrader.NinjaScript;
 //
 // Important design stance
 // -----------------------
-// v2.14 keeps RTH-only execution and no safety/panic stoppages, but relaxes the context-first gate for full-day discovery and prints exact rejection reasons.
+// v2.15 keeps RTH-only execution and no safety/panic stoppages, but makes the 5m/1m higher-timeframe layer authoritative: the tick/100ms microburst is a trigger only after HTF permission exists.
 // Default behavior: pre/post-RTH data may still be inspected and used for diagnostics, but actual order entry is enabled only inside the configured RTH window. No daily loss, profit lock, max trade, consecutive-loss, or cooldown stoppages are enabled by default.
 // =================================================================================================
 
 namespace NinjaTrader.NinjaScript.Strategies
 {
-    public class CG_OrderFlow_Aggression_v2_14_RTH_DISCOVERY_DIAGNOSTIC : Strategy
+    public class CG_OrderFlow_Aggression_v2_15_RTH_HARD_GATE_HTF_PERMISSIONS : Strategy
     {
         #region Enums
         private enum DirectionSignal { None = 0, Long = 1, Short = -1 }
@@ -162,8 +162,8 @@ namespace NinjaTrader.NinjaScript.Strategies
         {
             if (State == State.SetDefaults)
             {
-                Description = "CG OrderFlow Aggression v2.14 - RTH-only discovery with relaxed gates and rejection diagnostics";
-                Name = "CG_OrderFlow_Aggression_v2_14_RTH_DISCOVERY_DIAGNOSTIC";
+                Description = "CG OrderFlow Aggression v2.15 - RTH-only discovery with authoritative 5m/1m permission layer";
+                Name = "CG_OrderFlow_Aggression_v2_15_RTH_HARD_GATE_HTF_PERMISSIONS";
 
                 Calculate = Calculate.OnEachTick;
                 EntriesPerDirection = 1;
@@ -271,22 +271,27 @@ namespace NinjaTrader.NinjaScript.Strategies
                 EnforceRTHExecutionOnly = true;
                 FlattenAtRTHEnd = true;
 
+                UseRawChartTimeForRTHGate = true;
+
                 PrintDiagnostics = true;
                 DiagnosticEveryBuckets = 100;
                             // v2.14 discovery defaults: keep RTH-only execution, but stop choking the system.
                 // The prior context-first defaults were too strict and produced zero trades while rejectEvents climbed.
                 RequireORCompleteBeforeTrading = false;
-                EnableHTFBiasFilter = false;
-                HTFBiasSlopeTicks = 18;
-                CounterBiasOverridePersistence = 4.00;
-                EnableRangeCenterSuppression = false;
-                RangeCenterBandPct = 0.40;
-                RangePowerOverridePersistence = 3.00;
+                EnableHTFBiasFilter = true;
+                EnableHTFPermissionLayer = true;
+                RequireHTFPermissionForRange = true;
+                UseRawChartTimeForRTHGate = true;
+                HTFBiasSlopeTicks = 10;
+                CounterBiasOverridePersistence = 20.00;
+                EnableRangeCenterSuppression = true;
+                RangeCenterBandPct = 0.50;
+                RangePowerOverridePersistence = 3.25;
                 RangeEdgeBandPct = 0.22;
-                EnableFailedDirectionCooldown = false;
-                FailedDirectionCooldownSeconds = 0;
-                FailedDirectionZoneTicks = 16;
-                FailedDirectionOverridePersistence = 4.00;
+                EnableFailedDirectionCooldown = true;
+                FailedDirectionCooldownSeconds = 180;
+                FailedDirectionZoneTicks = 20;
+                FailedDirectionOverridePersistence = 5.50;
             }
             else if (State == State.Configure)
             {
@@ -398,7 +403,7 @@ namespace NinjaTrader.NinjaScript.Strategies
             if (BarsInProgress == 0)
                 HandleRTHExecutionBoundary(eventTime);
 
-            DateTime etDate = ToEastern(eventTime).Date;
+            DateTime etDate = (UseRawChartTimeForRTHGate ? eventTime : ToEastern(eventTime)).Date;
             if (lastTradeDateEt == DateTime.MinValue || etDate != lastTradeDateEt)
             {
                 lastTradeDateEt = etDate;
@@ -413,8 +418,7 @@ namespace NinjaTrader.NinjaScript.Strategies
                 return;
             }
 
-            // Internal 5-minute bias series. Currently used as a headless enforced data rail;
-            // reserved for stricter higher-timeframe bias in later versions.
+            // Internal 5-minute bias series. v2.15 uses this as the authoritative permission rail.
             if (BarsInProgress == 2)
             {
                 UpdateFiveMinuteBias();
@@ -433,7 +437,7 @@ namespace NinjaTrader.NinjaScript.Strategies
             if (CurrentBars[1] < 2)
                 return;
 
-            DateTime tEt = ToEastern(Times[1][0]);
+            DateTime tEt = UseRawChartTimeForRTHGate ? Times[1][0] : ToEastern(Times[1][0]);
             double h = Highs[1][0];
             double l = Lows[1][0];
             double c = Closes[1][0];
@@ -662,19 +666,19 @@ namespace NinjaTrader.NinjaScript.Strategies
                 else
                 {
                     rejectedSignalCount++;
-                    Print(string.Format("{0} | REJECT {1} reason={2} state={3} pers={4:F2} cL={5} cS={6} accL={7} accS={8} absL={9} absS={10} price={11:F2}",
+                    Print(string.Format("{0} | REJECT {1} reason={2} state={3} htf={12} htfTicks={13:F1} pers={4:F2} cL={5} cS={6} accL={7} accS={8} absL={9} absS={10} price={11:F2}",
                         currentMarketTime.ToString("HH:mm:ss.fff"), candidate, rejectionReason, auctionState, weightedPersistenceScore,
                         consecutiveLongBuckets, consecutiveShortBuckets, acceptedLongBuckets, acceptedShortBuckets,
-                        rangeAbsorptionLongBuckets, rangeAbsorptionShortBuckets, lastPrice));
+                        rangeAbsorptionLongBuckets, rangeAbsorptionShortBuckets, lastPrice, htfBias, htfBiasScoreTicks));
                 }
             }
 
             if (PrintDiagnostics && DiagnosticEveryBuckets > 0 && processedBuckets % DiagnosticEveryBuckets == 0)
             {
-                Print(string.Format("{0} | DIAG buckets={1} md={2} depth={3} state={4} pers={5:F2} cL={6} cS={7} accL={8} accS={9} absL={10} absS={11} trades={12} rejectEvents={13} pnl={14:F2}",
+                Print(string.Format("{0} | DIAG buckets={1} md={2} depth={3} state={4} htf={15} htfTicks={16:F1} pers={5:F2} cL={6} cS={7} accL={8} accS={9} absL={10} absS={11} trades={12} rejectEvents={13} pnl={14:F2}",
                     currentMarketTime.ToString("HH:mm:ss.fff"), processedBuckets, marketDataEvents, depthEvents, auctionState,
                     weightedPersistenceScore, consecutiveLongBuckets, consecutiveShortBuckets, acceptedLongBuckets, acceptedShortBuckets,
-                    rangeAbsorptionLongBuckets, rangeAbsorptionShortBuckets, tradesCountToday, rejectedSignalCount, dailyPnL));
+                    rangeAbsorptionLongBuckets, rangeAbsorptionShortBuckets, tradesCountToday, rejectedSignalCount, dailyPnL, htfBias, htfBiasScoreTicks));
             }
         }
 
@@ -762,6 +766,9 @@ namespace NinjaTrader.NinjaScript.Strategies
             if (!QuoteIsFreshAndSane())
                 return "QUOTE_BAD_OR_STALE";
 
+            if (EnableHTFPermissionLayer && !HTFPermissionAllows(signal, lastPrice))
+                return "HTF_PERMISSION";
+
             if (!ContextFirstAllows(signal, lastPrice))
                 return "CONTEXT_FIRST";
 
@@ -811,6 +818,9 @@ namespace NinjaTrader.NinjaScript.Strategies
             if (RequireORCompleteBeforeTrading && EnableOpeningRangeFilter && !orCalculated)
                 return false;
 
+            if (EnableHTFPermissionLayer && !HTFPermissionAllows(signal, price))
+                return false;
+
             if (EnableFailedDirectionCooldown && IsInsideFailedDirectionCooldown(signal, price))
                 return false;
 
@@ -841,6 +851,87 @@ namespace NinjaTrader.NinjaScript.Strategies
                     if (signal == DirectionSignal.Short && !edgeShort && !powerOverride)
                         return false;
                 }
+            }
+
+            return true;
+        }
+
+        private bool HTFPermissionAllows(DirectionSignal signal, double price)
+        {
+            if (!EnableHTFPermissionLayer || signal == DirectionSignal.None)
+                return true;
+
+            // v2.15 hierarchy:
+            //   5m bias = permission/veto layer
+            //   1m VWAP/OR/swing context = local auction filter
+            //   100ms/tick persistence = trigger only
+            bool isLong = signal == DirectionSignal.Long;
+            bool isShort = signal == DirectionSignal.Short;
+
+            // Hard 5m veto. Counter-bias override is effectively disabled by default.
+            if (EnableHTFBiasFilter && htfBias != DirectionSignal.None && htfBias != signal)
+            {
+                if (Math.Abs(weightedPersistenceScore) < CounterBiasOverridePersistence)
+                    return false;
+            }
+
+            // VWAP permission: do not buy materially below VWAP or short materially above VWAP.
+            // This is intentionally light so the branch remains a discovery system.
+            if (sessionVwap > 0.0)
+            {
+                double vwapDistTicks = (price - sessionVwap) / TickSize;
+                if (isLong && vwapDistTicks < -4)
+                    return false;
+                if (isShort && vwapDistTicks > 4)
+                    return false;
+            }
+
+            // Once OR exists, make it part of permission rather than a passive annotation.
+            if (EnableOpeningRangeFilter && orCalculated && orHigh > 0.0 && orLow > 0.0)
+            {
+                if (isLong)
+                {
+                    // Longs below OR low are counter-auction and must wait for explicit reversal logic.
+                    if (price < orLow - ORBreakoutBufferTicks * TickSize)
+                        return false;
+
+                    // In balance/inside OR, long continuation is allowed only when 5m is explicitly long
+                    // or the move has reached the upper half of the OR.
+                    if (RequireHTFPermissionForRange && auctionState == AuctionState.Range && htfBias != DirectionSignal.Long)
+                    {
+                        double mid = (orHigh + orLow) * 0.5;
+                        if (price < mid)
+                            return false;
+                    }
+                }
+                else if (isShort)
+                {
+                    if (price > orHigh + ORBreakoutBufferTicks * TickSize)
+                        return false;
+
+                    if (RequireHTFPermissionForRange && auctionState == AuctionState.Range && htfBias != DirectionSignal.Short)
+                    {
+                        double mid = (orHigh + orLow) * 0.5;
+                        if (price > mid)
+                            return false;
+                    }
+                }
+            }
+
+            // Before OR is complete, require at least VWAP alignment or explicit 5m bias. This prevents
+            // the open from becoming pure bidirectional impulse chasing while still allowing discovery.
+            if (EnableOpeningRangeFilter && !orCalculated && RequireHTFPermissionForRange && auctionState == AuctionState.Range)
+            {
+                if (htfBias == signal)
+                    return true;
+                if (sessionVwap > 0.0)
+                {
+                    if (isLong && price >= sessionVwap)
+                        return true;
+                    if (isShort && price <= sessionVwap)
+                        return true;
+                }
+                return false;
             }
 
             return true;
@@ -1643,7 +1734,7 @@ namespace NinjaTrader.NinjaScript.Strategies
             if (!EnforceRTHExecutionOnly)
                 return;
 
-            DateTime et = ToEastern(t);
+            DateTime et = UseRawChartTimeForRTHGate ? t : ToEastern(t);
             DateTime etDate = et.Date;
             TimeSpan now = et.TimeOfDay;
             TimeSpan rthEnd = new TimeSpan(RTHEndHour, RTHEndMinute, 0);
@@ -1697,8 +1788,10 @@ namespace NinjaTrader.NinjaScript.Strategies
 
         private bool IsRTH(DateTime t)
         {
-            DateTime et = ToEastern(t);
-            TimeSpan now = et.TimeOfDay;
+            // NT Playback timestamps in this lab are already displayed in the intended exchange/session clock.
+            // v2.14 converted them again, which allowed apparent 09:28 entries. Default to raw chart time.
+            DateTime gateTime = UseRawChartTimeForRTHGate ? t : ToEastern(t);
+            TimeSpan now = gateTime.TimeOfDay;
             return now >= new TimeSpan(RTHStartHour, RTHStartMinute, 0) && now < new TimeSpan(RTHEndHour, RTHEndMinute, 0);
         }
 
@@ -2008,59 +2101,71 @@ namespace NinjaTrader.NinjaScript.Strategies
         public int Stage2RangeStrongAcceptanceBuckets { get; set; }
 
         [NinjaScriptProperty]
-        [Display(Name = "Require OR Complete Before Trading", Order = 30, GroupName = "4. Sweep/Acceptance")]
+        [Display(Name = "Use Raw Chart Time For RTH Gate", Order = 28, GroupName = "4. Sweep/Acceptance")]
+        public bool UseRawChartTimeForRTHGate { get; set; }
+
+        [NinjaScriptProperty]
+        [Display(Name = "Enable HTF Permission Layer", Order = 29, GroupName = "4. Sweep/Acceptance")]
+        public bool EnableHTFPermissionLayer { get; set; }
+
+        [NinjaScriptProperty]
+        [Display(Name = "Require HTF Permission For Range", Order = 30, GroupName = "4. Sweep/Acceptance")]
+        public bool RequireHTFPermissionForRange { get; set; }
+
+        [NinjaScriptProperty]
+        [Display(Name = "Require OR Complete Before Trading", Order = 31, GroupName = "4. Sweep/Acceptance")]
         public bool RequireORCompleteBeforeTrading { get; set; }
 
         [NinjaScriptProperty]
-        [Display(Name = "Enable HTF Bias Filter", Order = 31, GroupName = "4. Sweep/Acceptance")]
+        [Display(Name = "Enable HTF Bias Filter", Order = 32, GroupName = "4. Sweep/Acceptance")]
         public bool EnableHTFBiasFilter { get; set; }
 
         [NinjaScriptProperty]
         [Range(1, 200)]
-        [Display(Name = "HTF Bias Slope Ticks", Order = 32, GroupName = "4. Sweep/Acceptance")]
+        [Display(Name = "HTF Bias Slope Ticks", Order = 33, GroupName = "4. Sweep/Acceptance")]
         public int HTFBiasSlopeTicks { get; set; }
 
         [NinjaScriptProperty]
         [Range(0.50, 20.00)]
-        [Display(Name = "Counter Bias Override Persistence", Order = 33, GroupName = "4. Sweep/Acceptance")]
+        [Display(Name = "Counter Bias Override Persistence", Order = 34, GroupName = "4. Sweep/Acceptance")]
         public double CounterBiasOverridePersistence { get; set; }
 
         [NinjaScriptProperty]
-        [Display(Name = "Enable Range Center Suppression", Order = 34, GroupName = "4. Sweep/Acceptance")]
+        [Display(Name = "Enable Range Center Suppression", Order = 35, GroupName = "4. Sweep/Acceptance")]
         public bool EnableRangeCenterSuppression { get; set; }
 
         [NinjaScriptProperty]
         [Range(0.05, 0.90)]
-        [Display(Name = "Range Center Band Pct", Order = 35, GroupName = "4. Sweep/Acceptance")]
+        [Display(Name = "Range Center Band Pct", Order = 36, GroupName = "4. Sweep/Acceptance")]
         public double RangeCenterBandPct { get; set; }
 
         [NinjaScriptProperty]
         [Range(0.50, 20.00)]
-        [Display(Name = "Range Power Override Persistence", Order = 36, GroupName = "4. Sweep/Acceptance")]
+        [Display(Name = "Range Power Override Persistence", Order = 37, GroupName = "4. Sweep/Acceptance")]
         public double RangePowerOverridePersistence { get; set; }
 
         [NinjaScriptProperty]
         [Range(0.05, 0.45)]
-        [Display(Name = "Range Edge Band Pct", Order = 37, GroupName = "4. Sweep/Acceptance")]
+        [Display(Name = "Range Edge Band Pct", Order = 38, GroupName = "4. Sweep/Acceptance")]
         public double RangeEdgeBandPct { get; set; }
 
         [NinjaScriptProperty]
-        [Display(Name = "Enable Failed Direction Cooldown", Order = 38, GroupName = "4. Sweep/Acceptance")]
+        [Display(Name = "Enable Failed Direction Cooldown", Order = 39, GroupName = "4. Sweep/Acceptance")]
         public bool EnableFailedDirectionCooldown { get; set; }
 
         [NinjaScriptProperty]
         [Range(0, 3600)]
-        [Display(Name = "Failed Direction Cooldown Seconds", Order = 39, GroupName = "4. Sweep/Acceptance")]
+        [Display(Name = "Failed Direction Cooldown Seconds", Order = 40, GroupName = "4. Sweep/Acceptance")]
         public int FailedDirectionCooldownSeconds { get; set; }
 
         [NinjaScriptProperty]
         [Range(0, 200)]
-        [Display(Name = "Failed Direction Zone Ticks", Order = 40, GroupName = "4. Sweep/Acceptance")]
+        [Display(Name = "Failed Direction Zone Ticks", Order = 41, GroupName = "4. Sweep/Acceptance")]
         public int FailedDirectionZoneTicks { get; set; }
 
         [NinjaScriptProperty]
         [Range(0.50, 20.00)]
-        [Display(Name = "Failed Direction Override Persistence", Order = 41, GroupName = "4. Sweep/Acceptance")]
+        [Display(Name = "Failed Direction Override Persistence", Order = 42, GroupName = "4. Sweep/Acceptance")]
         public double FailedDirectionOverridePersistence { get; set; }
 
         [NinjaScriptProperty]

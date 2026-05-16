@@ -10,7 +10,7 @@ using NinjaTrader.NinjaScript;
 #endregion
 
 // =================================================================================================
-// CG_OrderFlow_Aggression_v2_16C_OPEN_DRIVE_PERMISSION_FIX.cs
+// CG_OrderFlow_Aggression_v2_16D_OPEN_LONG_LEAK_PATCH.cs
 // Generated: 2026-05-16 ET
 // Patch: v2.16C fixes opening-drive override propagation through all HTF migration gates.
 //
@@ -39,7 +39,7 @@ using NinjaTrader.NinjaScript;
 
 namespace NinjaTrader.NinjaScript.Strategies
 {
-    public class CG_OrderFlow_Aggression_v2_16C_OPEN_DRIVE_PERMISSION_FIX : Strategy
+    public class CG_OrderFlow_Aggression_v2_16D_OPEN_LONG_LEAK_PATCH : Strategy
     {
         #region Enums
         private enum DirectionSignal { None = 0, Long = 1, Short = -1 }
@@ -178,7 +178,7 @@ namespace NinjaTrader.NinjaScript.Strategies
             if (State == State.SetDefaults)
             {
                 Description = "CG OrderFlow Aggression v2.16 - RTH-only discovery with authoritative 5m auction migration permissions";
-                Name = "CG_OrderFlow_Aggression_v2_16C_OPEN_DRIVE_PERMISSION_FIX";
+                Name = "CG_OrderFlow_Aggression_v2_16D_OPEN_LONG_LEAK_PATCH";
 
                 Calculate = Calculate.OnEachTick;
                 EntriesPerDirection = 1;
@@ -323,6 +323,11 @@ namespace NinjaTrader.NinjaScript.Strategies
                 OpeningDriveEndHour = 9;
                 OpeningDriveEndMinute = 45;
                 OpeningDriveMinPersistence = 2.50;
+                // v2.16D: the prior opening-drive NoTrade override allowed a 09:31 long while HTF still showed NoTrade/None.
+                // Default patch: no opening-drive longs from HTF NoTrade, and no opening-drive entries during the first 3 minutes.
+                DisableOpeningDriveLongsInHTFNoTrade = true;
+                OpeningDriveStartDelayMinutes = 3;
+                OpeningDriveShortRequiresBelowVWAP = true;
             }
             else if (State == State.Configure)
             {
@@ -1131,7 +1136,13 @@ namespace NinjaTrader.NinjaScript.Strategies
             TimeSpan now = gateTime.TimeOfDay;
             TimeSpan openStart = new TimeSpan(RTHStartHour, RTHStartMinute, 0);
             TimeSpan openEnd = new TimeSpan(OpeningDriveEndHour, OpeningDriveEndMinute, 0);
-            if (now < openStart || now >= openEnd)
+            TimeSpan eligibleStart = openStart.Add(new TimeSpan(0, Math.Max(0, OpeningDriveStartDelayMinutes), 0));
+            if (now < eligibleStart || now >= openEnd)
+                return false;
+
+            // v2.16D: NoTrade/None HTF is not allowed to manufacture long permission during the open.
+            // Longs must wait for explicit 5m migration/expansion outside this NoTrade override path.
+            if (signal == DirectionSignal.Long && DisableOpeningDriveLongsInHTFNoTrade)
                 return false;
 
             // Only allow the actual opening drive, not random pre-OR chop. Directional persistence must be strong.
@@ -1148,6 +1159,10 @@ namespace NinjaTrader.NinjaScript.Strategies
                 if (signal == DirectionSignal.Short && price > sessionVwap)
                     return false;
             }
+
+            // Shorts are the only default NoTrade opening-drive escape hatch. Keep them below VWAP unless explicitly disabled.
+            if (signal == DirectionSignal.Short && OpeningDriveShortRequiresBelowVWAP && sessionVwap > 0.0 && price >= sessionVwap)
+                return false;
 
             return true;
         }
@@ -2552,6 +2567,19 @@ namespace NinjaTrader.NinjaScript.Strategies
         [Range(0.50, 20.00)]
         [Display(Name = "Opening Drive Min Persistence", Order = 56, GroupName = "4. Sweep/Acceptance")]
         public double OpeningDriveMinPersistence { get; set; }
+
+        [NinjaScriptProperty]
+        [Display(Name = "Disable Opening Drive Longs In HTF NoTrade", Order = 57, GroupName = "4. Sweep/Acceptance")]
+        public bool DisableOpeningDriveLongsInHTFNoTrade { get; set; }
+
+        [NinjaScriptProperty]
+        [Range(0, 15)]
+        [Display(Name = "Opening Drive Start Delay Minutes", Order = 58, GroupName = "4. Sweep/Acceptance")]
+        public int OpeningDriveStartDelayMinutes { get; set; }
+
+        [NinjaScriptProperty]
+        [Display(Name = "Opening Drive Short Requires Below VWAP", Order = 59, GroupName = "4. Sweep/Acceptance")]
+        public bool OpeningDriveShortRequiresBelowVWAP { get; set; }
 
         [NinjaScriptProperty]
         [Display(Name = "Enable Cooldown", Order = 1, GroupName = "5. Frequency")]

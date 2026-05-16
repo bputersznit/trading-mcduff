@@ -10,13 +10,14 @@ using NinjaTrader.NinjaScript;
 #endregion
 
 // =================================================================================================
-// CG_OrderFlow_Aggression_v2_16_RTH_HARD_GATE_AUCTION_MIGRATION.cs
+// CG_OrderFlow_Aggression_v2_17_TICK_AGG_FAST_PLAYBACK.cs
 // Generated: 2026-05-16 ET
+// Patch: v2.16C fixes opening-drive override propagation through all HTF migration gates.
 //
 // Purpose
 // -------
 // Execution-aggression MNQ strategy upgraded from v2.1 with the requested "implement all" changes:
-//   1. Persistence engine: requires repeated aligned 100ms buckets / weighted pressure score.
+//   1. Persistence engine: requires repeated aligned execution tick-aggregation bars / weighted pressure score.
 //   2. Directional state machine: TREND_UP / TREND_DOWN / RANGE / REVERSAL / EXHAUSTION.
 //   3. Post-sweep delay: avoids immediate chase into sweep/climax bars.
 //   4. Price acceptance filter: requires price to move/hold beyond trigger reference.
@@ -32,13 +33,13 @@ using NinjaTrader.NinjaScript;
 //
 // Important design stance
 // -----------------------
-// v2.16 keeps RTH-only execution and no safety/panic stoppages, but replaces slope-only HTF permission with explicit 5m auction migration, acceptance, rejection, and no-trade regime logic. The tick/100ms layer remains a trigger only after HTF permission exists.
+// v2.16 keeps RTH-only execution and no safety/panic stoppages, but replaces slope-only HTF permission with explicit 5m auction migration, acceptance, rejection, and no-trade regime logic. The tick aggregation layer remains a trigger only after HTF permission exists; raw ticks update counters only.
 // Default behavior: pre/post-RTH data may still be inspected and used for diagnostics, but actual order entry is enabled only inside the configured RTH window. No daily loss, profit lock, max trade, consecutive-loss, or cooldown stoppages are enabled by default.
 // =================================================================================================
 
 namespace NinjaTrader.NinjaScript.Strategies
 {
-    public class CG_OrderFlow_Aggression_v2_16_RTH_HARD_GATE_AUCTION_MIGRATION : Strategy
+    public class CG_OrderFlow_Aggression_v2_17_TICK_AGG_FAST_PLAYBACK : Strategy
     {
         #region Enums
         private enum DirectionSignal { None = 0, Long = 1, Short = -1 }
@@ -65,6 +66,12 @@ namespace NinjaTrader.NinjaScript.Strategies
 
         private long aggBuyVol100ms = 0;
         private long aggSellVol100ms = 0;
+        private long aggBuyVolExec = 0;
+        private long aggSellVolExec = 0;
+        private bool executionAggregationPrimed = false;
+        private int lastProcessedExecBar = -1;
+        private long ticksAccumulatedExec = 0;
+        private long lastExecBarTicks = 0;
         private long aggBuyVol1s = 0;
         private long aggSellVol1s = 0;
         private long aggBuyVol5s = 0;
@@ -176,8 +183,8 @@ namespace NinjaTrader.NinjaScript.Strategies
         {
             if (State == State.SetDefaults)
             {
-                Description = "CG OrderFlow Aggression v2.16 - RTH-only discovery with authoritative 5m auction migration permissions";
-                Name = "CG_OrderFlow_Aggression_v2_16_RTH_HARD_GATE_AUCTION_MIGRATION";
+                Description = "CG OrderFlow Aggression v2.17 - RTH discovery with tick-aggregation execution for faster Playback stability";
+                Name = "CG_OrderFlow_Aggression_v2_17_TICK_AGG_FAST_PLAYBACK";
 
                 Calculate = Calculate.OnEachTick;
                 EntriesPerDirection = 1;
@@ -200,6 +207,9 @@ namespace NinjaTrader.NinjaScript.Strategies
                 // v2.3 UNBLOCKED: relaxed defaults because v2.2 proved over-gated and produced zero trades.
                 MinAggressionDelta100ms = 40;
                 MinAggressionImbalance100ms = 0.55;
+                ExecutionTickAggregation = 500;
+                MinAggressionDeltaTickAgg = 175;
+                MinAggressionImbalanceTickAgg = 0.35;
                 MinAggressionDelta1s = 50;
                 MinAggressionImbalance1s = 0.05;
                 MinAggressionDelta5s = 100;
@@ -318,6 +328,15 @@ namespace NinjaTrader.NinjaScript.Strategies
                 HTFFailedMigrationCooldownMinutes = 20;
                 DisableRangePowerOverrideWhenHTFNoTrade = true;
                 RequireHTFMigrationForBreakouts = true;
+                AllowOpeningDriveWhenHTFNoTrade = true;
+                OpeningDriveEndHour = 9;
+                OpeningDriveEndMinute = 45;
+                OpeningDriveMinPersistence = 2.50;
+                // v2.16D: the prior opening-drive NoTrade override allowed a 09:31 long while HTF still showed NoTrade/None.
+                // Default patch: no opening-drive longs from HTF NoTrade, and no opening-drive entries during the first 3 minutes.
+                DisableOpeningDriveLongsInHTFNoTrade = true;
+                OpeningDriveStartDelayMinutes = 3;
+                OpeningDriveShortRequiresBelowVWAP = true;
             }
             else if (State == State.Configure)
             {
@@ -326,6 +345,7 @@ namespace NinjaTrader.NinjaScript.Strategies
                 // so we validate it in DataLoaded and refuse to trade if it is wrong.
                 AddDataSeries(BarsPeriodType.Minute, 1);
                 AddDataSeries(BarsPeriodType.Minute, 5);
+                AddDataSeries(BarsPeriodType.Tick, ExecutionTickAggregation);
             }
             else if (State == State.DataLoaded)
             {
@@ -343,6 +363,7 @@ namespace NinjaTrader.NinjaScript.Strategies
             bool primaryIsOneTick = false;
             bool hasOneMinute = false;
             bool hasFiveMinute = false;
+            bool hasExecutionTickAggregation = false;
 
             try
             {
@@ -363,6 +384,12 @@ namespace NinjaTrader.NinjaScript.Strategies
                     && BarsArray[2] != null
                     && BarsArray[2].BarsPeriod.BarsPeriodType == BarsPeriodType.Minute
                     && BarsArray[2].BarsPeriod.Value == 5;
+
+                hasExecutionTickAggregation = BarsArray != null
+                    && BarsArray.Length >= 4
+                    && BarsArray[3] != null
+                    && BarsArray[3].BarsPeriod.BarsPeriodType == BarsPeriodType.Tick
+                    && BarsArray[3].BarsPeriod.Value == ExecutionTickAggregation;
             }
             catch (Exception ex)
             {
@@ -370,10 +397,10 @@ namespace NinjaTrader.NinjaScript.Strategies
                 fatalSeriesMessage = "SERIES VALIDATION EXCEPTION: " + ex.Message;
             }
 
-            if (!primaryIsOneTick || !hasOneMinute || !hasFiveMinute)
+            if (!primaryIsOneTick || !hasOneMinute || !hasFiveMinute || !hasExecutionTickAggregation)
             {
                 fatalSeriesConfiguration = true;
-                fatalSeriesMessage = "FATAL SERIES CONFIG: attach to MNQ 1 Tick primary. Strategy internally requires BIP0=1 Tick, BIP1=1 Minute, BIP2=5 Minute. "
+                fatalSeriesMessage = "FATAL SERIES CONFIG: attach to MNQ 1 Tick primary. Strategy internally requires BIP0=1 Tick, BIP1=1 Minute, BIP2=5 Minute, BIP3=execution Tick aggregation. "
                     + "Detected: " + DescribeSeriesLayout();
             }
 
@@ -448,6 +475,14 @@ namespace NinjaTrader.NinjaScript.Strategies
             if (BarsInProgress == 2)
             {
                 UpdateFiveMinuteBias();
+                return;
+            }
+
+            // v2.17 execution layer: evaluate trigger logic on completed N-tick aggregation bars,
+            // not on 100ms wall-clock buckets. This is materially more stable at faster Playback speeds.
+            if (BarsInProgress == 3)
+            {
+                ProcessExecutionTickAggregationBar();
                 return;
             }
 
@@ -706,36 +741,20 @@ namespace NinjaTrader.NinjaScript.Strategies
 
             lastTradePrice = e.Price;
 
+            ticksAccumulatedExec += volume;
             if (isAggressiveBuy)
             {
                 aggBuyVol100ms += volume;
+                aggBuyVolExec += volume;
                 aggBuyVol1s += volume;
                 aggBuyVol5s += volume;
             }
             else if (isAggressiveSell)
             {
                 aggSellVol100ms += volume;
+                aggSellVolExec += volume;
                 aggSellVol1s += volume;
                 aggSellVol5s += volume;
-            }
-
-            if ((e.Time - bucket100msStart).TotalMilliseconds >= 100.0)
-            {
-                ProcessBucket100ms(e.Price);
-                bucket100msStart = e.Time;
-                Reset100msBucket();
-            }
-
-            if ((e.Time - bucket1sStart).TotalSeconds >= 1.0)
-            {
-                bucket1sStart = e.Time;
-                Reset1sBucket();
-            }
-
-            if ((e.Time - bucket5sStart).TotalSeconds >= 5.0)
-            {
-                bucket5sStart = e.Time;
-                Reset5sBucket();
             }
         }
 
@@ -762,6 +781,94 @@ namespace NinjaTrader.NinjaScript.Strategies
         #endregion
 
         #region Signal processing
+
+        private void ProcessExecutionTickAggregationBar()
+        {
+            if (CurrentBars[3] < 1)
+                return;
+
+            // With Calculate.OnEachTick, evaluate once when a new aggregation bar begins.
+            // The counters accumulated since the prior BIP3 boundary represent the just-completed execution sample.
+            if (!IsFirstTickOfBar && executionAggregationPrimed)
+                return;
+
+            if (!executionAggregationPrimed)
+            {
+                executionAggregationPrimed = true;
+                lastProcessedExecBar = CurrentBars[3];
+                ResetExecutionAggregationBucket();
+                return;
+            }
+
+            if (lastProcessedExecBar == CurrentBars[3])
+                return;
+
+            lastProcessedExecBar = CurrentBars[3];
+            lastExecBarTicks = ticksAccumulatedExec;
+
+            double lastPrice = Closes[3][1];
+            ProcessExecutionAggregationSample(lastPrice);
+            ResetExecutionAggregationBucket();
+        }
+
+        private void ProcessExecutionAggregationSample(double lastPrice)
+        {
+            processedBuckets++;
+            long delta = aggBuyVolExec - aggSellVolExec;
+            long total = aggBuyVolExec + aggSellVolExec;
+            if (total <= 0)
+                return;
+
+            double imb = (double)delta / (double)total;
+            UpdateResponseHistory(lastPrice, delta, imb);
+
+            DirectionSignal raw = DirectionSignal.None;
+            if (delta >= MinAggressionDeltaTickAgg && imb >= MinAggressionImbalanceTickAgg)
+                raw = DirectionSignal.Long;
+            else if (delta <= -MinAggressionDeltaTickAgg && imb <= -MinAggressionImbalanceTickAgg)
+                raw = DirectionSignal.Short;
+
+            bool sweepDetected = Math.Abs(delta) >= SweepDeltaThreshold && Math.Abs(imb) >= SweepImbalanceThreshold;
+            if (sweepDetected)
+            {
+                lastSweepTime = currentMarketTime;
+                lastStage2SweepTime = currentMarketTime;
+            }
+
+            UpdateStage2ResponseState(lastPrice, delta, imb);
+            UpdatePersistence(raw, delta, imb);
+
+            if (EnablePriceAcceptance)
+                UpdatePendingAcceptance(lastPrice);
+
+            DirectionSignal candidate = BuildCandidateSignal(raw, delta, imb, lastPrice);
+
+            if (candidate != DirectionSignal.None)
+            {
+                string rejectionReason = GetSignalRejectionReason(candidate, lastPrice, delta, imb);
+                if (string.IsNullOrEmpty(rejectionReason))
+                {
+                    EnterPosition(candidate, lastPrice);
+                }
+                else
+                {
+                    rejectedSignalCount++;
+                    Print(string.Format("{0} | REJECT {1} reason={2} layer=TICK_AGG{17} state={3} htf={12} regime={14} htfTicks={13:F1} acc={15:F1} ovlp={16:F2} pers={4:F2} cL={5} cS={6} accL={7} accS={8} absL={9} absS={10} price={11:F2}",
+                        currentMarketTime.ToString("HH:mm:ss.fff"), candidate, rejectionReason, auctionState, weightedPersistenceScore,
+                        consecutiveLongBuckets, consecutiveShortBuckets, acceptedLongBuckets, acceptedShortBuckets,
+                        rangeAbsorptionLongBuckets, rangeAbsorptionShortBuckets, lastPrice, htfBias, htfBiasScoreTicks, htfRegime, htfAcceptanceScore, htfOverlapRatio, ExecutionTickAggregation));
+                }
+            }
+
+            if (PrintDiagnostics && DiagnosticEveryBuckets > 0 && processedBuckets % DiagnosticEveryBuckets == 0)
+            {
+                Print(string.Format("{0} | DIAG execBars={1} tickAgg={20} md={2} depth={3} state={4} htf={15} regime={17} htfTicks={16:F1} acc={18:F1} ovlp={19:F2} pers={5:F2} cL={6} cS={7} accL={8} accS={9} absL={10} absS={11} trades={12} rejectEvents={13} pnl={14:F2}",
+                    currentMarketTime.ToString("HH:mm:ss.fff"), processedBuckets, marketDataEvents, depthEvents, auctionState,
+                    weightedPersistenceScore, consecutiveLongBuckets, consecutiveShortBuckets, acceptedLongBuckets, acceptedShortBuckets,
+                    rangeAbsorptionLongBuckets, rangeAbsorptionShortBuckets, tradesCountToday, rejectedSignalCount, dailyPnL, htfBias, htfBiasScoreTicks, htfRegime, htfAcceptanceScore, htfOverlapRatio, ExecutionTickAggregation));
+            }
+        }
+
         private void ProcessBucket100ms(double lastPrice)
         {
             processedBuckets++;
@@ -1001,6 +1108,7 @@ namespace NinjaTrader.NinjaScript.Strategies
 
             bool isLong = signal == DirectionSignal.Long;
             bool isShort = signal == DirectionSignal.Short;
+            bool openingDriveNoTradeOverride = false;
 
             if (EnableHTFAuctionMigration)
             {
@@ -1008,12 +1116,19 @@ namespace NinjaTrader.NinjaScript.Strategies
                     return false;
 
                 if (EnableHTFNoTradeRegime && htfRegime == HTFAuctionRegime.NoTrade)
+                {
+                    // v2.16C: opening-drive permission must propagate beyond the first NoTrade check.
+                    // v2.16B passed this check, then immediately failed the generic migration requirement,
+                    // leaving all 09:30-09:45 candidates rejected as HTF_PERMISSION.
+                    openingDriveNoTradeOverride = OpeningDriveAllowsHTFNoTradeOverride(signal, price);
+                    if (!openingDriveNoTradeOverride)
+                        return false;
+                }
+
+                if (!openingDriveNoTradeOverride && IsInsideHTFFailedMigrationCooldown(signal))
                     return false;
 
-                if (IsInsideHTFFailedMigrationCooldown(signal))
-                    return false;
-
-                if (RequireHTFMigrationForBreakouts)
+                if (RequireHTFMigrationForBreakouts && !openingDriveNoTradeOverride)
                 {
                     bool directionalMigration = (signal == DirectionSignal.Long && (htfRegime == HTFAuctionRegime.MigratingUp || htfRegime == HTFAuctionRegime.ExpandingUp))
                         || (signal == DirectionSignal.Short && (htfRegime == HTFAuctionRegime.MigratingDown || htfRegime == HTFAuctionRegime.ExpandingDown));
@@ -1088,6 +1203,9 @@ namespace NinjaTrader.NinjaScript.Strategies
 
             if (EnableOpeningRangeFilter && !orCalculated && RequireHTFPermissionForRange && auctionState == AuctionState.Range)
             {
+                if (openingDriveNoTradeOverride)
+                    return true;
+
                 if (htfBias == signal)
                     return true;
                 if (sessionVwap > 0.0)
@@ -1099,6 +1217,49 @@ namespace NinjaTrader.NinjaScript.Strategies
                 }
                 return false;
             }
+
+            return true;
+        }
+
+        private bool OpeningDriveAllowsHTFNoTradeOverride(DirectionSignal signal, double price)
+        {
+            if (!AllowOpeningDriveWhenHTFNoTrade)
+                return false;
+
+            if (!IsRTH(currentMarketTime))
+                return false;
+
+            DateTime gateTime = UseRawChartTimeForRTHGate ? currentMarketTime : ToEastern(currentMarketTime);
+            TimeSpan now = gateTime.TimeOfDay;
+            TimeSpan openStart = new TimeSpan(RTHStartHour, RTHStartMinute, 0);
+            TimeSpan openEnd = new TimeSpan(OpeningDriveEndHour, OpeningDriveEndMinute, 0);
+            TimeSpan eligibleStart = openStart.Add(new TimeSpan(0, Math.Max(0, OpeningDriveStartDelayMinutes), 0));
+            if (now < eligibleStart || now >= openEnd)
+                return false;
+
+            // v2.16D: NoTrade/None HTF is not allowed to manufacture long permission during the open.
+            // Longs must wait for explicit 5m migration/expansion outside this NoTrade override path.
+            if (signal == DirectionSignal.Long && DisableOpeningDriveLongsInHTFNoTrade)
+                return false;
+
+            // Only allow the actual opening drive, not random pre-OR chop. Directional persistence must be strong.
+            if (signal == DirectionSignal.Long && weightedPersistenceScore < OpeningDriveMinPersistence)
+                return false;
+            if (signal == DirectionSignal.Short && weightedPersistenceScore > -OpeningDriveMinPersistence)
+                return false;
+
+            // If VWAP exists, require the opening impulse to be on the correct side of VWAP.
+            if (sessionVwap > 0.0)
+            {
+                if (signal == DirectionSignal.Long && price < sessionVwap)
+                    return false;
+                if (signal == DirectionSignal.Short && price > sessionVwap)
+                    return false;
+            }
+
+            // Shorts are the only default NoTrade opening-drive escape hatch. Keep them below VWAP unless explicitly disabled.
+            if (signal == DirectionSignal.Short && OpeningDriveShortRequiresBelowVWAP && sessionVwap > 0.0 && price >= sessionVwap)
+                return false;
 
             return true;
         }
@@ -1326,7 +1487,10 @@ namespace NinjaTrader.NinjaScript.Strategies
 
         private bool IsRangePowerMove(DirectionSignal signal)
         {
-            if (DisableRangePowerOverrideWhenHTFNoTrade && htfRegime == HTFAuctionRegime.NoTrade)
+            bool openingDriveNoTradeOverride = htfRegime == HTFAuctionRegime.NoTrade
+                && OpeningDriveAllowsHTFNoTradeOverride(signal, lastTradePrice > 0.0 ? lastTradePrice : currentBestBid);
+
+            if (DisableRangePowerOverrideWhenHTFNoTrade && htfRegime == HTFAuctionRegime.NoTrade && !openingDriveNoTradeOverride)
                 return false;
 
             if (EnableHTFAuctionMigration && htfRegime == HTFAuctionRegime.Balanced && RequireHTFMigrationForBreakouts)
@@ -1837,6 +2001,10 @@ namespace NinjaTrader.NinjaScript.Strategies
             Reset100msBucket();
             Reset1sBucket();
             Reset5sBucket();
+            ResetExecutionAggregationBucket();
+            executionAggregationPrimed = false;
+            lastProcessedExecBar = -1;
+            lastExecBarTicks = 0;
 
             persistenceSigns.Clear();
             persistenceScores.Clear();
@@ -1919,6 +2087,7 @@ namespace NinjaTrader.NinjaScript.Strategies
         }
 
         private void Reset100msBucket() { aggBuyVol100ms = 0; aggSellVol100ms = 0; }
+        private void ResetExecutionAggregationBucket() { aggBuyVolExec = 0; aggSellVolExec = 0; ticksAccumulatedExec = 0; Reset100msBucket(); Reset1sBucket(); Reset5sBucket(); }
         private void Reset1sBucket() { aggBuyVol1s = 0; aggSellVol1s = 0; }
         private void Reset5sBucket() { aggBuyVol5s = 0; aggSellVol5s = 0; }
         #endregion
@@ -2117,8 +2286,23 @@ namespace NinjaTrader.NinjaScript.Strategies
         public double MinAggressionImbalance100ms { get; set; }
 
         [NinjaScriptProperty]
+        [Range(100, 2000)]
+        [Display(Name = "Execution Tick Aggregation", Order = 3, GroupName = "1. Signal")]
+        public int ExecutionTickAggregation { get; set; }
+
+        [NinjaScriptProperty]
+        [Range(25, 5000)]
+        [Display(Name = "Min Agg Delta TickAgg", Order = 4, GroupName = "1. Signal")]
+        public int MinAggressionDeltaTickAgg { get; set; }
+
+        [NinjaScriptProperty]
+        [Range(0.05, 0.95)]
+        [Display(Name = "Min Agg Imbalance TickAgg", Order = 5, GroupName = "1. Signal")]
+        public double MinAggressionImbalanceTickAgg { get; set; }
+
+        [NinjaScriptProperty]
         [Range(10, 1000)]
-        [Display(Name = "Min Agg Delta 1s", Order = 3, GroupName = "1. Signal")]
+        [Display(Name = "Min Agg Delta 1s", Order = 6, GroupName = "1. Signal")]
         public int MinAggressionDelta1s { get; set; }
 
         [NinjaScriptProperty]
@@ -2481,6 +2665,38 @@ namespace NinjaTrader.NinjaScript.Strategies
         [NinjaScriptProperty]
         [Display(Name = "Require HTF Migration For Breakouts", Order = 52, GroupName = "4. Sweep/Acceptance")]
         public bool RequireHTFMigrationForBreakouts { get; set; }
+
+        [NinjaScriptProperty]
+        [Display(Name = "Allow Opening Drive When HTF NoTrade", Order = 53, GroupName = "4. Sweep/Acceptance")]
+        public bool AllowOpeningDriveWhenHTFNoTrade { get; set; }
+
+        [NinjaScriptProperty]
+        [Range(0, 23)]
+        [Display(Name = "Opening Drive End Hour", Order = 54, GroupName = "4. Sweep/Acceptance")]
+        public int OpeningDriveEndHour { get; set; }
+
+        [NinjaScriptProperty]
+        [Range(0, 59)]
+        [Display(Name = "Opening Drive End Minute", Order = 55, GroupName = "4. Sweep/Acceptance")]
+        public int OpeningDriveEndMinute { get; set; }
+
+        [NinjaScriptProperty]
+        [Range(0.50, 20.00)]
+        [Display(Name = "Opening Drive Min Persistence", Order = 56, GroupName = "4. Sweep/Acceptance")]
+        public double OpeningDriveMinPersistence { get; set; }
+
+        [NinjaScriptProperty]
+        [Display(Name = "Disable Opening Drive Longs In HTF NoTrade", Order = 57, GroupName = "4. Sweep/Acceptance")]
+        public bool DisableOpeningDriveLongsInHTFNoTrade { get; set; }
+
+        [NinjaScriptProperty]
+        [Range(0, 15)]
+        [Display(Name = "Opening Drive Start Delay Minutes", Order = 58, GroupName = "4. Sweep/Acceptance")]
+        public int OpeningDriveStartDelayMinutes { get; set; }
+
+        [NinjaScriptProperty]
+        [Display(Name = "Opening Drive Short Requires Below VWAP", Order = 59, GroupName = "4. Sweep/Acceptance")]
+        public bool OpeningDriveShortRequiresBelowVWAP { get; set; }
 
         [NinjaScriptProperty]
         [Display(Name = "Enable Cooldown", Order = 1, GroupName = "5. Frequency")]

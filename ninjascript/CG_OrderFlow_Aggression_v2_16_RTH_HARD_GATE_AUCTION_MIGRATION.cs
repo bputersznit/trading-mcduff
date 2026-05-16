@@ -10,9 +10,8 @@ using NinjaTrader.NinjaScript;
 #endregion
 
 // =================================================================================================
-// CG_OrderFlow_Aggression_v2_16B_RTH_OPEN_DRIVE_HTF_FIX.cs
+// CG_OrderFlow_Aggression_v2_16_RTH_HARD_GATE_AUCTION_MIGRATION.cs
 // Generated: 2026-05-16 ET
-// Patch: v2.16B loosens HTF NoTrade only during the RTH opening-drive discovery window.
 //
 // Purpose
 // -------
@@ -39,7 +38,7 @@ using NinjaTrader.NinjaScript;
 
 namespace NinjaTrader.NinjaScript.Strategies
 {
-    public class CG_OrderFlow_Aggression_v2_16B_RTH_OPEN_DRIVE_HTF_FIX : Strategy
+    public class CG_OrderFlow_Aggression_v2_16_RTH_HARD_GATE_AUCTION_MIGRATION : Strategy
     {
         #region Enums
         private enum DirectionSignal { None = 0, Long = 1, Short = -1 }
@@ -178,7 +177,7 @@ namespace NinjaTrader.NinjaScript.Strategies
             if (State == State.SetDefaults)
             {
                 Description = "CG OrderFlow Aggression v2.16 - RTH-only discovery with authoritative 5m auction migration permissions";
-                Name = "CG_OrderFlow_Aggression_v2_16B_RTH_OPEN_DRIVE_HTF_FIX";
+                Name = "CG_OrderFlow_Aggression_v2_16_RTH_HARD_GATE_AUCTION_MIGRATION";
 
                 Calculate = Calculate.OnEachTick;
                 EntriesPerDirection = 1;
@@ -319,10 +318,6 @@ namespace NinjaTrader.NinjaScript.Strategies
                 HTFFailedMigrationCooldownMinutes = 20;
                 DisableRangePowerOverrideWhenHTFNoTrade = true;
                 RequireHTFMigrationForBreakouts = true;
-                AllowOpeningDriveWhenHTFNoTrade = true;
-                OpeningDriveEndHour = 9;
-                OpeningDriveEndMinute = 45;
-                OpeningDriveMinPersistence = 3.00;
             }
             else if (State == State.Configure)
             {
@@ -1013,13 +1008,7 @@ namespace NinjaTrader.NinjaScript.Strategies
                     return false;
 
                 if (EnableHTFNoTradeRegime && htfRegime == HTFAuctionRegime.NoTrade)
-                {
-                    // v2.16B: pre-RTH overlap correctly says "do not trade", but it was also freezing the
-                    // 09:30 opening drive. During 09:30-09:45, allow only strong RTH impulse discovery,
-                    // still subject to quote, VWAP/OR, auction, Stage2, and risk gates below.
-                    if (!OpeningDriveAllowsHTFNoTradeOverride(signal, price))
-                        return false;
-                }
+                    return false;
 
                 if (IsInsideHTFFailedMigrationCooldown(signal))
                     return false;
@@ -1109,39 +1098,6 @@ namespace NinjaTrader.NinjaScript.Strategies
                         return true;
                 }
                 return false;
-            }
-
-            return true;
-        }
-
-        private bool OpeningDriveAllowsHTFNoTradeOverride(DirectionSignal signal, double price)
-        {
-            if (!AllowOpeningDriveWhenHTFNoTrade)
-                return false;
-
-            if (!IsRTH(currentMarketTime))
-                return false;
-
-            DateTime gateTime = UseRawChartTimeForRTHGate ? currentMarketTime : ToEastern(currentMarketTime);
-            TimeSpan now = gateTime.TimeOfDay;
-            TimeSpan openStart = new TimeSpan(RTHStartHour, RTHStartMinute, 0);
-            TimeSpan openEnd = new TimeSpan(OpeningDriveEndHour, OpeningDriveEndMinute, 0);
-            if (now < openStart || now >= openEnd)
-                return false;
-
-            // Only allow the actual opening drive, not random pre-OR chop. Directional persistence must be strong.
-            if (signal == DirectionSignal.Long && weightedPersistenceScore < OpeningDriveMinPersistence)
-                return false;
-            if (signal == DirectionSignal.Short && weightedPersistenceScore > -OpeningDriveMinPersistence)
-                return false;
-
-            // If VWAP exists, require the opening impulse to be on the correct side of VWAP.
-            if (sessionVwap > 0.0)
-            {
-                if (signal == DirectionSignal.Long && price < sessionVwap)
-                    return false;
-                if (signal == DirectionSignal.Short && price > sessionVwap)
-                    return false;
             }
 
             return true;
@@ -2525,25 +2481,6 @@ namespace NinjaTrader.NinjaScript.Strategies
         [NinjaScriptProperty]
         [Display(Name = "Require HTF Migration For Breakouts", Order = 52, GroupName = "4. Sweep/Acceptance")]
         public bool RequireHTFMigrationForBreakouts { get; set; }
-
-        [NinjaScriptProperty]
-        [Display(Name = "Allow Opening Drive When HTF NoTrade", Order = 53, GroupName = "4. Sweep/Acceptance")]
-        public bool AllowOpeningDriveWhenHTFNoTrade { get; set; }
-
-        [NinjaScriptProperty]
-        [Range(0, 23)]
-        [Display(Name = "Opening Drive End Hour", Order = 54, GroupName = "4. Sweep/Acceptance")]
-        public int OpeningDriveEndHour { get; set; }
-
-        [NinjaScriptProperty]
-        [Range(0, 59)]
-        [Display(Name = "Opening Drive End Minute", Order = 55, GroupName = "4. Sweep/Acceptance")]
-        public int OpeningDriveEndMinute { get; set; }
-
-        [NinjaScriptProperty]
-        [Range(0.50, 20.00)]
-        [Display(Name = "Opening Drive Min Persistence", Order = 56, GroupName = "4. Sweep/Acceptance")]
-        public double OpeningDriveMinPersistence { get; set; }
 
         [NinjaScriptProperty]
         [Display(Name = "Enable Cooldown", Order = 1, GroupName = "5. Frequency")]
